@@ -1,0 +1,18 @@
+﻿.image-main {
+    border: 5px solid darkorchid;
+}
+
+.show-btn a {
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.show-btn:hover a {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+.hide-btn a {
+    display: none;
+}
