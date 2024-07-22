@@ -17,9 +17,9 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
             _httpClient.BaseAddress = _baseUri;
         }
 
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("admin/Restaurant/GetPaginateDatas?page=1&take=3");
+            HttpResponseMessage response = await _httpClient.GetAsync("admin/Restaurant/GetPaginateDatas?page=1&take=5");
 
             response.EnsureSuccessStatusCode();
 

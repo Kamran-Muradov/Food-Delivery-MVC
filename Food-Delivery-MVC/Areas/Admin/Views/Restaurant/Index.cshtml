@@ -22,9 +22,9 @@
                 </div>
                 <div class="">
                     <div class="btn-list">
-                        <a asp-action="Create" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                        <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                            Create new course
+                            Create new restaurant
                         </a>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     <tbody class="table-tbody">
                         @foreach (var item in Model.Datas)
                         {
-                            <tr>
+                            <tr data-id="@item.Id">
                                 <td class="sort-name">
                                     <img src="@item.MainImage" style="width:90px;height:54px" alt="" />
                                 </td>
@@ -62,7 +62,7 @@
                                     <a class="btn btn-info btn-icon" asp-action="Detail" asp-route-id="@item.Id">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
                                     </a>
-                                    <a class="btn btn-warning btn-icon" asp-action="Edit" asp-route-id="@item.Id">
+                                    <a class="btn btn-warning btn-icon" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
                                     </a>
                                     <a class="btn btn-danger btn-icon delete-btn" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-small">
@@ -101,68 +101,68 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input id="name" type="text" class="form-control" name="name" placeholder="Name..." />
+                            <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Description</label>
-                            <textarea id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
+                            <textarea autocomplete="off" id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Phone</label>
-                            <input id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
+                            <input autocomplete="off" id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
+                            <input autocomplete="off" id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Delivery fee</label>
-                            <input id="delfee" type="number" class="form-control" name="delfee">
+                            <input autocomplete="off" id="delfee" type="number" class="form-control" name="delfee">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Minimum order</label>
-                            <input id="minorder" type="number" class="form-control" name="minorder">
+                            <input autocomplete="off" id="minorder" type="number" class="form-control" name="minorder">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Minimum delivery time</label>
-                            <input id="mintime" type="number" class="form-control" name="mintime">
+                            <input autocomplete="off" id="mintime" type="number" class="form-control" name="mintime">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Maximum delivery time</label>
-                            <input id="maxtime" type="number" class="form-control" name="maxtime">
+                            <input autocomplete="off" id="maxtime" type="number" class="form-control" name="maxtime">
                         </div>
                     </div>
 
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Address</label>
-                            <input id="address" type="text" class="form-control" name="address" placeholder="Address...">
+                            <input autocomplete="off" id="address" type="text" class="form-control" name="address" placeholder="Address...">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Website</label>
-                            <input id="website" type="text" class="form-control" name="website">
+                            <input autocomplete="off" id="website" type="text" class="form-control" name="website">
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Upload images</label>
-                            <input id="images" type="file" multiple class="form-control" name="images">
+                            <input autocomplete="off" id="images" type="file" multiple class="form-control" name="images">
                         </div>
                     </div>
                     <div class="row">
@@ -199,30 +199,127 @@
                         <button type="submit" href="#" class="btn btn-primary ms-auto ">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
-                            Create new report
+                            Create
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title">New report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>
+                <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea autocomplete="off" id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input autocomplete="off" id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input autocomplete="off" id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Delivery fee</label>
+                            <input autocomplete="off" id="delfee" type="number" class="form-control" name="delfee">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Minimum order</label>
+                            <input autocomplete="off" id="minorder" type="number" class="form-control" name="minorder">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Minimum delivery time</label>
+                            <input autocomplete="off" id="mintime" type="number" class="form-control" name="mintime">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Maximum delivery time</label>
+                            <input autocomplete="off" id="maxtime" type="number" class="form-control" name="maxtime">
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input autocomplete="off" id="address" type="text" class="form-control" name="address" placeholder="Address...">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Website</label>
+                            <input autocomplete="off" id="website" type="text" class="form-control" name="website">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Upload images</label>
+                            <input autocomplete="off" id="images" type="file" multiple class="form-control" name="images">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Rating</label>
+                                    <select id="rating" class="form-select">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Active</label>
+                                    <select id="active" class="form-select">
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <button type="submit" href="#" class="btn btn-primary ms-auto ">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                            Edit
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
