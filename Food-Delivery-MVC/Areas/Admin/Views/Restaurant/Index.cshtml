@@ -24,7 +24,7 @@
                     <div class="btn-list">
                         <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                            Create new restaurant
+                            Create
                         </a>
                     </div>
                 </div>
@@ -52,14 +52,14 @@
                         {
                             <tr data-id="@item.Id">
                                 <td class="sort-name">
-                                    <img src="@item.MainImage" style="width:90px;height:54px" alt="" />
+                                    <img data-id="@item.Id" src="@item.MainImage" style="width:90px;height:54px" alt="" />
                                 </td>
                                 <td class="sort-name">@item.Name</td>
                                 <td class="sort-name">@item.Phone</td>
                                 <td class="sort-name">@item.Email</td>
                                 <td class="sort-name">@item.Address</td>
                                 <td>
-                                    <a class="btn btn-info btn-icon" asp-action="Detail" asp-route-id="@item.Id">
+                                    <a class="btn btn-info btn-icon detail" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-detail">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
                                     </a>
                                     <a class="btn btn-warning btn-icon" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
@@ -67,6 +67,9 @@
                                     </a>
                                     <a class="btn btn-danger btn-icon delete-btn" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-small">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                    </a>
+                                    <a class="btn btn-outline-primary image-edit " data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-images">
+                                        Edit images
                                     </a>
                                 </td>
                             </tr>
@@ -85,16 +88,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger yes-btn" data-id="0" data-bs-dismiss="modal">Yes, delete this course</button>
+                    <button type="button" class="btn btn-danger yes-btn" data-id="0" data-bs-dismiss="modal">Yes, delete this data</button>
                 </div>
             </div>
         </div>
     </div>
+    @* Modal-Create *@
     <div class="modal modal-blur fade" id="modal-report" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">New report</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="form-create" class="data-create" enctype="multipart/form-data">
@@ -207,11 +210,11 @@
         </div>
     </div>
 
+    @* Modal-Edit *@
     <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">New report</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
@@ -323,6 +326,53 @@
             </div>
         </div>
     </div>
+
+    @* Modal-Images *@
+    <div class="modal modal-blur fade" id="modal-images" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content container">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="row images-area">
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Modal-Detail *@
+    <div class="modal modal-blur fade" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content container">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">Detailed View</h5>
+                </div>
+                <div class="row images-area">
+                </div>
+                <div class="data-area">
+                </div>
+               
+                <div class="mb-0 mt-3 flex-grow ">
+                <p class="mb-0  font-weight-light"><strong>Socials:</strong></p>
+                <ul class="mb-3 list-group list-group-flush">
+                </ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="pagination-area d-flex justify-content-center mt-3">
         <nav aria-label="...">
             <ul class="pagination">
@@ -331,7 +381,7 @@
                 </li>
                 @for (int i = 1; i <= Model.TotalPage; i++)
                 {
-                    <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link" href="#">@i</a></li>
+                    <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                 }
                 <li class="page-item">
                     <a class="page-link" href="#">Next</a>
@@ -340,7 +390,6 @@
         </nav>
     </div>
 </section>
-
 
 
 @section js {

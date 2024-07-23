@@ -1,32 +1,25 @@
-﻿using Food_Delivery_MVC.Models;
+﻿using Food_Delivery_MVC.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Food_Delivery_MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly Uri _baseUri = new("https://localhost:7247/api/");
+        private readonly HttpClient _httpClient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(HttpClient httpClient)
         {
-            _logger = logger;
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = _baseUri;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
+   
 }

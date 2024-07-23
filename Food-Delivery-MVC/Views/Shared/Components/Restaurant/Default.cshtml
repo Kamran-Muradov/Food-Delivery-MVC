@@ -1,0 +1,17 @@
+﻿@model IEnumerable<RestaurantVMVC>
+
+<section class="container pb-4 pt-2 pt-sm-0 pt-md-2 pb-sm-5">
+    <h2 class="text-center">Popular restaurants in your city</h2>
+    <p class="text-muted pb-4 text-center">Check the best restaurants near you</p>
+    <div class="row pb-2 pb-sm-0 pb-md-3">
+        @foreach (var restaurant in Model.Take(12))
+        {
+            <div class="col-md-3 col-sm-4 col-6 text-center">
+                <a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" href="food-delivery-single.html">
+                    <img class="d-block mx-auto" src="@restaurant.MainImage" style="width: 150px; height:80px;" alt="Brand">
+                    <p class="text-dark">@restaurant.Name</p>
+                </a>
+            </div>
+        }
+    </div>
+</section>

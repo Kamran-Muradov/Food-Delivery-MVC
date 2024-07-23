@@ -28,7 +28,7 @@
             font-feature-settings: "cv03", "cv04", "cv11";
         }
     </style>
-    @RenderSection("css", required: false)
+    @await RenderSectionAsync("css", required: false)
 </head>
 <body>
     <div class="page">
@@ -191,11 +191,11 @@
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-columns">
                                         <div class="dropdown-menu-column">
-                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Slider" asp-action="Index">
-                                                Sliders
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Restaurant" asp-action="Index">
+                                                Restaurants
                                             </a>
-                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Information" asp-action="Index">
-                                                Information
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                                                Categories
                                             </a>
                                             <a class="dropdown-item" asp-area="Admin" asp-controller="About" asp-action="Index">
                                                 About
