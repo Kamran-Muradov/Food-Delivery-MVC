@@ -3,8 +3,8 @@
         return this.optional(element) || (element.files[0].size <= param)
     }, 'File size must be less than {0}');
 
-    let tableBody = $("#restaurant-area .table-tbody")
-    let pagination = $("#restaurant-area .pagination-area .pagination")
+    let tableBody = $("#table-area .table-tbody")
+    let pagination = $("#table-area .pagination-area .pagination")
 
     $("#form-create").validate({
         errorClass: "my-error-class",
@@ -102,20 +102,20 @@
         submitHandler: function (form) {
 
             let formData = new FormData();
-            formData.append('name', $('#restaurant-area #name').val());
-            formData.append('description', $('#restaurant-area #desc').val());
-            formData.append('phone', $('#restaurant-area #phone').val());
-            formData.append('address', $('#restaurant-area #address').val());
-            formData.append('deliveryFee', $('#restaurant-area #delfee').val());
-            formData.append('minimumOrder', $('#restaurant-area #minorder').val());
-            formData.append('minDeliveryTime', $('#restaurant-area #mintime').val());
-            formData.append('maxDeliveryTime', $('#restaurant-area #maxtime').val());
-            formData.append('website', $('#restaurant-area #website').val());
-            formData.append('isActive', $('#restaurant-area #active').val());
-            formData.append('email', $('#restaurant-area #email').val());
-            formData.append('rating', $('#restaurant-area #rating').val());
+            formData.append('name', $('#table-area #name').val());
+            formData.append('description', $('#table-area #desc').val());
+            formData.append('phone', $('#table-area #phone').val());
+            formData.append('address', $('#table-area #address').val());
+            formData.append('deliveryFee', $('#table-area #delfee').val());
+            formData.append('minimumOrder', $('#table-area #minorder').val());
+            formData.append('minDeliveryTime', $('#table-area #mintime').val());
+            formData.append('maxDeliveryTime', $('#table-area #maxtime').val());
+            formData.append('website', $('#table-area #website').val());
+            formData.append('isActive', $('#table-area #active').val());
+            formData.append('email', $('#table-area #email').val());
+            formData.append('rating', $('#table-area #rating').val());
 
-            let files = $('#restaurant-area #images')[0].files;
+            let files = $('#table-area #images')[0].files;
             for (var i = 0; i < files.length; i++) {
                 formData.append('images', files[i]);
             }
@@ -168,18 +168,18 @@
 
         getPaginatedDatas(currentPage)
             .then(function (datas) {
-                $("#restaurant-area .active").removeClass("active")
+                $("#table-area .active").removeClass("active")
                 pageItem.addClass("active")
                 if (currentPage == datas.totalPage) {
-                    $("#restaurant-area .page-item").last().addClass("disabled")
+                    $("#table-area .page-item").last().addClass("disabled")
                 } else {
-                    $("#restaurant-area .page-item").last().removeClass("disabled")
+                    $("#table-area .page-item").last().removeClass("disabled")
                 }
 
                 if (currentPage == 1) {
-                    $("#restaurant-area .page-item").first().addClass("disabled")
+                    $("#table-area .page-item").first().addClass("disabled")
                 } else {
-                    $("#restaurant-area .page-item").first().removeClass("disabled")
+                    $("#table-area .page-item").first().removeClass("disabled")
                 }
 
                 updateTable(datas)
@@ -191,23 +191,23 @@
     $(document).on('click', '.page-item .page-link:first', function (e) {
         e.preventDefault()
 
-        let activePageItem = $('#restaurant-area .active')
+        let activePageItem = $('#table-area .active')
         let previousPageItem = activePageItem.prev()
 
 
-        let previousPage = (parseInt($('#restaurant-area .active .page-link').html())) - 1
+        let previousPage = (parseInt($('#table-area .active .page-link').html())) - 1
 
         getPaginatedDatas(previousPage)
             .then(function (datas) {
                 activePageItem.removeClass("active")
                 previousPageItem.addClass("active")
 
-                $("#restaurant-area .page-item").last().removeClass("disabled")
+                $("#table-area .page-item").last().removeClass("disabled")
 
                 if (previousPage == 1) {
-                    $("#restaurant-area .page-item").first().addClass("disabled")
+                    $("#table-area .page-item").first().addClass("disabled")
                 } else {
-                    $("#restaurant-area .page-item").first().removeClass("disabled")
+                    $("#table-area .page-item").first().removeClass("disabled")
                 }
 
                 updateTable(datas)
@@ -217,11 +217,11 @@
     $(document).on('click', '.page-item .page-link:last', function (e) {
         e.preventDefault()
 
-        let activePageItem = $('#restaurant-area .active')
+        let activePageItem = $('#table-area .active')
 
         let nextPageItem = activePageItem.next()
 
-        let nextPage = (parseInt($('#restaurant-area .active .page-link').html())) + 1
+        let nextPage = (parseInt($('#table-area .active .page-link').html())) + 1
 
 
         getPaginatedDatas(nextPage)
@@ -229,41 +229,41 @@
                 activePageItem.removeClass("active")
                 nextPageItem.addClass("active")
 
-                $("#restaurant-area .page-item").first().removeClass("disabled")
+                $("#table-area .page-item").first().removeClass("disabled")
 
 
                 if (nextPage == datas.totalPage) {
-                    $("#restaurant-area .page-item").last().addClass("disabled")
+                    $("#table-area .page-item").last().addClass("disabled")
                 } else {
-                    $("#restaurant-area .page-item").last().removeClass("disabled")
+                    $("#table-area .page-item").last().removeClass("disabled")
                 }
 
                 updateTable(datas)
             })
     })
 
-    $(document).on('click', '#restaurant-area .btn-warning', function (e) {
+    $(document).on('click', '#table-area .btn-warning', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
-        $('#restaurant-area #form-edit').attr('data-id', id)
+        $('#table-area #form-edit').attr('data-id', id)
 
         $.ajax({
             type: "GET",
             url: `https://localhost:7247/api/admin/restaurant/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
-                $('#restaurant-area #modal-edit #name').val(response.name)
-                $('#restaurant-area #modal-edit #desc').val(response.description)
-                $('#restaurant-area #modal-edit #phone').val(response.phone)
-                $('#restaurant-area #modal-edit #email').val(response.email)
-                $('#restaurant-area #modal-edit #address').val(response.address)
-                $('#restaurant-area #modal-edit #delfee').val(response.deliveryFee)
-                $('#restaurant-area #modal-edit #minorder').val(response.minimumOrder)
-                $('#restaurant-area #modal-edit #mintime').val(response.minDeliveryTime)
-                $('#restaurant-area #modal-edit #maxtime').val(response.maxDeliveryTime)
-                $('#restaurant-area #modal-edit #website').val(response.website)
-                $(`#restaurant-area #modal-edit #rating option[value="${response.rating}"]`).attr("selected", "selected")
-                $(`#restaurant-area #modal-edit #active option[value="${response.isActive}"]`).attr("selected", "selected")
+                $('#table-area #modal-edit #name').val(response.name)
+                $('#table-area #modal-edit #desc').val(response.description)
+                $('#table-area #modal-edit #phone').val(response.phone)
+                $('#table-area #modal-edit #email').val(response.email)
+                $('#table-area #modal-edit #address').val(response.address)
+                $('#table-area #modal-edit #delfee').val(response.deliveryFee)
+                $('#table-area #modal-edit #minorder').val(response.minimumOrder)
+                $('#table-area #modal-edit #mintime').val(response.minDeliveryTime)
+                $('#table-area #modal-edit #maxtime').val(response.maxDeliveryTime)
+                $('#table-area #modal-edit #website').val(response.website)
+                $(`#table-area #modal-edit #rating option[value="${response.rating}"]`).attr("selected", "selected")
+                $(`#table-area #modal-edit #active option[value="${response.isActive}"]`).attr("selected", "selected")
             }
         });
     })
@@ -360,23 +360,23 @@
         },
 
         submitHandler: function (form) {
-            let id = $('#restaurant-area #form-edit').attr('data-id')
+            let id = $('#table-area #form-edit').attr('data-id')
 
             let formData = new FormData();
-            formData.append('name', $('#restaurant-area #modal-edit #name').val());
-            formData.append('description', $('#restaurant-area #modal-edit #desc').val());
-            formData.append('phone', $('#restaurant-area #modal-edit #phone').val());
-            formData.append('address', $('#restaurant-area #modal-edit #address').val());
-            formData.append('deliveryFee', $('#restaurant-area #modal-edit #delfee').val());
-            formData.append('minimumOrder', $('#restaurant-area #modal-edit #minorder').val());
-            formData.append('minDeliveryTime', $('#restaurant-area #modal-edit #mintime').val());
-            formData.append('maxDeliveryTime', $('#restaurant-area #modal-edit #maxtime').val());
-            formData.append('website', $('#restaurant-area #modal-edit #website').val());
-            formData.append('isActive', $('#restaurant-area #modal-edit #active').val());
-            formData.append('email', $('#restaurant-area #modal-edit #email').val());
-            formData.append('rating', $('#restaurant-area #modal-edit #rating').val());
+            formData.append('name', $('#table-area #modal-edit #name').val());
+            formData.append('description', $('#table-area #modal-edit #desc').val());
+            formData.append('phone', $('#table-area #modal-edit #phone').val());
+            formData.append('address', $('#table-area #modal-edit #address').val());
+            formData.append('deliveryFee', $('#table-area #modal-edit #delfee').val());
+            formData.append('minimumOrder', $('#table-area #modal-edit #minorder').val());
+            formData.append('minDeliveryTime', $('#table-area #modal-edit #mintime').val());
+            formData.append('maxDeliveryTime', $('#table-area #modal-edit #maxtime').val());
+            formData.append('website', $('#table-area #modal-edit #website').val());
+            formData.append('isActive', $('#table-area #modal-edit #active').val());
+            formData.append('email', $('#table-area #modal-edit #email').val());
+            formData.append('rating', $('#table-area #modal-edit #rating').val());
 
-            let files = $('#restaurant-area #modal-edit #images')[0].files;
+            let files = $('#table-area #modal-edit #images')[0].files;
             for (var i = 0; i < files.length; i++) {
                 formData.append('images', files[i]);
             }
@@ -391,8 +391,8 @@
                 contentType: false,
                 data: formData,
                 success: function (response) {
-                    let row = $(`#restaurant-area tr[data-id="${id}"]`)
-                    let imageUrl = $(`#restaurant-area tr[data-id="${id}"] td img`).attr('src')
+                    let row = $(`#table-area tr[data-id="${id}"]`)
+                    let imageUrl = $(`#table-area tr[data-id="${id}"] td img`).attr('src')
                     let name = formData.get('name')
                     let phone = formData.get('phone')
                     let email = formData.get('email')
@@ -444,11 +444,11 @@
         }
     });
 
-    $(document).on('click', '#restaurant-area .image-edit', function (e) {
+    $(document).on('click', '#table-area .image-edit', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
-        $('#restaurant-area #form-images').attr('data-id', id)
-        $('#restaurant-area #modal-images .images-area').empty()
+        $('#table-area #form-images').attr('data-id', id)
+        $('#table-area #modal-images .images-area').empty()
 
         $.ajax({
             type: "GET",
@@ -507,12 +507,12 @@
                     }
                 })
 
-                $('#restaurant-area #modal-images .images-area').append(html);
+                $('#table-area #modal-images .images-area').append(html);
             }
         });
     })
 
-    $(document).on('click', '#restaurant-area .set-main', function (e) {
+    $(document).on('click', '#table-area .set-main', function (e) {
         e.preventDefault()
 
         let imageId = parseInt($(this).attr("data-id"));
@@ -541,7 +541,7 @@
 
     })
 
-    $(document).on('click', '#restaurant-area .img-delete', function (e) {
+    $(document).on('click', '#table-area .img-delete', function (e) {
         e.preventDefault()
 
         let imageId = parseInt($(this).attr("data-id"));
@@ -560,15 +560,15 @@
         });
     })
 
-    $(document).on("click", "#restaurant-area .delete-btn", function (e) {
+    $(document).on("click", "#table-area .delete-btn", function (e) {
         e.preventDefault()
         let id = parseInt($(this).attr("data-id"));
-        $("#restaurant-area .yes-btn").attr("data-id", id)
+        $("#table-area .yes-btn").attr("data-id", id)
 
 
     })
 
-    $(document).on("click", "#restaurant-area .yes-btn", function () {
+    $(document).on("click", "#table-area .yes-btn", function () {
         let id = parseInt($(this).attr("data-id"));
         $(".page-loader").removeClass("d-none")
 
@@ -605,13 +605,13 @@
         });
     })
 
-    $(document).on('click', '#restaurant-area .detail', function (e) {
+    $(document).on('click', '#table-area .detail', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
 
-        $('#restaurant-area #modal-detail .images-area').empty()
-        $('#restaurant-area #modal-detail .data-area').empty()
-        $('#restaurant-area #modal-detail ul').empty();
+        $('#table-area #modal-detail .images-area').empty()
+        $('#table-area #modal-detail .data-area').empty()
+        $('#table-area #modal-detail ul').empty();
 
         $.ajax({
             type: "GET",
@@ -638,7 +638,7 @@
                     }
                 })
 
-                $('#restaurant-area #modal-detail .images-area').append(imgHtml);
+                $('#table-area #modal-detail .images-area').append(imgHtml);
 
                 let dataHtml = `  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Name: </strong>${response.name}</p>
@@ -674,7 +674,7 @@
                     <p class="mb-0 font-weight-light"><strong>Update date: </strong>${response.updatedDate}</p>
                 </div>`
 
-                $('#restaurant-area #modal-detail .data-area').append(dataHtml);
+                $('#table-area #modal-detail .data-area').append(dataHtml);
 
                 let categoryHtml = "";
 
@@ -682,7 +682,7 @@
 
                     categoryHtml += `<li class="list-group-item">${item}</li>`
                 })
-                $('#restaurant-area #modal-detail ul').append(categoryHtml);
+                $('#table-area #modal-detail ul').append(categoryHtml);
             }
         });
     })
@@ -705,9 +705,9 @@
 
         for (let i = 1; i <= response.totalPage; i++) {
             if (i == 1) {
-                paginationHtml += ` <li class="page-item active"><a class="page-link" href="#">${i}</a></li>`
+                paginationHtml += ` <li class="page-item active"><a class="page-link page-num" href="#">${i}</a></li>`
             } else {
-                paginationHtml += ` <li class="page-item"><a class="page-link" href="#">${i}</a></li>`
+                paginationHtml += ` <li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`
             }
         }
 
