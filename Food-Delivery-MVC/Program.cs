@@ -1,8 +1,15 @@
+using Food_Delivery_MVC.Helpers;
+using Food_Delivery_MVC.Services;
+using Food_Delivery_MVC.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 
 var app = builder.Build();
 

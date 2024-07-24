@@ -262,6 +262,16 @@
                                 timer: 1500
                             });
                         },
+                          error: function (xhr, status, error) {
+                            $('#modal-edit').modal('hide');
+                            $(".page-loader").addClass("d-none")
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                            });
+                        },
+
                         error: function (xhr, status, error) {
                             $('#modal-edit').modal('hide');
                             $(".page-loader").addClass("d-none")

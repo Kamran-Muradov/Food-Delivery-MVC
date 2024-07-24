@@ -27,8 +27,9 @@
     <link rel="stylesheet" media="screen" href="~/vendor/tiny-slider/dist/tiny-slider.css" />
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="~/css/theme.min.css">
+    <link rel="stylesheet" media="screen" href="~/admin/dist/css/custom.css">
     <!-- Google Tag Manager-->
-    <script>
+  @*   <script>
         (function (w, d, s, l, i) {
             w[l] = w[l] || []; w[l].push({
                 'gtm.start':
@@ -37,7 +38,7 @@
                 j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
                     '../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-WKV3GT5');
-    </script>
+    </script> *@
 </head>
 <!-- Body-->
 <body class="handheld-toolbar-enabled">
@@ -60,7 +61,7 @@
                     <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab">
                         <div class="mb-3">
                             <label class="form-label" for="si-email">Email address</label>
-                            <input class="form-control" type="email" id="si-email" placeholder="nigammishra826@gmail.com" required>
+                            <input class="form-control" type="email" id="email" placeholder="nigammishra826@gmail.com" required>
                             <div class="invalid-feedback">Please provide a valid email address.</div>
                         </div>
                         <div class="mb-3">
@@ -82,34 +83,41 @@
                     </form>
                     <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
                         <div class="mb-3">
-                            <label class="form-label" for="su-name">Full name</label>
-                            <input class="form-control" type="text" id="su-name" placeholder="Nigam Mishra" required>
+                            <label class="form-label" for="fullname">Full name</label>
+                            <input class="form-control" name="fullname" type="text" id="fullname" placeholder="Nigam Mishra" required>
                             <div class="invalid-feedback">Please fill in your name.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="su-email">Email address</label>
-                            <input class="form-control" type="email" id="su-email" placeholder="nigammishra826@gmail.com" required>
+                            <label class="form-label" for="username">User name</label>
+                            <input class="form-control" name="username" type="text" id="username" placeholder="user123" required>
+                            <span class="text-danger exist-username"></span>
+                            <div class="invalid-feedback">Please fill in your name.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Email address</label>
+                            <input class="form-control" type="email" id="email" name="email" placeholder="nigammishra826@gmail.com" required>
+                            <span class="text-danger exist-email"></span>
                             <div class="invalid-feedback">Please provide a valid email address.</div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="su-password">Password</label>
+                            <label class="form-label" for="password">Password</label>
                             <div class="password-toggle">
-                                <input class="form-control" type="password" id="su-password" required>
+                                <input class="form-control" type="password" id="password" name="password">
                                 <label class="password-toggle-btn" aria-label="Show/hide password">
                                     <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                                 </label>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="su-password-confirm">Confirm password</label>
+                            <label class="form-label" for="confirmpassword">Confirm password</label>
                             <div class="password-toggle">
-                                <input class="form-control" type="password" id="su-password-confirm" required>
+                                <input class="form-control" type="password" id="confirmpassword" name="confirmpassword">
                                 <label class="password-toggle-btn" aria-label="Show/hide password">
                                     <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                                 </label>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign up</button>
+                        <button id="signup-btn" class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign up</button>
                     </form>
                 </div>
             </div>
@@ -333,12 +341,17 @@
     <!-- Back To Top Button-->
     <a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
     <!-- Vendor scrits: js libraries and plugins-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>
     <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/vendor/simplebar/dist/simplebar.min.js"></script>
     <script src="~/vendor/tiny-slider/dist/min/tiny-slider.js"></script>
     <script src="~/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <!-- Main theme script-->
     <script src="~/js/theme.min.js"></script>
+    <script src="~/js/account.js"></script>
 </body>
 
 <!-- Mirrored from cartzilla.createx.studio/home-food-delivery.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 12 Aug 2022 18:15:32 GMT -->

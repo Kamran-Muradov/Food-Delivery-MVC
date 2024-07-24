@@ -1,0 +1,125 @@
+﻿$(function () {
+    $(document).on("click", "#signup-tab #signup-btn", function () {
+        $("#signup-tab .exist-email").empty()
+        $("#signup-tab .exist-username").empty()
+    })
+
+    $.validator.addMethod("hasNumber", function (value, element) {
+        return /[0-9]/.test(value);
+    }, "Password must contain at least one number");
+    $.validator.addMethod("hasUpperCase", function (value, element) {
+        return /[A-Z]/.test(value);
+    }, "Password must contain at least one uppercase letter");
+    $.validator.addMethod("hasLowerCase", function (value, element) {
+        return /[a-z]/.test(value);
+    }, "Password must contain at least one lowercase letter");
+    $.validator.addMethod("hasSpecialChar", function (value, element) {
+        // Use regex to define which characters are considered special
+        return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+    }, "Password must contain at least one special character");
+
+    $("#signup-tab").validate({
+        errorClass: "my-error-class",
+        rules: {
+            ignore: [],
+            fullname: {
+                required: true,
+                maxlength: 50
+            },
+            username: {
+                required: true,
+                maxlength: 50
+            },
+            email: {
+                required: true,
+                maxlength: 50
+            },
+            password: {
+                required: true,
+                minlength: 6,
+                hasNumber: true,
+                hasUpperCase: true,
+                hasLowerCase: true,
+                hasSpecialChar: true
+            },
+            confirmpassword: {
+                equalTo: "#password"
+            }
+        },
+        messages: {
+            fullname: {
+                required: "",
+                maxlength: "Maximum 50 characters are allowed for full name"
+            },
+            username: {
+                required: "",
+                maxlength: "Maximum 50 characters are allowed for username"
+            },
+            email: {
+                required: "",
+                maxlength: "Maximum 50 characters are allowed for email"
+            },
+            password: {
+                required: "Password is required",
+            },
+            confirmpassword: {
+                equalTo: "Passwords do not match"
+            }
+        },
+
+        submitHandler: function (form) {
+            $("#signup-tab .exist-email").empty()
+            $("#signup-tab .exist-username").empty()
+
+            let fullName = $("#signup-tab #fullname").val()
+            let userName = $("#signup-tab #username").val()
+            let email = $("#signup-tab #email").val()
+            let password = $("#signup-tab #password").val()
+
+            let data = {
+                fullName,
+                userName,
+                email,
+                password
+            }
+
+            $.ajax({
+                type: "POST",
+                url: `/account/signup`,
+                data: data,
+                //contentType: 'application/json',
+                success: function (response) {
+                    if (response.errors == null) {
+                        $('#signin-modal').modal('hide');
+                        Swal.fire({
+                            title: "Register is successfull!",
+                            text: "Please confirm your email",
+                            icon: "success"
+                        });
+                    } else if (response.isEmailTaken == true && response.isUsernameTaken == true) {
+                        $("#signup-tab .exist-email").html(`Email '${data.email}' is already taken.`)
+                        $("#signup-tab .exist-username").html(`Username '${data.userName}' is already taken.`)
+                    } else if (response.isUsernameTaken == true) {
+                        $("#signup-tab .exist-username").html(`Username '${data.userName}' is already taken.`)
+                    } else if (response.isEmailTaken == true) {
+                        $("#signup-tab .exist-email").html(`Email '${data.email}' is already taken.`)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#signin-modal').modal('hide');
+                    $('#modal-small').modal('hide');
+                    $(".page-loader").addClass("d-none")
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                }
+            });
+
+            return false; // Prevent normal form submission
+        }
+    });
+})
+
+
