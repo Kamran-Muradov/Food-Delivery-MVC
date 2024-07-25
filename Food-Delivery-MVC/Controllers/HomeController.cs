@@ -1,9 +1,10 @@
-﻿using Food_Delivery_MVC.ViewModels.Categories;
+﻿using Food_Delivery_MVC.Helpers.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Food_Delivery_MVC.Controllers
 {
+    [Authorize(Policy = "RequireAdminRole")]
     public class HomeController : Controller
     {
         private readonly Uri _baseUri = new("https://localhost:7247/api/");
@@ -21,5 +22,5 @@ namespace Food_Delivery_MVC.Controllers
         }
     }
 
-   
+
 }

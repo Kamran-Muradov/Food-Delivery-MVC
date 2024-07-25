@@ -1,8 +1,8 @@
 ﻿using Food_Delivery_MVC.ViewModels.Restaurants;
-using Food_Delivery_MVC.ViewModels;
 using Food_Delivery_MVC.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Food_Delivery_MVC.Helpers;
 
 namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
@@ -26,7 +26,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 
             string data = await response.Content.ReadAsStringAsync();
 
-            PaginationResponseVM<CategoryVM> model = JsonConvert.DeserializeObject<PaginationResponseVM<CategoryVM>>(data);
+            PaginationResponse<CategoryVM> model = JsonConvert.DeserializeObject<PaginationResponse<CategoryVM>>(data);
 
             return View(model);
         }

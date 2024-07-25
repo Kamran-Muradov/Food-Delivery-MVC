@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <!-- Mirrored from cartzilla.createx.studio/home-food-delivery.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 12 Aug 2022 18:14:50 GMT -->
@@ -29,15 +28,15 @@
     <link rel="stylesheet" media="screen" href="~/css/theme.min.css">
     <link rel="stylesheet" media="screen" href="~/admin/dist/css/custom.css">
     <!-- Google Tag Manager-->
-  @*   <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            }); var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                    '../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-WKV3GT5');
+    @*   <script>
+    (function (w, d, s, l, i) {
+    w[l] = w[l] || []; w[l].push({
+    'gtm.start':
+    new Date().getTime(), event: 'gtm.js'
+    }); var f = d.getElementsByTagName(s)[0],
+    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+    '../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-WKV3GT5');
     </script> *@
 </head>
 <!-- Body-->
@@ -47,82 +46,86 @@
         https://nigammishra.github.io/nigam-portfolio/
     </noscript>
     <!-- Sign in / sign up modal-->
-    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-secondary">
-                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
-                        <li class="nav-item"><a class="nav-link fw-medium active" href="#signin-tab" data-bs-toggle="tab" role="tab" aria-selected="true"><i class="ci-unlocked me-2 mt-n1"></i>Sign in</a></li>
-                        <li class="nav-item"><a class="nav-link fw-medium" href="#signup-tab" data-bs-toggle="tab" role="tab" aria-selected="false"><i class="ci-user me-2 mt-n1"></i>Sign up</a></li>
-                    </ul>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body tab-content py-4">
-                    <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab">
-                        <div class="mb-3">
-                            <label class="form-label" for="si-email">Email address</label>
-                            <input class="form-control" type="email" id="email" placeholder="nigammishra826@gmail.com" required>
-                            <div class="invalid-feedback">Please provide a valid email address.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="si-password">Password</label>
-                            <div class="password-toggle">
-                                <input class="form-control" type="password" id="si-password" required>
-                                <label class="password-toggle-btn" aria-label="Show/hide password">
-                                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                                </label>
+    @if (User.Identity != null && !User.Identity.IsAuthenticated)
+    {
+        <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-secondary">
+                        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link fw-medium active" href="#signin-tab" data-bs-toggle="tab" role="tab" aria-selected="true"><i class="ci-unlocked me-2 mt-n1"></i>Sign in</a></li>
+                            <li class="nav-item"><a class="nav-link fw-medium" href="#signup-tab" data-bs-toggle="tab" role="tab" aria-selected="false"><i class="ci-user me-2 mt-n1"></i>Sign up</a></li>
+                        </ul>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body tab-content py-4">
+                        <span class="text-danger signin-error"></span>
+                        <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab">
+                            <div class="mb-3">
+                                <label class="form-label" for="emailorusername">Email or username</label>
+                                <input class="form-control" type="text" id="emailorusername" required>
+                                <div class="invalid-feedback">Please provide a valid email address.</div>
                             </div>
-                        </div>
-                        <div class="mb-3 d-flex flex-wrap justify-content-between">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="si-remember">
-                                <label class="form-check-label" for="si-remember">Remember me</label>
-                            </div><a class="fs-sm" href="#">Forgot password?</a>
-                        </div>
-                        <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button>
-                    </form>
-                    <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
-                        <div class="mb-3">
-                            <label class="form-label" for="fullname">Full name</label>
-                            <input class="form-control" name="fullname" type="text" id="fullname" placeholder="Nigam Mishra" required>
-                            <div class="invalid-feedback">Please fill in your name.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="username">User name</label>
-                            <input class="form-control" name="username" type="text" id="username" placeholder="user123" required>
-                            <span class="text-danger exist-username"></span>
-                            <div class="invalid-feedback">Please fill in your name.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email">Email address</label>
-                            <input class="form-control" type="email" id="email" name="email" placeholder="nigammishra826@gmail.com" required>
-                            <span class="text-danger exist-email"></span>
-                            <div class="invalid-feedback">Please provide a valid email address.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="password">Password</label>
-                            <div class="password-toggle">
-                                <input class="form-control" type="password" id="password" name="password">
-                                <label class="password-toggle-btn" aria-label="Show/hide password">
-                                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                                </label>
+                            <div class="mb-3">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="password-toggle">
+                                    <input class="form-control" type="password" id="password" required>
+                                    <label class="password-toggle-btn" aria-label="Show/hide password">
+                                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="confirmpassword">Confirm password</label>
-                            <div class="password-toggle">
-                                <input class="form-control" type="password" id="confirmpassword" name="confirmpassword">
-                                <label class="password-toggle-btn" aria-label="Show/hide password">
-                                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                                </label>
+                            <div class="mb-3 d-flex flex-wrap justify-content-between">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="remember">
+                                    <label class="form-check-label" for="remember">Remember me</label>
+                                </div><a class="fs-sm" href="#">Forgot password?</a>
                             </div>
-                        </div>
-                        <button id="signup-btn" class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign up</button>
-                    </form>
+                            <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button>
+                        </form>
+                        <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
+                            <div class="mb-3">
+                                <label class="form-label" for="fullname">Full name</label>
+                                <input class="form-control" name="fullname" type="text" id="fullname" placeholder="Nigam Mishra" required>
+                                <div class="invalid-feedback">Please fill in your name.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="username">User name</label>
+                                <input class="form-control" name="username" type="text" id="username" placeholder="user123" required>
+                                <span class="text-danger exist-username"></span>
+                                <div class="invalid-feedback">Please fill in your name.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email">Email address</label>
+                                <input class="form-control" type="email" id="email" name="email" placeholder="nigammishra826@gmail.com" required>
+                                <span class="text-danger exist-email"></span>
+                                <div class="invalid-feedback">Please provide a valid email address.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="password-toggle">
+                                    <input class="form-control" type="password" id="password" name="password">
+                                    <label class="password-toggle-btn" aria-label="Show/hide password">
+                                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="confirmpassword">Confirm password</label>
+                                <div class="password-toggle">
+                                    <input class="form-control" type="password" id="confirmpassword" name="confirmpassword">
+                                    <label class="password-toggle-btn" aria-label="Show/hide password">
+                                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="signup-btn" class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign up</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
     <main class="page-wrapper">
         <!-- Navbar for Food Delivery Service demo-->
         <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
@@ -133,10 +136,32 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button><a class="navbar-tool d-none d-lg-flex" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#searchBox" role="button" aria-expanded="false" aria-controls="searchBox">
                         <span class="navbar-tool-tooltip">Search</span>
                         <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-search"></i></div>
-                    </a><a class="navbar-tool ms-2" href="#signin-modal" data-bs-toggle="modal">
-                        <span class="navbar-tool-tooltip">Account</span>
-                        <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
                     </a>
+                    @if (User.Identity != null && !User.Identity.IsAuthenticated)
+                    {
+                        <a class="navbar-tool ms-2" href="#signin-modal" data-bs-toggle="modal">
+                            <span class="navbar-tool-tooltip">Account</span>
+                            <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
+                        </a>
+                    }
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav navbar-mega-nav ms-lg-4 pe-lg-2 me-lg-2">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle ps-lg-0" href="#" data-bs-toggle="dropdown"><i></i>@userName</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Account</a></li>
+                                    @if (User.IsInRole("Admin")||User.IsInRole("SuperAdmin"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Go to Admin</a></li>
+                                    }
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <input type="submit" class="dropdown-item" value="Logout"/>
+                                    </form>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
                 </div>
                 <div class="collapse navbar-collapse me-auto order-lg-2" id="navbarCollapse">
                     <!-- Search (mobile)-->

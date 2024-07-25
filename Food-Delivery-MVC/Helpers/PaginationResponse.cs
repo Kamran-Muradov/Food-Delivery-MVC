@@ -1,6 +1,6 @@
-﻿namespace Food_Delivery_MVC.ViewModels
+﻿namespace Food_Delivery_MVC.Helpers
 {
-    public class PaginationResponseVM<T>
+    public class PaginationResponse<T>
     {
         public IEnumerable<T> Datas { get; set; }
         public int TotalPage { get; set; }

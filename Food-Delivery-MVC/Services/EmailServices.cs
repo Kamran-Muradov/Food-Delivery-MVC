@@ -3,7 +3,6 @@ using Food_Delivery_MVC.Services.Interfaces;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
-using MimeKit.Text;
 using MimeKit;
 
 namespace Food_Delivery_MVC.Services
@@ -12,9 +11,9 @@ namespace Food_Delivery_MVC.Services
     {
         private readonly EmailSettings _emailSettings;
 
-        public EmailService(IOptions<EmailSettings> emailsettings)
+        public EmailService(IOptions<EmailSettings> emailSettings)
         {
-            _emailSettings = emailsettings.Value;
+            _emailSettings = emailSettings.Value;
         }
 
         public void Send(string to, string subject, string html, string from = null)
@@ -24,7 +23,13 @@ namespace Food_Delivery_MVC.Services
             email.From.Add(MailboxAddress.Parse(from ?? _emailSettings.FromAddress));
             email.To.Add(MailboxAddress.Parse(to));
             email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = html };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = html
+            };
+
+            //email.Body = new TextPart(TextFormat.Html) { Text = html };
+            email.Body = bodyBuilder.ToMessageBody();
 
             // send email
             using var smtp = new SmtpClient();

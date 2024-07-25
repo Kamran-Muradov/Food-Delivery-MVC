@@ -43,11 +43,9 @@ namespace Food_Delivery_MVC.Controllers
 
             if (response.Errors is not null) return Ok(response);
 
-            string encodedToken = WebUtility.UrlEncode(response.ConfirmationToken);
+            var url = Url.Action(nameof(ConfirmEmail), "Account", new { userId = response.UserId, token = response.ConfirmationToken }, Request.Scheme, Request.Host.ToString());
 
-            var url = Url.Action(nameof(ConfirmEmail), "Account", new { userId = response.UserId, token = encodedToken }, Request.Scheme, Request.Host.ToString());
-
-            string path = _env.GenerateFilePath("templates", "confirm.html");
+            string path = _env.GenerateFilePath("templates", "new-email.html");
 
             string html = await path.ReadFromFileAsync();
 
@@ -56,7 +54,6 @@ namespace Food_Delivery_MVC.Controllers
             _emailService.Send(request.Email, "Email confirmation", confirmHtml);
 
             return Ok(response);
-
         }
 
         [HttpGet]
@@ -78,6 +75,50 @@ namespace Food_Delivery_MVC.Controllers
         public IActionResult VerifySuccess()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(LoginVM request)
+        {
+            string data = JsonConvert.SerializeObject(request);
+
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/signin", content);
+
+            var responseContent = await responseMessage.Content.ReadAsStringAsync();
+            LoginResponse response = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
+
+            if (!response.Success) return Ok(response);
+
+            if (request.RememberMe)
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddDays(30),
+                    IsEssential = true,
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict
+                };
+
+                Response.Cookies.Append("JWTToken", response.Token, cookieOptions);
+            }
+            else
+            {
+                Response.Cookies.Append("JWTToken", response.Token);
+
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("JWTToken");
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿$(function () {
-    $(document).on("click", "#signup-tab #signup-btn", function () {
-        $("#signup-tab .exist-email").empty()
-        $("#signup-tab .exist-username").empty()
-    })
+
 
     $.validator.addMethod("hasNumber", function (value, element) {
         return /[0-9]/.test(value);
@@ -17,6 +14,73 @@
         // Use regex to define which characters are considered special
         return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
     }, "Password must contain at least one special character");
+
+    $("#signin-tab").validate({
+        errorClass: "my-error-class",
+        rules: {
+            emailorusername: {
+                required: true,
+                maxlength: 50
+            },
+            password: {
+                required: true,
+            },
+        },
+        messages: {
+            emailorusername: {
+                required: "Email or username is required",
+                maxlength: "Maximum 50 characters are allowed for full name"
+            },
+            password: {
+                required: "Password is required",
+            },
+        },
+
+        submitHandler: function (form) {
+
+            let emailorusername = $("#signin-tab #emailorusername").val()
+            let password = $("#signin-tab #password").val()
+            let rememberMe = $("#signin-tab #remember").is(":checked")
+
+            let data = {
+                emailorusername,
+                password,
+                rememberMe
+            }
+
+            $.ajax({
+                type: "POST",
+                url: `/account/signin`,
+                data: data,
+                //contentType: 'application/json',
+                success: function (response) {
+                    if (response.success == true) {
+                        $('#signin-modal').modal('hide');
+                        window.location.reload()
+                    } else {
+                        console.log($("#signin-tab .signin-error"))
+                        $(".signin-error").html("Signin failed")
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#signin-modal').modal('hide');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                }
+            });
+
+            return false; // Prevent normal form submission
+        }
+    });
+
+    ///
+    $(document).on("click", "#signup-tab #signup-btn", function () {
+        $("#signup-tab .exist-email").empty()
+        $("#signup-tab .exist-username").empty()
+    })
 
     $("#signup-tab").validate({
         errorClass: "my-error-class",

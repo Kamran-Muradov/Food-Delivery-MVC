@@ -1,4 +1,4 @@
-﻿using Food_Delivery_MVC.ViewModels;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.Restaurants;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -25,7 +25,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 
             string data = await response.Content.ReadAsStringAsync();
 
-            PaginationResponseVM<RestaurantVM> model = JsonConvert.DeserializeObject<PaginationResponseVM<RestaurantVM>>(data);
+            PaginationResponse<RestaurantVM> model = JsonConvert.DeserializeObject<PaginationResponse<RestaurantVM>>(data);
 
             return View(model);
         }

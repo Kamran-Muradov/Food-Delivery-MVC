@@ -721,9 +721,10 @@
     function updateTable(response) {
 
         tableBody.empty()
+        let html = ""
         $.each(response.datas, function (index, item) {
 
-            tableBody.append(`<tr data-id="${item.id}">
+            html += `<tr data-id="${item.id}">
                                     <td class="sort-name">
                                         <img data-id="${item.id}" src="${item.mainImage}" style="width:90px;height:54px" alt="" />
                                     </td>
@@ -745,7 +746,8 @@
                                         Edit images
                                         </a>
                                     </td>
-                                </tr>`);
+                                </tr>`;
         })
+        tableBody.append(html)
     }
 })
