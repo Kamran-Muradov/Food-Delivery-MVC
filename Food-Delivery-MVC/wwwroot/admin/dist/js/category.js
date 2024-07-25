@@ -5,6 +5,7 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
+    const header = "Bearer " + $.cookie("JWTToken");
 
     $("#form-create").validate({
         errorClass: "my-error-class",
@@ -41,18 +42,22 @@
                 formData.append('image', files[i]);
             }
 
-            $(".page-loader").removeClass("d-none")
-            $('#modal-report').modal('hide');
+            $("#form-create #create-btn").addClass("d-none")
+            $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
                 url: 'https://localhost:7247/api/admin/category/create',
                 method: 'POST',
+                headers: {
+                    'Authorization': header
+                },
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function (response) {
                     $('#modal-report').modal('hide');
-                    $(".page-loader").addClass("d-none")
+                    $("#form-create #create-btn").removeClass("d-none")
+                    $("#form-create #loading-create-btn").addClass("d-none")
 
                     Swal.fire({
                         position: "top-end",
@@ -69,8 +74,9 @@
                         })
                 },
                 error: function (xhr, status, error) {
+                    $("#form-create #create-btn").removeClass("d-none")
+                    $("#form-create #loading-create-btn").addClass("d-none")
                     $('#modal-report').modal('hide');
-                    $(".page-loader").addClass("d-none")
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -163,17 +169,30 @@
             })
     })
 
-    $(document).on('click', '#table-area .btn-warning', function (e) {
+    $(document).on('click', '#table-area .table-tbody .btn-warning', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
         $('#table-area #form-edit').attr('data-id', id)
+        $('#table-area #form-edit #image').val("")
 
         $.ajax({
             type: "GET",
             url: `https://localhost:7247/api/admin/category/getbyid/${id}`,
+            headers: {
+                'Authorization': header
+            },
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #name').val(response.name)
+            },
+            error: function (xhr, status, error) {
+                $('#modal-report').modal('hide');
+                $(".page-loader").addClass("d-none")
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
             }
         });
     })
@@ -203,7 +222,6 @@
 
         submitHandler: function (form) {
             let id = $('#table-area #form-edit').attr('data-id')
-
             let formData = new FormData();
             formData.append('name', $('#table-area #modal-edit #name').val());
 
@@ -212,18 +230,34 @@
                 formData.append('image', files[i]);
             }
 
-            $(".page-loader").removeClass("d-none")
-            $('#modal-edit').modal('hide');
+            $("#form-edit #edit-btn").addClass("d-none")
+            $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
                 url: `https://localhost:7247/api/admin/category/edit/${id}`,
                 method: 'PUT',
+                headers: {
+                    'Authorization': header
+                },
                 processData: false,
                 contentType: false,
                 data: formData,
+                error: function (xhr, status, error) {
+                    $("#form-edit #edit-btn").removeClass("d-none")
+                    $("#form-edit #loading-edit-btn").addClass("d-none")
+                    $('#modal-edit').modal('hide');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                },
                 success: function () {
                     $.ajax({
                         url: `https://localhost:7247/api/admin/categoryimage/getbycategoryid/${id}`,
+                        headers: {
+                            'Authorization': header
+                        },
                         method: 'GET',
                         dataType: 'json',
                         success: function (response) {
@@ -251,8 +285,10 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                         </a>
                                     </td>`)
+
                             $('#modal-edit').modal('hide');
-                            $(".page-loader").addClass("d-none")
+                            $("#form-edit #edit-btn").removeClass("d-none")
+                            $("#form-edit #loading-edit-btn").addClass("d-none")
 
                             Swal.fire({
                                 position: "top-end",
@@ -264,17 +300,8 @@
                         },
                         error: function (xhr, status, error) {
                             $('#modal-edit').modal('hide');
-                            $(".page-loader").addClass("d-none")
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Something went wrong!",
-                            });
-                        },
-
-                        error: function (xhr, status, error) {
-                            $('#modal-edit').modal('hide');
-                            $(".page-loader").addClass("d-none")
+                            $("#form-edit #edit-btn").removeClass("d-none")
+                            $("#form-edit #loading-edit-btn").addClass("d-none")
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
@@ -282,7 +309,6 @@
                             });
                         }
                     });
-
                 }
             });
             return false; // Prevent normal form submission
@@ -290,21 +316,25 @@
     });
 
     $(document).on("click", "#table-area .delete-btn", function (e) {
-        e.preventDefault()
         let id = parseInt($(this).attr("data-id"));
         $("#table-area .yes-btn").attr("data-id", id)
     })
 
     $(document).on("click", "#table-area .yes-btn", function () {
         let id = parseInt($(this).attr("data-id"));
-        $(".page-loader").removeClass("d-none")
+        $("#table-area .yes-btn").addClass("d-none")
+        $("#table-area #loading-delete-btn").removeClass("d-none")
 
         $.ajax({
             type: "DELETE",
             url: `https://localhost:7247/api/admin/category/Delete?id=${id}`,
+            headers: {
+                'Authorization': header
+            },
             success: function (response) {
                 $('#modal-small').modal('hide');
-                $(".page-loader").addClass("d-none")
+                $("#table-area .yes-btn").removeClass("d-none")
+                $("#table-area #loading-delete-btn").addClass("d-none")
 
                 Swal.fire({
                     position: "top-end",
@@ -321,6 +351,8 @@
                     })
             },
             error: function (xhr, status, error) {
+                $("#table-area .yes-btn").removeClass("d-none")
+                $("#table-area #loading-delete-btn").addClass("d-none")
                 $('#modal-small').modal('hide');
                 $(".page-loader").addClass("d-none")
                 Swal.fire({
@@ -335,8 +367,20 @@
     function getPaginatedDatas(page) {
         return Promise.resolve($.ajax({
             type: "GET",
+            headers: {
+                'Authorization': header
+            },
             url: `https://localhost:7247/api/admin/category/GetPaginateDatas?page=${page}&take=5`,
-            dataType: 'json'
+            dataType: 'json',
+            error: function (xhr, status, error) {
+                $('#modal-small').modal('hide');
+                $(".page-loader").addClass("d-none")
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            }
         }));
     }
 

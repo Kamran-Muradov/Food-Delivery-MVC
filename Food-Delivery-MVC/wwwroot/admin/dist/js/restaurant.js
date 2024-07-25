@@ -5,6 +5,7 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
+    const header = "Bearer " + $.cookie("JWTToken");
 
     $("#form-create").validate({
         errorClass: "my-error-class",
@@ -120,18 +121,22 @@
                 formData.append('images', files[i]);
             }
 
-            $(".page-loader").removeClass("d-none")
-            $('#modal-report').modal('hide');
+            $("#form-create #create-btn").addClass("d-none")
+            $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
                 url: 'https://localhost:7247/api/admin/restaurant/create',
+                headers: {
+                    'Authorization': header
+                },
                 method: 'POST',
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function (response) {
                     $('#modal-report').modal('hide');
-                    $(".page-loader").addClass("d-none")
+                    $("#form-create #create-btn").removeClass("d-none")
+                    $("#form-create #loading-create-btn").addClass("d-none")
 
                     Swal.fire({
                         position: "top-end",
@@ -149,7 +154,8 @@
                 },
                 error: function (xhr, status, error) {
                     $('#modal-report').modal('hide');
-                    $(".page-loader").addClass("d-none")
+                    $("#form-create #create-btn").removeClass("d-none")
+                    $("#form-create #loading-create-btn").addClass("d-none")
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -242,14 +248,18 @@
             })
     })
 
-    $(document).on('click', '#table-area .btn-warning', function (e) {
+    $(document).on('click', '#table-area .table-tbody .btn-warning', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
         $('#table-area #form-edit').attr('data-id', id)
+        $('#table-area #form-edit #images').val("")
 
         $.ajax({
             type: "GET",
             url: `https://localhost:7247/api/admin/restaurant/getbyid/${id}`,
+            headers: {
+                'Authorization': header
+            },
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #name').val(response.name)
@@ -381,11 +391,14 @@
                 formData.append('images', files[i]);
             }
 
-            $(".page-loader").removeClass("d-none")
-            $('#modal-edit').modal('hide');
+            $("#form-edit #edit-btn").addClass("d-none")
+            $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
                 url: `https://localhost:7247/api/admin/restaurant/edit/${id}`,
+                headers: {
+                    'Authorization': header
+                },
                 method: 'PUT',
                 processData: false,
                 contentType: false,
@@ -420,7 +433,8 @@
                                         </a>
                                     </td>`)
                     $('#modal-edit').modal('hide');
-                    $(".page-loader").addClass("d-none")
+                    $("#form-edit #edit-btn").removeClass("d-none")
+                    $("#form-edit #loading-edit-btn").addClass("d-none")
 
                     Swal.fire({
                         position: "top-end",
@@ -432,7 +446,8 @@
                 },
                 error: function (xhr, status, error) {
                     $('#modal-edit').modal('hide');
-                    $(".page-loader").addClass("d-none")
+                    $("#form-edit #edit-btn").removeClass("d-none")
+                    $("#form-edit #loading-edit-btn").addClass("d-none")
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -453,6 +468,9 @@
         $.ajax({
             type: "GET",
             url: `https://localhost:7247/api/admin/restaurantimage/getallbyrestaurantid/${id}`,
+            headers: {
+                'Authorization': header
+            },
             dataType: 'json',
             success: function (response) {
                 let html = "";
@@ -523,6 +541,9 @@
         $.ajax({
             type: "POST",
             url: `https://localhost:7247/api/admin/restaurant/SetMainImage`,
+            headers: {
+                'Authorization': header
+            },
             data: data,
             contentType: 'application/json',
             success: function () {
@@ -536,7 +557,16 @@
                 $(`[data-id=${imageId}]`).closest(".col-4")
                     .addClass("hide-btn")
                     .removeClass("show-btn");
-            }
+            },
+            error: function (xhr, status, error) {
+                $('#modal-edit').modal('hide');
+                $(".page-loader").addClass("d-none")
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            },
         });
 
     })
@@ -552,6 +582,9 @@
         $.ajax({
             type: "POST",
             url: `https://localhost:7247/api/admin/restaurant/DeleteImage`,
+            headers: {
+                'Authorization': header
+            },
             data: data,
             contentType: 'application/json',
             success: function () {
@@ -564,20 +597,23 @@
         e.preventDefault()
         let id = parseInt($(this).attr("data-id"));
         $("#table-area .yes-btn").attr("data-id", id)
-
-
     })
 
     $(document).on("click", "#table-area .yes-btn", function () {
         let id = parseInt($(this).attr("data-id"));
-        $(".page-loader").removeClass("d-none")
+        $("#table-area .yes-btn").addClass("d-none")
+        $("#table-area #loading-delete-btn").removeClass("d-none")
 
         $.ajax({
             type: "DELETE",
             url: `https://localhost:7247/api/admin/Restaurant/Delete?id=${id}`,
+            headers: {
+                'Authorization': header
+            },
             success: function (response) {
                 $('#modal-small').modal('hide');
-                $(".page-loader").addClass("d-none")
+                $("#table-area .yes-btn").removeClass("d-none")
+                $("#table-area #loading-delete-btn").addClass("d-none")
 
                 Swal.fire({
                     position: "top-end",
@@ -595,7 +631,8 @@
             },
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
-                $(".page-loader").addClass("d-none")
+                $("#table-area .yes-btn").removeClass("d-none")
+                $("#table-area #loading-delete-btn").addClass("d-none")
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -616,6 +653,9 @@
         $.ajax({
             type: "GET",
             url: `https://localhost:7247/api/admin/restaurant/getbyid/${id}`,
+            headers: {
+                'Authorization': header
+            },
             dataType: 'json',
             success: function (response) {
                 let imgHtml = "";
@@ -691,7 +731,19 @@
         return Promise.resolve($.ajax({
             type: "GET",
             url: `https://localhost:7247/api/admin/restaurant/GetPaginateDatas?page=${page}&take=5`,
-            dataType: 'json'
+            headers: {
+                'Authorization': header
+            },
+            dataType: 'json',
+            error: function (xhr, status, error) {
+                $('#modal-small').modal('hide');
+                $(".page-loader").addClass("d-none")
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            }
         }));
     }
 

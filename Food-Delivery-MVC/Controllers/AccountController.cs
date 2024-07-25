@@ -1,4 +1,4 @@
-﻿using Food_Delivery_MVC.Helpers;
+﻿using Food_Delivery_MVC.Helpers.Account;
 using Food_Delivery_MVC.Helpers.Extensions;
 using Food_Delivery_MVC.Services.Interfaces;
 using Food_Delivery_MVC.ViewModels.Account;
@@ -45,13 +45,13 @@ namespace Food_Delivery_MVC.Controllers
 
             var url = Url.Action(nameof(ConfirmEmail), "Account", new { userId = response.UserId, token = response.ConfirmationToken }, Request.Scheme, Request.Host.ToString());
 
-            string path = _env.GenerateFilePath("templates", "new-email.html");
+            string path = _env.GenerateFilePath("templates", "confirm-email.html");
 
-            string html = await path.ReadFromFileAsync();
+            string htmlTemplate = await path.ReadFromFileAsync();
 
-            string confirmHtml = html.Replace("verify-link", url);
+            string html = htmlTemplate.Replace("verify-link", url);
 
-            _emailService.Send(request.Email, "Email confirmation", confirmHtml);
+            _emailService.Send(request.Email, "Email confirmation", html);
 
             return Ok(response);
         }
@@ -86,6 +86,8 @@ namespace Food_Delivery_MVC.Controllers
 
             HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/signin", content);
 
+            responseMessage.EnsureSuccessStatusCode();
+
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
             LoginResponse response = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
 
@@ -97,7 +99,7 @@ namespace Food_Delivery_MVC.Controllers
                 {
                     Expires = DateTime.UtcNow.AddDays(30),
                     IsEssential = true,
-                    HttpOnly = true,
+                    HttpOnly = false,
                     SameSite = SameSiteMode.Strict
                 };
 
@@ -117,6 +119,83 @@ namespace Food_Delivery_MVC.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("JWTToken");
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordVM request)
+        {
+            string data = JsonConvert.SerializeObject(request);
+
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/forgotpassword", content);
+            responseMessage.EnsureSuccessStatusCode();
+
+            var responseContent = await responseMessage.Content.ReadAsStringAsync();
+            ForgotPasswordResponse response = JsonConvert.DeserializeObject<ForgotPasswordResponse>(responseContent);
+
+            if (response.Success)
+            {
+                var url = Url.Action(nameof(ResetPassword), "Account", new { userId = response.UserId, token = response.PasswordResetToken }, Request.Scheme, Request.Host.ToString());
+
+                string path = _env.GenerateFilePath("templates", "new-email.html");
+
+                string htmlTemplate = await path.ReadFromFileAsync();
+
+                string html = htmlTemplate.Replace("{link}", url);
+
+                _emailService.Send(response.Email, "Reset password", html);
+            }
+
+            return RedirectToAction(nameof(ForgotPasswordSuccess));
+        }
+
+        public IActionResult ForgotPasswordSuccess()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string userId, string token)
+        {
+            if (userId is null || token is null) return BadRequest();
+
+            token = token.Replace(" ", "+");
+
+            return View(new PasswordResetVM { UserId = userId, Token = token });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(PasswordResetVM request)
+        {
+            if (!ModelState.IsValid) return BadRequest(request);
+
+            string data = JsonConvert.SerializeObject(request);
+
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/resetpassword", content);
+
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
+                if (responseContent.Contains("same"))
+                {
+                    ModelState.AddModelError("NewPassword", "New password cannot be same as old password");
+                    return View(request);
+                }
+            }
+
+            responseMessage.EnsureSuccessStatusCode();
 
             return RedirectToAction("Index", "Home");
         }

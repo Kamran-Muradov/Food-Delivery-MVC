@@ -1,4 +1,4 @@
-﻿namespace Food_Delivery_MVC.Helpers
+﻿namespace Food_Delivery_MVC.Helpers.Account
 {
     public class RegisterResponse
     {

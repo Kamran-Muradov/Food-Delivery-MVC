@@ -1,26 +1,27 @@
-﻿using Food_Delivery_MVC.ViewModels.Restaurants;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Food_Delivery_MVC.Helpers;
 
 namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    //[Authorize(Policy = "RequireAdminRole")]
+    public class CategoryController : BaseController
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
-        private readonly HttpClient _httpClient;
+        //private readonly Uri _baseUri = new("https://localhost:7247/api/");
+        //private readonly HttpClient _httpClient;
 
-        public CategoryController(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
-        }
+        //public CategoryController(HttpClient httpClient)
+        //{
+        //    _httpClient = httpClient;
+        //    _httpClient.BaseAddress = _baseUri;
+        //}
+        public CategoryController(HttpClient httpClient) : base(httpClient) { }
 
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("admin/category/GetPaginateDatas?page=1&take=5");
+            HttpResponseMessage response = await HttpClient.GetAsync("admin/category/GetPaginateDatas?page=1&take=5");
 
             response.EnsureSuccessStatusCode();
 
@@ -30,5 +31,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 
             return View(model);
         }
+
+        
     }
 }

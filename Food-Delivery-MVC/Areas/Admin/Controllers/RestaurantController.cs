@@ -5,21 +5,12 @@ using Newtonsoft.Json;
 
 namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class RestaurantController : Controller
+    public class RestaurantController : BaseController
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
-        private readonly HttpClient _httpClient;
-
-        public RestaurantController(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
-        }
-
+        public RestaurantController(HttpClient httpClient) : base(httpClient) { }
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("admin/Restaurant/GetPaginateDatas?page=1&take=5");
+            HttpResponseMessage response = await HttpClient.GetAsync("admin/Restaurant/GetPaginateDatas?page=1&take=5");
 
             response.EnsureSuccessStatusCode();
 
@@ -29,5 +20,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 
             return View(model);
         }
+
+       
     }
 }

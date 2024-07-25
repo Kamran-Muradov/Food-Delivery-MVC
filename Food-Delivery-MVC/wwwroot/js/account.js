@@ -47,23 +47,27 @@
                 password,
                 rememberMe
             }
+            $("#signin-tab #signin-btn").addClass("d-none")
+            $("#signin-tab #loading-btn").removeClass("d-none")
 
             $.ajax({
                 type: "POST",
                 url: `/account/signin`,
                 data: data,
-                //contentType: 'application/json',
                 success: function (response) {
+                    $("#signin-tab #signin-btn").removeClass("d-none")
+                    $("#signin-tab #loading-btn").addClass("d-none")
                     if (response.success == true) {
                         $('#signin-modal').modal('hide');
                         window.location.reload()
                     } else {
-                        console.log($("#signin-tab .signin-error"))
                         $(".signin-error").html("Signin failed")
                     }
                 },
                 error: function (xhr, status, error) {
                     $('#signin-modal').modal('hide');
+                    $("#signin-tab #signin-btn").removeClass("d-none")
+                    $("#signin-tab #loading-btn").addClass("d-none")
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -107,7 +111,7 @@
                 hasSpecialChar: true
             },
             confirmpassword: {
-                equalTo: "#password"
+                equalTo: "#signup-tab #password"
             }
         },
         messages: {
@@ -134,6 +138,8 @@
         submitHandler: function (form) {
             $("#signup-tab .exist-email").empty()
             $("#signup-tab .exist-username").empty()
+            $("#signup-tab #signup-btn").addClass("d-none")
+            $("#signup-tab #loading-btn").removeClass("d-none")
 
             let fullName = $("#signup-tab #fullname").val()
             let userName = $("#signup-tab #username").val()
@@ -153,6 +159,8 @@
                 data: data,
                 //contentType: 'application/json',
                 success: function (response) {
+                    $("#signup-tab #signup-btn").removeClass("d-none")
+                    $("#signup-tab #loading-btn").addClass("d-none")
                     if (response.errors == null) {
                         $('#signin-modal').modal('hide');
                         Swal.fire({
@@ -170,6 +178,8 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    $("#signup-tab #signup-btn").removeClass("d-none")
+                    $("#signup-tab #loading-btn").addClass("d-none")
                     $('#signin-modal').modal('hide');
                     $('#modal-small').modal('hide');
                     $(".page-loader").addClass("d-none")
@@ -183,6 +193,47 @@
 
             return false; // Prevent normal form submission
         }
+    });
+
+    $("#forgot-password-tab").validate({
+        errorClass: "my-error-class",
+        rules: {
+            emailorusername: {
+                required: true,
+                maxlength: 50
+            },
+        },
+        messages: {
+            emailorusername: {
+                required: "Email or username is required",
+                maxlength: "Maximum 50 characters are allowed for full name"
+            },
+        },
+    });
+
+    $("#reset-password-tab").validate({
+        errorClass: "my-error-class",
+        rules: {
+            newpassword: {
+                required: true,
+                minlength: 6,
+                hasNumber: true,
+                hasUpperCase: true,
+                hasLowerCase: true,
+                hasSpecialChar: true
+            },
+            confirmpassword: {
+                equalTo: "#reset-password-tab #newpassword"
+            }
+        },
+        messages: {
+           password: {
+                required: "Password is required",
+            },
+            confirmpassword: {
+                equalTo: "Passwords do not match"
+            }
+        },
     });
 })
 
