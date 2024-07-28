@@ -1,4 +1,4 @@
-﻿@model PaginationResponse<CategoryVM>
+﻿@model PaginationResponse<MenuVariantVM>
 
 @{
     ViewData["Title"] = "Index";
@@ -19,7 +19,7 @@
                 {
                     <div class="">
                         <div class="btn-list">
-                            <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                            <a id="toggle-create" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                 Create
                             </a>
@@ -38,8 +38,8 @@
                     <div class="col-2">
                         <div class="form-label">Sort by</div>
                         <select class="form-select">
-                            <option value="Name">Name</option>
                             <option value="Create date">Create date</option>
+                            <option value="Name">Name</option>
                             <option value="Update date">Update date</option>
                         </select>
                     </div>
@@ -55,8 +55,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Image</th>
-                            <th>Name</th>
+                            <th>Option</th>
                             <th>Create Date</th>
                             <th>Update Date</th>
                             <th>Operations</th>
@@ -66,10 +65,7 @@
                         @foreach (var item in Model.Datas)
                         {
                             <tr data-id="@item.Id">
-                                <td class="sort-name">
-                                    <img data-id="@item.Id" src="@item.Image" style="width:90px;height:54px" alt="" />
-                                </td>
-                                <td class="sort-name">@item.Name</td>
+                                <td class="sort-name">@item.Option</td>
                                 <td class="sort-name create-date">@item.CreatedDate</td>
                                 <td class="sort-name">@item.UpdatedDate</td>
                                 <td>
@@ -118,16 +114,40 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form id="form-create" class="data-create" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Name</label>
-                                <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Option</label>
+                                        <input autocomplete="off" id="option" type="text" class="form-control" name="option" placeholder="Option..."/>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Upload image</label>
-                                <input autocomplete="off" id="image" type="file" class="form-control" name="image">
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Additional price</label>
+                                        <input autocomplete="off" id="addprice" type="number" class="form-control" name="addprice">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Choose type</label>
+                                        <select id="types" name="types" class="form-select">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Choose menu</label>
+                                        <select id="menus" name="menus" class="form-select">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -157,16 +177,40 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Name</label>
-                            <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Option</label>
+                                    <input autocomplete="off" id="option" type="text" class="form-control" name="option" placeholder="Option..."/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Upload images</label>
-                            <input autocomplete="off" id="image" type="file" class="form-control" name="image">
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Additional price</label>
+                                    <input autocomplete="off" id="addprice" type="number" class="form-control" name="addprice">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Choose type</label>
+                                    <select id="types" name="types" class="form-select">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Choose menu</label>
+                                    <select id="menus" name="menus" class="form-select">
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -198,7 +242,7 @@
                     <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                 }
                 <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                    <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
                 </li>
             </ul>
         </nav>
@@ -207,6 +251,6 @@
 
 
 @section js {
-    <script src="~/admin/dist/js/category.js"></script>
+    <script src="~/admin/dist/js/menuvariant.js"></script>
 }
 

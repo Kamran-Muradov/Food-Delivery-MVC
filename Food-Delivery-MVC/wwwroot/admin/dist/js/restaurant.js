@@ -39,11 +39,6 @@
                 required: true,
                 min: 1
             },
-            maxtime: {
-                required: true,
-                min: 1,
-                max: 55
-            },
             website: {
                 url: true
             },
@@ -88,11 +83,6 @@
                 min: "Minimum delivery time must be minimum 1",
                 max: "Minimum delivery time must be maximum 55"
             },
-            maxtime: {
-                required: "Maximum delivery time is required",
-                min: "Maximum delivery time must be minimum 1",
-                max: "Maximum delivery time must be maximum 55"
-            },
             images: {
                 required: "At least one image is required",
                 extension: "File must be image type",
@@ -110,7 +100,6 @@
             formData.append('deliveryFee', $('#table-area #delfee').val());
             formData.append('minimumOrder', $('#table-area #minorder').val());
             formData.append('minDeliveryTime', $('#table-area #mintime').val());
-            formData.append('maxDeliveryTime', $('#table-area #maxtime').val());
             formData.append('website', $('#table-area #website').val());
             formData.append('isActive', $('#table-area #active').val());
             formData.append('email', $('#table-area #email').val());
@@ -310,11 +299,6 @@
                 required: true,
                 min: 1
             },
-            maxtime: {
-                required: true,
-                min: 1,
-                max: 55
-            },
             website: {
                 url: true
             },
@@ -358,11 +342,6 @@
                 min: "Minimum delivery time must be minimum 1",
                 max: "Minimum delivery time must be maximum 55"
             },
-            maxtime: {
-                required: "Maximum delivery time is required",
-                min: "Maximum delivery time must be minimum 1",
-                max: "Maximum delivery time must be maximum 55"
-            },
             images: {
                 extension: "File must be image type",
                 filesize: "Image size cannot exceed 500Kb"
@@ -380,7 +359,6 @@
             formData.append('deliveryFee', $('#table-area #modal-edit #delfee').val());
             formData.append('minimumOrder', $('#table-area #modal-edit #minorder').val());
             formData.append('minDeliveryTime', $('#table-area #modal-edit #mintime').val());
-            formData.append('maxDeliveryTime', $('#table-area #modal-edit #maxtime').val());
             formData.append('website', $('#table-area #modal-edit #website').val());
             formData.append('isActive', $('#table-area #modal-edit #active').val());
             formData.append('email', $('#table-area #modal-edit #email').val());

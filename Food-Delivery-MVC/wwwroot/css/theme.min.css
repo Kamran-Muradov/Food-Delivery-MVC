@@ -1,4 +1,8 @@
-
+.required:after {
+    content: "*";
+    margin-left: .25rem;
+    color: #d63939
+}
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;

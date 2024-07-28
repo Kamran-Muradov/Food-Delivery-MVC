@@ -1,8 +1,4 @@
 ﻿$(function () {
-    $.validator.addMethod('filesize', function (value, element, param) {
-        return this.optional(element) || (element.files[0].size <= param)
-    }, 'File size must be less than {0}');
-
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
     const header = "Bearer " + $.cookie("JWTToken");
@@ -14,46 +10,31 @@
                 required: true,
                 maxlength: 50
             },
-            image: {
-                required: true,
-                extension: "jpeg|img|svg|webp|avif|jpg|png",
-                filesize: 512000
-            }
         },
         messages: {
             name: {
                 required: "Name is required",
                 maxlength: "Maximum 50 characters are allowed for name"
             },
-            image: {
-                required: "Image is required",
-                extension: "File must be image type",
-                filesize: "Image size cannot exceed 500Kb"
-            }
         },
 
         submitHandler: function (form) {
-
-            let formData = new FormData();
-            formData.append('name', $('#table-area #name').val());
-
-            let files = $('#table-area #image')[0].files;
-            for (var i = 0; i < files.length; i++) {
-                formData.append('image', files[i]);
-            }
+            let data = JSON.stringify(
+                {
+                    name: $('#table-area #name').val()
+                })
 
             $("#form-create #create-btn").addClass("d-none")
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/category/create',
+                url: 'https://localhost:7247/api/admin/ingredient/create',
                 method: 'POST',
                 headers: {
                     'Authorization': header
                 },
-                processData: false,
-                contentType: false,
-                data: formData,
+                contentType: 'application/json',
+                data: data,
                 success: function (response) {
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
@@ -80,7 +61,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Category with this name already exists",
+                            text: "Ingredient with this name already exists",
                         });
                     } else {
                         $("#form-create #create-btn").removeClass("d-none")
@@ -187,7 +168,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/category/getbyid/${id}`,
+            url: `https://localhost:7247/api/admin/ingredient/getbyid/${id}`,
             headers: {
                 'Authorization': header
             },
@@ -214,44 +195,32 @@
                 required: true,
                 maxlength: 50
             },
-            image: {
-                extension: "jpeg|img|svg|webp|avif|jpg|png",
-                filesize: 512000
-            }
         },
         messages: {
             name: {
                 required: "Name is required",
                 maxlength: "Maximum 50 characters are allowed for name"
             },
-            image: {
-                extension: "File must be image type",
-                filesize: "Image size cannot exceed 500Kb"
-            }
         },
 
         submitHandler: function (form) {
             let id = $('#table-area #form-edit').attr('data-id')
-            let formData = new FormData();
-            formData.append('name', $('#table-area #modal-edit #name').val());
-
-            let files = $('#table-area #modal-edit #image')[0].files;
-            for (var i = 0; i < files.length; i++) {
-                formData.append('image', files[i]);
-            }
+            let data = JSON.stringify(
+                {
+                    name: $('#table-area #modal-edit #name').val()
+                })
 
             $("#form-edit #edit-btn").addClass("d-none")
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/category/edit/${id}`,
+                url: `https://localhost:7247/api/admin/ingredient/edit/${id}`,
                 method: 'PUT',
                 headers: {
                     'Authorization': header
                 },
-                processData: false,
-                contentType: false,
-                data: formData,
+                data: data,
+                contentType: 'application/json',
                 error: function (xhr, status, error) {
                     if (xhr.status == 409) {
                         $("#form-edit #edit-btn").removeClass("d-none")
@@ -259,7 +228,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Category with this name already exists",
+                            text: "Ingredient with this name already exists",
                         });
                     } else {
                         $("#form-edit #edit-btn").removeClass("d-none")
@@ -273,25 +242,12 @@
                     }
                 },
                 success: function () {
-                    $.ajax({
-                        url: `https://localhost:7247/api/admin/categoryimage/getbycategoryid/${id}`,
-                        headers: {
-                            'Authorization': header
-                        },
-                        method: 'GET',
-                        dataType: 'json',
-                        success: function (response) {
-
-                            let row = $(`#table-area tr[data-id="${id}"]`)
-                            let imageUrl = response.url
-                            let createdDate = $(`#table-area tr[data-id="${id}"] .create-date`).html()
-                            let updatedDate = moment().format('MM/DD/yyyy')
-                            let name = formData.get('name')
-                            row.empty()
-                            row.html(`    <td class="sort-name">
-                                        <img data-id="${id}" src="${imageUrl}" style="width:90px;height:54px" alt="" />
-                                    </td>
-                                    <td class="sort-name">${name}</td>
+                    let row = $(`#table-area tr[data-id="${id}"]`)
+                    let createdDate = $(`#table-area tr[data-id="${id}"] .create-date`).html()
+                    let updatedDate = moment().format('MM/DD/yyyy')
+                    let name = $('#table-area #modal-edit #name').val()
+                    row.empty()
+                    row.html(`<td class="sort-name">${name}</td>
                                     <td class="sort-name create-date">${createdDate}</td>
                                     <td class="sort-name">${updatedDate}</td>
                                     <td>
@@ -303,28 +259,26 @@
                                         </a>
                                     </td>`)
 
-                            $('#modal-edit').modal('hide');
-                            $("#form-edit #edit-btn").removeClass("d-none")
-                            $("#form-edit #loading-edit-btn").addClass("d-none")
+                    $('#modal-edit').modal('hide');
+                    $("#form-edit #edit-btn").removeClass("d-none")
+                    $("#form-edit #loading-edit-btn").addClass("d-none")
 
-                            Swal.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: "Operation is successfull",
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            $('#modal-edit').modal('hide');
-                            $("#form-edit #edit-btn").removeClass("d-none")
-                            $("#form-edit #loading-edit-btn").addClass("d-none")
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Something went wrong!",
-                            });
-                        }
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Operation is successfull",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+                error: function (xhr, status, error) {
+                    $('#modal-edit').modal('hide');
+                    $("#form-edit #edit-btn").removeClass("d-none")
+                    $("#form-edit #loading-edit-btn").addClass("d-none")
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
                     });
                 }
             });
@@ -344,7 +298,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/category/Delete?id=${id}`,
+            url: `https://localhost:7247/api/admin/ingredient/Delete?id=${id}`,
             headers: {
                 'Authorization': header
             },
@@ -387,7 +341,7 @@
             headers: {
                 'Authorization': header
             },
-            url: `https://localhost:7247/api/admin/category/GetPaginateDatas?page=${page}&take=5`,
+            url: `https://localhost:7247/api/admin/ingredient/GetPaginateDatas?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
@@ -431,9 +385,6 @@
         $.each(response.datas, function (index, item) {
 
             html += `<tr data-id="${item.id}">
-                                    <td class="sort-name">
-                                        <img data-id="${item.id}" src="${item.image}" style="width:90px;height:54px" alt="" />
-                                    </td>
                                     <td class="sort-name">${item.name}</td>
                                     <td class="sort-name create-date">${item.createdDate}</td>
                                     <td class="sort-name">${item.updatedDate}</td>

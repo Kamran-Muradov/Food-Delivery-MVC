@@ -5,18 +5,8 @@ using Newtonsoft.Json;
 
 namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    //[Authorize(Policy = "RequireAdminRole")]
     public class CategoryController : BaseController
     {
-        //private readonly Uri _baseUri = new("https://localhost:7247/api/");
-        //private readonly HttpClient _httpClient;
-
-        //public CategoryController(HttpClient httpClient)
-        //{
-        //    _httpClient = httpClient;
-        //    _httpClient.BaseAddress = _baseUri;
-        //}
         public CategoryController(HttpClient httpClient) : base(httpClient) { }
 
         public async Task<IActionResult> Index()
@@ -31,7 +21,5 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 
             return View(model);
         }
-
-        
     }
 }
