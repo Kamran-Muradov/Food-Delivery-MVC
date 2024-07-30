@@ -2,15 +2,10 @@
 
 namespace Food_Delivery_MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
-        private readonly HttpClient _httpClient;
-
-        public HomeController(HttpClient httpClient)
+        public HomeController(HttpClient httpClient) : base(httpClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
         }
 
         public async Task<IActionResult> Index()
@@ -18,6 +13,4 @@ namespace Food_Delivery_MVC.Controllers
             return View();
         }
     }
-
-
 }

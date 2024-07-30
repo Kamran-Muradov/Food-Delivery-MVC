@@ -1,4 +1,4 @@
-﻿namespace Food_Delivery_MVC.ViewModels.Restaurants
+﻿namespace Food_Delivery_MVC.ViewModels.Admin.Restaurants
 {
     public class RestaurantVM
     {

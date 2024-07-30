@@ -390,8 +390,6 @@
             url: `https://localhost:7247/api/admin/category/GetPaginateDatas?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
-                $('#modal-small').modal('hide');
-                $(".page-loader").addClass("d-none")
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

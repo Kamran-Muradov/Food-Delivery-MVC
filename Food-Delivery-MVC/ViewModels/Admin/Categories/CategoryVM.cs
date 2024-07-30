@@ -1,4 +1,4 @@
-﻿namespace Food_Delivery_MVC.ViewModels.Categories
+﻿namespace Food_Delivery_MVC.ViewModels.Admin.Categories
 {
     public class CategoryVM
     {

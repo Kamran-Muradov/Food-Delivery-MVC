@@ -16,12 +16,6 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
         {
             HttpClient = httpClient;
             HttpClient.BaseAddress = BaseUri;
-
-            //var token = Request.Cookies["JWTToken"];
-            //if (token is not null)
-            //{
-            //    HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //}
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
