@@ -1,0 +1,24 @@
+﻿@model RestaurantResponse
+@foreach (var item in Model.Restaurants.Datas)
+{
+    <div class="col-md-4 col-sm-6 mb-grid-gutter">
+        <a class="card product-card h-100 border-0 shadow pb-2" href="food-delivery-single.html">
+            <span class="badge badge-end badge-shadow bg-success fs-md fw-medium">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
+            <div class="card-body text-center pt-3 pb-4">
+                <h3 class="h5 mb-2">@item.Name</h3>
+                <div class="fs-ms text-muted">@string.Join(", ", item.Categories.Take(3).Select(m => m.Name))</div>
+                <div class="d-flex align-items-center justify-content-between mt-3">
+                    <div class="product-price"><span class="text-accent">$@item.MinimumOrder</span></div>
+                    <div>
+                        @for (int i = 0; i < item.Rating; i++)
+                        {
+                            <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
+                        }
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+}
+<input class="totalPage" type="hidden" value="@Model.Restaurants.TotalPage" />
+

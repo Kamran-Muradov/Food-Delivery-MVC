@@ -1,0 +1,95 @@
+﻿@model RestaurantResponse
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="bg-accent pt-4 pb-5">
+    <div class="container pt-2 pb-3 pt-lg-3 pb-lg-4">
+        <div class="d-lg-flex justify-content-between pb-3">
+            <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+                <h1 class="h3 text-light mb-0">Restaurants</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="filter-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body tab-content py-4">
+                <!-- Categories-->
+                <div class="card">
+                    <div class="card-body px-4">
+                        <div class="widget">
+                            <h3 class="widget-title mb-2 pb-1">Categories</h3>
+                            <ul class="widget-list list-unstyled">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li class="d-flex justify-content-between align-items-center mb-1">
+                                        <div id="categories" class="form-check">
+                                            <input class="form-check-input category-checkbox" type="checkbox" id="all" value="@category.Id">
+                                            <label class="form-check-label" for="all">@category.Name</label>
+                                        </div><span class="fs-xs text-muted">@category.RestaurantCount</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <label class="form-label mb-0 me-2 pe-1 fw-normal text-nowrap d-sm-block d-none">Sort by:</label>
+                <select id="sorting" class="form-select">
+                    <option selected value="recent">Recent</option>
+                    <option value="deliveryTime">Delivery time</option>
+                    <option value="deliveryFee">Delivery fee</option>
+                    <option value="rating">Rating</option>
+                </select>
+                <button id="filter-btn" class="btn btn-primary btn-shadow d-block w-100 mt-5" type="submit">Apply Filter</button>
+                <button id="loading-btn" class="btn btn-primary btn-shadow d-block w-100 d-none" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row gy-3 gx-4 justify-content-end">
+        <div class="col-lg-2 col-md-3 col-sm-5 col-12 order-md-1 order-sm-2 order-3">
+            <div><a class="btn btn-outline-secondary w-100 collapsed" href="#filter-modal" data-bs-toggle="modal" ><i class="ci-filter me-2"></i>Filters</a></div>
+        </div>
+    </div>
+</div>
+<section class="container py-4 py-sm-5">
+    <div id="filterResults" class="row pt-3 pt-sm-0">
+        @foreach (var item in Model.Restaurants.Datas)
+        {
+            <div class="col-md-4 col-sm-6 mb-grid-gutter">
+                <a class="card product-card h-100 border-0 shadow pb-2" href="food-delivery-single.html">
+                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium" data-bs-toggle="tooltip" title="Average meal cost">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
+                    <div class="card-body text-center pt-3 pb-4">
+                        <h3 class="h5 mb-2">@item.Name</h3>
+                        <div class="fs-ms text-muted">@string.Join(", ", item.Categories.Take(3).Select(m => m.Name))</div>
+                        <div class="d-flex align-items-center justify-content-between mt-3">
+                            <div class="product-price"><span class="text-accent">$@item.DeliveryFee</span></div>
+                            <div>
+                                @for (int i = 0; i < item.Rating; i++)
+                                {
+                                    <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+    <button id="loadMore" class="btn btn-outline-secondary @(Model.Restaurants.TotalPage == 1 ? "d-none" : "")" type="button">Load more items</button>
+</section>
+
+@section js {
+    <script src="~/js/restaurant.js"></script>
+}
+
+
+

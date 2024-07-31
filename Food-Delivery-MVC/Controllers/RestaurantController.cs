@@ -1,6 +1,11 @@
-﻿using Food_Delivery_MVC.ViewModels.UI.Restaurants;
+﻿using Food_Delivery_MVC.Helpers;
+using Food_Delivery_MVC.ViewModels.UI.Categories;
+using Food_Delivery_MVC.ViewModels.UI.Restaurants;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Text;
 
 namespace Food_Delivery_MVC.Controllers
 {
@@ -8,6 +13,49 @@ namespace Food_Delivery_MVC.Controllers
     {
         public RestaurantController(HttpClient httpClient) : base(httpClient)
         {
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var categories = await HttpClient.GetFromJsonAsync<IEnumerable<CategoryVM>>("category/getAll");
+
+            string data = JsonConvert.SerializeObject(new RestaurantFilterVM());
+
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("restaurant/getLoadMore", content);
+
+            responseMessage.EnsureSuccessStatusCode();
+
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+
+            PaginationResponse<RestaurantVM> restaurants = JsonConvert.DeserializeObject<PaginationResponse<RestaurantVM>>(responseData);
+
+            return View(new RestaurantResponse { Categories = categories, Restaurants = restaurants });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> LoadMore([FromBody] RestaurantFilterVM request)
+        {
+            if (request is null) return BadRequest();
+
+            string data = JsonConvert.SerializeObject(request);
+
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("restaurant/getLoadMore", content);
+
+            responseMessage.EnsureSuccessStatusCode();
+
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+
+            PaginationResponse<RestaurantVM> restaurants = JsonConvert.DeserializeObject<PaginationResponse<RestaurantVM>>(responseData);
+
+            Console.WriteLine(restaurants.TotalPage);
+
+            return PartialView("_FilterResult", new RestaurantResponse { Restaurants = restaurants });
         }
 
         [HttpGet]
