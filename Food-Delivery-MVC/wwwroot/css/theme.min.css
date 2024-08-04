@@ -4,6 +4,10 @@
     color: #d63939
 }
 
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 :root {
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
@@ -21384,18 +21388,26 @@ html:not([dir="rtl"]) .range-slider-ui.noUi-horizontal .noUi-handle {
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.3), 4px 7px 15px rgba(0, 0, 0, 0.2), 9px 15px 25px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.3), 4px 7px 15px rgba(0, 0, 0, 0.2), 9px 15px 25px rgba(0, 0, 0, 0.2);*/
+    box-shadow: 0 0.5rem 1.125rem -0.5rem rgba(254, 105, 106, 0.9);
     border-radius: 15px;
     max-width: 360px;
 }
 
-    .count-area button,
-    .count-area input {
-        outline: none;
-        border: none;
-        padding: 9px;
-        font-size: 18px;
-    }
+
+
+.count-area button,
+.count-area input {
+    outline: none;
+    border: none;
+    padding: 9px;
+    font-size: 18px;
+}
+
+.basket-item .count-area button,
+.basket-item .count-area input {
+    padding: 1px 6px;
+}
 
 .count-area input {
     width: 100%;
@@ -21404,27 +21416,30 @@ html:not([dir="rtl"]) .range-slider-ui.noUi-horizontal .noUi-handle {
 
 .count-area button {
     cursor: pointer;
+    background-color: #fe696a;
+    color: white;
 }
 
-.count-area button:nth-last-child(1) {
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
-}
+    .count-area button:nth-last-child(1) {
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+    }
 
-.count-area button:nth-child(1) {
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
-}
+    .count-area button:nth-child(1) {
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
 
-.count-area button:hover {
-    background-color: #e6e6e6;
-}
+    .count-area button:hover {
+        background-color: #e6e6e6;
+        color: #fe696a
+    }
 
-.count-area button:nth-last-child(1):active {
-    box-shadow: inset -4px 5px 10px rgba(0, 0, 0, 0.5);
-}
+    .count-area button:nth-last-child(1):active {
+        box-shadow: inset -4px 5px 10px rgba(0, 0, 0, 0.5);
+    }
 
-.count-area button:nth-child(1):active {
-    box-shadow: inset 4px 5px 10px rgba(0, 0, 0, 0.5);
-}
+    .count-area button:nth-child(1):active {
+        box-shadow: inset 4px 5px 10px rgba(0, 0, 0, 0.5);
+    }
 /*# sourceMappingURL=theme.min.css.map */

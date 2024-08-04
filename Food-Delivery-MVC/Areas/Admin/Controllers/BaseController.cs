@@ -7,12 +7,12 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Policy = "RequireAdminRole")]
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected readonly Uri BaseUri = new("https://localhost:7247/api/");
         protected readonly HttpClient HttpClient;
 
-        public BaseController(HttpClient httpClient)
+        protected BaseController(HttpClient httpClient)
         {
             HttpClient = httpClient;
             HttpClient.BaseAddress = BaseUri;

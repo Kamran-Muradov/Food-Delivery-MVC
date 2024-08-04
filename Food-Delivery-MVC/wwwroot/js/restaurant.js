@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿
+$(function () {
     let currentpage = 1;
     const take = 6;
     let tagIds = null;
@@ -125,56 +126,84 @@
             });
         }
     });
+
     let basePrice = 0;
     let totalPrice = 0;
+    let totalPriceChange = 0;
+    let basePriceChange = 0;
+    let counter = 1;
+
+    const updateTotalPrice = () => {
+        $('#menu-detail .cart-btn span').html(`(${totalPrice.toFixed(2)})`);
+    };
+
+    $('#menu-detail').on('click', '#increment', function () {
+        counter++;
+        $('#menu-detail #basket-count').val(counter);
+        totalPrice += totalPriceChange;
+        basePrice += basePriceChange;
+        updateTotalPrice();
+    });
+
+    $('#menu-detail').on('click', '#decrement', function () {
+        if (counter > 1) {
+            counter--;
+            $('#menu-detail #basket-count').val(counter);
+            totalPrice -= totalPriceChange;
+            basePrice -= basePriceChange;
+            updateTotalPrice();
+        }
+    });
+
     $('.menu-detail').on('click', function (e) {
-        e.preventDefault()
-        const id = $(this).attr('data-id')
-        $('#menu-detail').empty()
+        counter = 1;
+        e.preventDefault();
+        const id = $(this).attr('data-id');
+        $('#menu-detail').empty();
         axios.get(`/menu/detail/${id}`)
             .then(function (response) {
-                $('#menu-detail').append(response.data)
+                $('#menu-detail').append(response.data);
+                basePrice = parseFloat($('#menu-detail input[type="hidden"]').val());
+                totalPrice = basePrice;
+                totalPriceChange = totalPrice;
+                basePriceChange = basePrice;
 
-                basePrice = parseFloat($('#menu-detail input[type="hidden"]').val())
-                totalPrice = basePrice
+                $('#menu-detail input:checked').each(function () {
+                    totalPrice += parseFloat($(this).val());
+                    totalPriceChange = totalPrice;
+                    basePriceChange = basePrice;
+                });
 
-                $('#menu-detail input').each(function () {
-                    if ($(this).prop('checked')) {
-                        totalPrice += parseFloat($(this).val())
-                    }
-                })
-
-                $('#menu-detail .cart-btn span').html(`(${totalPrice})`)
+                updateTotalPrice();
             })
-            .catch(function (error) {
+            .catch(function () {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
                     text: "Something went wrong!",
                 });
-            })
+            });
     });
-    $('#menu-detail').on('change', 'input', function (e) {
-        e.preventDefault()
-        if ($(this).attr('type') == 'radio' && $(this).attr('data-addPrice') == 'true') {
-            if ($(this).prop('checked')) {
-                totalPrice = basePrice + parseFloat($(this).val())
-                $('#menu-detail .cart-btn span').html(`(${totalPrice})`)
-            } else {
-                totalPrice = basePrice - parseFloat($(this).val())
-                $('#menu-detail .cart-btn span').html(`(${totalPrice})`)
-            }
-        } else if ($(this).attr('type') == 'checkbox') {
-            let temp = totalPrice - basePrice
-            if ($(this).prop('checked')) {
-                totalPrice = (basePrice += parseFloat($(this).val())) + temp
-                $('#menu-detail .cart-btn span').html(`(${totalPrice})`)
-            } else {
-                totalPrice = (basePrice -= parseFloat($(this).val())) + temp
-                $('#menu-detail .cart-btn span').html(`(${totalPrice})`)
-            }
+
+    $('#menu-detail').on('change', 'input', function () {
+        let inputPrice = parseFloat($(this).val());
+        let isChecked = $(this).prop('checked');
+        let isRadio = $(this).attr('type') === 'radio';
+        let addPrice = $(this).attr('data-addPrice') === 'true';
+
+        if (isRadio && addPrice) {
+            totalPrice = isChecked ? basePrice + (inputPrice * counter) : basePrice - (inputPrice * counter);
+        } else if (!isRadio) {
+            let temp = totalPrice - basePrice;
+            basePrice = isChecked ? basePrice + (inputPrice * counter) : basePrice - (inputPrice * counter);
+            totalPrice = basePrice + temp;
+            basePriceChange = basePrice / counter;
         }
-    })
+
+        totalPriceChange = totalPrice / counter;
+        updateTotalPrice();
+    });
+
 
     $('#menu-detail').on('click', '.cart-btn', function () {
         let id = $(this).attr('data-id')
@@ -193,60 +222,47 @@
         const data = JSON.stringify({
             id,
             count,
-            price: totalPrice,
+            price: totalPrice.toFixed(2),
             menuvariants
         })
 
-        //axios.post(`/restaurant/addmenutobasket`, data, {
-        //    headers: {
-        //        'Content-Type': 'application/json'
-        //    }
-        //})
-        //    .then(function (response) {
-        //        $('#menu-detail').append(response.data)
-        //    })
-        //    .catch(function (error) {
-        //        Swal.fire({
-        //            icon: "error",
-        //            title: "Oops...",
-        //            text: "Something went wrong!",
-        //        });
-        //    })
-
-        $.ajax({
-            type: "POST",
-            url: `/restaurant/addmenutobasket`,
-            data: data,
-            contentType: 'application/json',
-            success: function (response) {
+        axios.post(`/restaurant/addmenutobasket`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(function (response) {
                 $('#menu-count').removeClass("d-none")
-                $('#menu-count').html(response.basketCount)
-            },
-            error: function (xhr, status, error) {
-                $('#modal-edit').modal('hide');
-                $(".page-loader").addClass("d-none")
+                $('#menu-count').html(response.data.basketCount)
+            })
+            .catch(function (error) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
                     text: "Something went wrong!",
                 });
-            },
-        });
+            })
 
-    })
+        //$.ajax({
+        //    type: "POST",
+        //    url: `/restaurant/addmenutobasket`,
+        //    data: data,
+        //    contentType: 'application/json',
+        //    success: function (response) {
+        //        $('#menu-count').removeClass("d-none")
+        //        $('#menu-count').html(response.basketCount)
+        //    },
+        //    error: function (xhr, status, error) {
+        //        $('#modal-edit').modal('hide');
+        //        $(".page-loader").addClass("d-none")
+        //        Swal.fire({
+        //            icon: "error",
+        //            title: "Oops...",
+        //            text: "Something went wrong!",
+        //        });
+        //    },
+        //});
 
-    let counter = 1
-    $('#menu-detail').on('click', '#increment', function () {
-        counter = $('#menu-detail #basket-count').val()
-        counter++;
-        $('#menu-detail #basket-count').val(counter)
-    })
-
-    $('#menu-detail').on('click', '#decrement', function () {
-        if ($('#menu-detail #basket-count').val() > 1) {
-            counter--;
-        }
-        $('#menu-detail #basket-count').val(counter)
     })
 });
 

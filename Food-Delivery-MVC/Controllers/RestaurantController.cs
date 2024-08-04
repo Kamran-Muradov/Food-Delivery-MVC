@@ -119,7 +119,7 @@ namespace Food_Delivery_MVC.Controllers
 
             Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketDatas));
 
-            return Ok(new { basketCount = basketDatas.Count });
+            return Ok(new { basketCount = basketDatas.Sum(bi => bi.Count) });
         }
     }
 }

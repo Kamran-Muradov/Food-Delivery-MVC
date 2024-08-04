@@ -9,6 +9,7 @@ namespace Food_Delivery_MVC.ViewModels.UI.Menus
         public decimal Price { get; set; }
         public IEnumerable<string> Ingredients { get; set; }
         public string Image { get; set; }
+        public string Restaurant { get; set; }
         public Dictionary<string, IEnumerable<MenuVariantVM>> MenuVariants { get; set; }
     }
 }

@@ -11,6 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Lax; // or Strict, None
+});
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Lax; // or Strict, None
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
 
@@ -102,8 +113,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCookiePolicy();
 
-//app.UseSession();
+
 
 app.Use(async (context, next) =>
 {
@@ -121,7 +133,7 @@ app.Use(async (context, next) =>
 app.UseAuthentication();
 
 app.UseAuthorization();
-
+app.UseSession();
 
 app.MapControllerRoute(
     name: "areas",
