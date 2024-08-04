@@ -1,4 +1,4 @@
-﻿@model PaginationResponse<MenuVM>
+﻿@model PaginationResponse<TagVM>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,7 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <h2 class="page-title">
-                    Menus
+                    Tags
                 </h2>
             </div>
             <!-- Page title actions -->
@@ -19,7 +19,7 @@
                 {
                     <div class="">
                         <div class="btn-list">
-                            <a id="toggle-create" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                            <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                 Create
                             </a>
@@ -57,9 +57,8 @@
                         <tr>
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Price</th>
-                            <th>Create date</th>
-                            <th>Update date</th>
+                            <th>Create Date</th>
+                            <th>Update Date</th>
                             <th>Operations</th>
                         </tr>
                     </thead>
@@ -71,13 +70,9 @@
                                     <img data-id="@item.Id" src="@item.Image" style="width:90px;height:54px" alt="" />
                                 </td>
                                 <td class="sort-name">@item.Name</td>
-                                <td class="sort-name">@item.Price</td>
                                 <td class="sort-name create-date">@item.CreatedDate</td>
                                 <td class="sort-name">@item.UpdatedDate</td>
                                 <td>
-                                    <a class="btn btn-info btn-icon detail" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
-                                    </a>
                                     <a class="btn btn-warning btn-icon" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
                                     </a>
@@ -123,57 +118,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form id="form-create" class="data-create" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label required">Name</label>
-                                        <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
-                                    </div>
-                                </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label required">Name</label>
+                                <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
                             </div>
-                            <div class="col-6">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label required">Price</label>
-                                        <input autocomplete="off" id="price" type="number" class="form-control" name="price">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label required">Categories</label>
-                                        <select id="categories" name="categories" class="form-select">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label required">Ingredients</label>
-                                        <select multiple id="ingredients" name="ingredients" class="form-select">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Restaurant</label>
-                                        <select id="restaurant" class="form-select">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label required">Upload image</label>
-                                        <input autocomplete="off" id="image" type="file" class="form-control" name="image">
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label required">Upload image</label>
+                                <input autocomplete="off" id="image" type="file" class="form-control" name="image">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -203,57 +157,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label required">Name</label>
-                                    <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
-                                </div>
-                            </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label required">Name</label>
+                            <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
                         </div>
-                        <div class="col-6">
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label required">Price</label>
-                                    <input autocomplete="off" id="price" type="number" class="form-control" name="price">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label required">Categories</label>
-                                    <select id="categories" name="categories" class="form-select">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label required">Ingredients</label>
-                                    <select multiple id="ingredients" name="ingredients" class="form-select">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Restaurant</label>
-                                    <select id="restaurant" class="form-select">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Upload image</label>
-                                    <input autocomplete="off" id="image" type="file" class="form-control" name="image">
-                                </div>
-                            </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Upload images</label>
+                            <input autocomplete="off" id="image" type="file" class="form-control" name="image">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -274,31 +187,6 @@
         </div>
     </div>
 
-    @* Modal-Detail *@
-    <div class="modal modal-blur fade" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content container">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h5 class="modal-title">Detailed View</h5>
-                </div>
-                <div class="row images-area">
-                </div>
-                <div class="data-area">
-                </div>
-                <div class="mb-0 mt-3 flex-grow ">
-                    <p class="mb-0  font-weight-light"><strong>Ingredients:</strong></p>
-                    <ul id="ingredients" class="mb-3 list-group list-group-flush"></ul>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                        Cancel
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="pagination-area d-flex justify-content-center mt-3">
         <nav aria-label="...">
             <ul class="pagination">
@@ -310,7 +198,7 @@
                     <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                 }
                 <li class="page-item">
-                    <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
+                    <a class="page-link" href="#">Next</a>
                 </li>
             </ul>
         </nav>
@@ -319,6 +207,8 @@
 
 
 @section js {
-    <script src="~/admin/dist/js/menu.js"></script>
+    <script src="~/admin/dist/js/tag.js"></script>
 }
+
+
 

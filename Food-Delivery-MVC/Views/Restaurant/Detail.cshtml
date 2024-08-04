@@ -1,0 +1,73 @@
+﻿@model RestaurantDetailVM
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<section class="bg-darker bg-size-cover bg-position-center py-5" style=" background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('@Model.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url') no-repeat center center;">
+    <div class="container py-md-4">
+        <h1 class="text-light text-center text-lg-start py-3">@Model.Name</h1>
+    </div>
+</section>
+<nav class="container mt-n5">
+    <div class="d-flex align-items-center bg-white rounded-3 shadow-lg py-2 ps-sm-2 pe-4 pe-lg-2">
+        <div class="ps-lg-3 w-100 text-end">
+            <!-- For desktop-->
+            <ul id="tab-header" class="nav nav-tabs d-none d-lg-flex border-0 mb-0">
+                <li class="nav-item"><a data-id="0" class="nav-link active" href="#">All</a></li>
+                @foreach (var category in Model.Menus.Select(m => m.Category).GroupBy(c => c.Name).Select(c => c.First()))
+                {
+                    <li class="nav-item"><a data-id="@category.Id" class="nav-link" href="#">@category.Name</a></li>
+                }
+            </ul>
+            <!-- For mobile-->
+            <div class="btn-group dropdown d-lg-none ms-auto">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ci-menu fs-base me-2"></i>Menu</button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    @foreach (var menu in Model.Menus)
+                    {
+                        <a class="dropdown-item fs-base" href="#">@menu.Category.Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="container tab-content py-4 py-sm-5">
+    <h2 class="text-center pt-2 pt-sm-0 mb-sm-5">Pizza</h2>
+    <div class="row pt-3 pt-sm-0">
+        <!-- Item-->
+        @foreach (var menu in Model.Menus)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter content" data-id="@menu.Category.Id">
+                <a data-id="@menu.Id" href="#quick-view" class="d-block menu-detail" data-bs-toggle="modal">
+                    <img class="card-img-top" style="height:203px" src="@menu.Image" alt="Pizza">
+                    <div class="card product-card border pb-2">
+
+                        <div class="card-body pt-1 pb-2">
+                            <h3 class="product-title fs-md"><a href="#quick-view" data-bs-toggle="modal">@menu.Name</a></h3>
+                            <p class="fs-ms text-muted">@string.Join(", ", menu.Ingredients)</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="product-price"><span class="text-accent">$@menu.Price</span></div>
+                                @* <button class="btn btn-primary btn-sm" type="button">+<i class="ci-cart fs-base ms-1"></i></button> *@
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+        <!-- Item-->
+    </div>
+    <div class="modal fade" id="quick-view" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div id="menu-detail" class="modal-content">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section js {
+    <script src="~/js/restaurant.js"></script>
+}
+

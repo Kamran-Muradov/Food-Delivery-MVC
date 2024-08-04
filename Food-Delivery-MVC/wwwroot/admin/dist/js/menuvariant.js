@@ -16,7 +16,7 @@
                 })
                 $("#form-create #menus").append(html)
             })
-            
+
 
         getTypesSelected()
             .then(function (datas) {
@@ -39,7 +39,6 @@
             },
             addprice: {
                 required: true,
-                min: 1
             }
         },
         messages: {
@@ -49,7 +48,6 @@
             },
             addprice: {
                 required: "Price is required",
-                min: "Price must be minimum 1"
             }
         },
 
@@ -59,7 +57,8 @@
                     option: $('#table-area #form-create #option').val(),
                     additionalPrice: $('#table-area #form-create #addprice').val(),
                     menuId: $('#table-area #form-create #menus').val(),
-                    variantTypeId: $('#table-area #form-create #types').val()
+                    variantTypeId: $('#table-area #form-create #types').val(),
+                    isSingleChoice: $('#table-area #form-create #choice').val() == 'true' ? true : false
                 })
 
             $("#form-create #create-btn").addClass("d-none")
@@ -77,6 +76,7 @@
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
+                    $("#form-create")[0].reset()
 
                     Swal.fire({
                         position: "top-end",
@@ -214,6 +214,13 @@
             success: function (response) {
                 $('#table-area #modal-edit #option').val(response.option)
                 $('#table-area #modal-edit #addprice').val(response.additionalPrice)
+
+                if (response.isSingleChoice == 'true') {
+                    $('#table-area #modal-edit #choice').val('true')
+                } else {
+                    $('#table-area #modal-edit #choice').val('false')
+                }
+
                 let html = "";
                 getMenusSelected()
                     .then(function (datas) {
@@ -245,8 +252,7 @@
                     })
             },
             error: function (xhr, status, error) {
-                $('#modal-report').modal('hide');
-                $(".page-loader").addClass("d-none")
+                $('#modal-edit').modal('hide');
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -265,17 +271,15 @@
             },
             addprice: {
                 required: true,
-                min: 1
             }
         },
         messages: {
-           option: {
+            option: {
                 required: "Option is required",
                 maxlength: "Maximum 50 characters are allowed for Option"
             },
             addprice: {
                 required: "Price is required",
-                min: "Price must be minimum 1"
             }
         },
 
@@ -286,7 +290,8 @@
                     option: $('#table-area #form-edit #option').val(),
                     additionalPrice: $('#table-area #form-edit #addprice').val(),
                     menuId: $('#table-area #form-edit #menus').val(),
-                    variantTypeId: $('#table-area #form-edit #types').val()
+                    variantTypeId: $('#table-area #form-edit #types').val(),
+                    isSingleChoice: $('#table-area #form-edit #choice').val() == 'true' ? true : false
                 })
 
             $("#form-edit #edit-btn").addClass("d-none")
@@ -377,7 +382,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/ingredient/Delete?id=${id}`,
+            url: `https://localhost:7247/api/admin/menuvariant/Delete?id=${id}`,
             headers: {
                 'Authorization': header
             },

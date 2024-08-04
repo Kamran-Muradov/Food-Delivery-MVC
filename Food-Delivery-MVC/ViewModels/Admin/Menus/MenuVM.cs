@@ -1,4 +1,4 @@
-﻿namespace Food_Delivery_MVC.ViewModels.Menus
+﻿namespace Food_Delivery_MVC.ViewModels.Admin.Menus
 {
     public class MenuVM
     {

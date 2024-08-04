@@ -1,0 +1,132 @@
+﻿@model MenuDetailVM
+
+<div class="modal-header">
+    <h4 class="modal-title">@Model.Name</h4>
+    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-12">
+            <div class="ms-auto">
+                <img src="@Model.Image" alt="image" />
+                <h5 class="h6 mt-3 mb-0">Ingredients:</h5>
+                <p class="fs-sm border-bottom">@string.Join(", ", Model.Ingredients)</p>
+                @foreach (KeyValuePair<string, IEnumerable<MenuVariantVM>> item in Model.MenuVariants)
+                {
+                    <h5 class="mt-5">@item.Key</h5>
+
+                    if (item.Value.All(mv => !mv.IsSingleChoice))
+                    {
+                        foreach (var menuVariant in item.Value)
+                        {
+                            <div class="d-flex justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="@item.Key" value="@menuVariant.AdditionalPrice">
+                                    <label class="form-check-label">
+                                        @menuVariant.Option
+                                    </label>
+                                </div>
+                                @if (menuVariant.AdditionalPrice != 0)
+                                {
+                                    <span class="fs-sm">@(menuVariant.AdditionalPrice > 0 ? $"+{menuVariant.AdditionalPrice}" : $"{menuVariant.AdditionalPrice}")</span>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        if (item.Value.All(mv => mv.AdditionalPrice == 0))
+                        {
+                            foreach (var menuVariant in item.Value)
+                            {
+                                @if (menuVariant.AdditionalPrice == 0)
+                                {
+                                    <div class="d-flex justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-addPrice="false" type="radio" value="@menuVariant.AdditionalPrice" name="@item.Key" checked>
+                                            <label class="form-check-label">
+                                                @menuVariant.Option
+                                            </label>
+                                        </div>
+                                        @if (menuVariant.AdditionalPrice != 0)
+                                        {
+                                            <span class="fs-sm">@(menuVariant.AdditionalPrice > 0 ? $"+{menuVariant.AdditionalPrice}" : $"{menuVariant.AdditionalPrice}")</span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-addPrice="false" type="radio" value="@menuVariant.AdditionalPrice" name="@item.Key">
+                                            <label class="form-check-label">
+                                                @menuVariant.Option
+                                            </label>
+                                        </div>
+                                        @if (menuVariant.AdditionalPrice != 0)
+                                        {
+                                            <span class="fs-sm">@(menuVariant.AdditionalPrice > 0 ? $"+{menuVariant.AdditionalPrice}" : $"{menuVariant.AdditionalPrice}")</span>
+                                        }
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var menuVariant in item.Value)
+                            {
+                                @if (menuVariant.AdditionalPrice == 0)
+                                {
+                                    <div class="d-flex justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-addPrice="true" type="radio" value="@menuVariant.AdditionalPrice" name="@item.Key" checked>
+                                            <label class="form-check-label">
+                                                @menuVariant.Option
+                                            </label>
+                                        </div>
+                                        @if (menuVariant.AdditionalPrice != 0)
+                                        {
+                                            <span class="fs-sm">@(menuVariant.AdditionalPrice > 0 ? $"+{menuVariant.AdditionalPrice}" : $"{menuVariant.AdditionalPrice}")</span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" data-addPrice="true" value="@menuVariant.AdditionalPrice" name="@item.Key">
+                                            <label class="form-check-label">
+                                                @menuVariant.Option
+                                            </label>
+                                        </div>
+                                        @if (menuVariant.AdditionalPrice != 0)
+                                        {
+                                            <span class="fs-sm">@(menuVariant.AdditionalPrice > 0 ? $"+{menuVariant.AdditionalPrice}" : $"{menuVariant.AdditionalPrice}")</span>
+                                        }
+                                    </div>
+                                }
+                            }
+                        }
+                    }
+                }
+                <input type="hidden" value="@Model.Price" />
+                <div class="row mt-5 justify-content-between">
+                    <div class="col-4">
+                        <div class="count-area">
+                            <button id="decrement">-</button>
+                            <input type="number" id="basket-count" value="1" readonly="">
+                            <button id="increment">+</button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <button data-bs-dismiss="modal" data-id="@Model.Id" class="btn btn-primary btn-shadow d-block w-100 cart-btn"><i class="ci-cart fs-lg me-2"></i>Add to Cart<span>(@Model.Price)</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section js {
+    <script src="~/js/restaurant.js"></script>
+}

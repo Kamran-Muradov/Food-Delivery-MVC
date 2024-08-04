@@ -57,6 +57,10 @@ builder.Services.AddAuthorization(o =>
     o.AddPolicy("RequireSuperAdminRole", p => p.RequireRole("SuperAdmin"));
 });
 builder.Services.AddControllersWithViews();
+    //.AddJsonOptions(options => 
+    //{
+    //    options.JsonSerializerOptions.DictionaryKeyPolicy = null; // or any other policy you prefer
+    //});
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IEmailService, EmailService>();

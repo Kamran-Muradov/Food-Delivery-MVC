@@ -1,5 +1,5 @@
 ﻿using Food_Delivery_MVC.Helpers;
-using Food_Delivery_MVC.ViewModels.Ingredients;
+using Food_Delivery_MVC.ViewModels.Admin.Ingredients;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

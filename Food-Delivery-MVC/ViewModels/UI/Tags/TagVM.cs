@@ -1,6 +1,6 @@
-﻿namespace Food_Delivery_MVC.ViewModels.UI.Categories
+﻿namespace Food_Delivery_MVC.ViewModels.UI.Tags
 {
-    public class CategoryVM
+    public class TagVM
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -14,12 +14,11 @@
         @foreach (var item in Model)
         {
             <div class="col-md-4 col-sm-6 mb-grid-gutter">
-                <a class="card product-card h-100 border-0 shadow pb-2" href="food-delivery-single.html">
-                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium" data-bs-toggle="tooltip" title="Average meal cost">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => !m.IsMain)?.Url" alt="McDonald's">
-                    <div class="bg-white rounded-3 pt-1 px-2 mx-auto mt-n5" style="width: 175px;"><img class="d-block rounded-3 mx-auto" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" width="150" alt="Brand"></div>
+                <a class="card product-card h-100 border-0 shadow pb-2" asp-action="Detail" asp-route-id="@item.Id">
+                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium" data-bs-toggle="tooltip" title="Average meal cost">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
                     <div class="card-body text-center pt-3 pb-4">
                         <h3 class="h5 mb-2">@item.Name</h3>
-                        <div class="fs-ms text-muted">@string.Join(", ", item.Categories.Select(m => m.Name))</div>
+                        <div class="fs-ms text-muted">@string.Join(", ", item.Tags.Select(m => m.Name))</div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div class="product-price"><span class="text-accent">$@item.MinimumOrder</span></div>
                             <div>

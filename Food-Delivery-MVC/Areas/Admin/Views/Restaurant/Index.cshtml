@@ -19,7 +19,7 @@
                 {
                     <div class="">
                         <div class="btn-list">
-                            <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                            <a id="toggle-create" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                 Create
                             </a>
@@ -193,6 +193,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Tags</label>
+                                        <select multiple id="tags" name="tags" class="form-select">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
@@ -303,6 +312,15 @@
                                     <select id="active" class="form-select">
                                         <option value="true">true</option>
                                         <option value="false">false</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Tags</label>
+                                    <select multiple id="tags" name="tags" class="form-select">
                                     </select>
                                 </div>
                             </div>

@@ -51,10 +51,6 @@
                 required: true,
                 maxlength: 50
             },
-            desc: {
-                required: true,
-                maxlength: 200
-            },
             price: {
                 required: true,
                 min: 1
@@ -77,10 +73,6 @@
                 required: "Name is required",
                 maxlength: "Maximum 50 characters are allowed for name"
             },
-            desc: {
-                required: "Description is required",
-                maxlength: "Maximum 200 characters are allowed for name"
-            },
             price: {
                 required: "Price is required",
                 min: "Price must be minimum 1"
@@ -102,13 +94,10 @@
 
             let formData = new FormData();
             formData.append('name', $('#table-area #form-create #name').val());
-            formData.append('description', $('#table-area #form-create #desc').val());
             formData.append('price', $('#table-area #form-create #price').val());
             formData.append('restaurantId', $('#table-area #form-create #restaurant').val());
+            formData.append('categoryId', $('#table-area #form-create #categories').val());
 
-            $('#table-area #form-create #categories option:selected').each(function () {
-                formData.append('categoryIds', $(this).val());
-            });
             $('#table-area #form-create #ingredients option:selected').each(function () {
                 formData.append('ingredientIds', $(this).val());
             });
@@ -134,6 +123,7 @@
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
+                    $("#form-create")[0].reset()
 
                     Swal.fire({
                         position: "top-end",
@@ -292,7 +282,7 @@
                     .then(function (datas) {
                         $("#form-edit #categories").empty()
                         $.each(datas, function (index, item) {
-                            if (response.categories.includes(item.name)) {
+                            if (item.name == response.category) {
                                 html += `<option selected value="${item.id}">${item.name}</option>`;
                             } else {
                                 html += `<option value="${item.id}">${item.name}</option>`;
@@ -335,10 +325,6 @@
                 required: true,
                 maxlength: 50
             },
-            desc: {
-                required: true,
-                maxlength: 200
-            },
             price: {
                 required: true,
                 min: 1
@@ -360,10 +346,6 @@
                 required: "Name is required",
                 maxlength: "Maximum 50 characters are allowed for name"
             },
-            desc: {
-                required: "Description is required",
-                maxlength: "Maximum 200 characters are allowed for name"
-            },
             price: {
                 required: "Price is required",
                 min: "Price must be minimum 1"
@@ -384,21 +366,15 @@
             let id = $('#table-area #form-edit').attr('data-id')
             let formData = new FormData();
             formData.append('name', $('#table-area #modal-edit #name').val());
-            formData.append('description', $('#table-area #form-edit #desc').val());
             formData.append('price', $('#table-area #form-edit #price').val());
-            $('#table-area #form-edit #categories option:selected').each(function () {
-                formData.append('categoryIds', $(this).val());
-            });
 
             $('#table-area #form-edit #ingredients option:selected').each(function () {
                 formData.append('ingredientIds', $(this).val());
             });
 
-            let restaurantId = $('#table-area #form-edit #restaurant').val()
-            if (restaurantId != 0) {
+            formData.append('restaurantId', $('#table-area #form-edit #restaurant').val());
 
-                formData.append('restaurantId', restaurantId);
-            }
+            formData.append('categoryId', $('#table-area #form-edit #categories').val());
 
             let files = $('#table-area #modal-edit #image')[0].files;
             for (var i = 0; i < files.length; i++) {
@@ -580,14 +556,14 @@
                 html += `  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Name: </strong>${response.name}</p>
                 </div>
-                <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Description: </strong>${response.description}</p>
-                </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Price: </strong>${response.price}</p>
                 </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Restaurant: </strong>${response.restaurant}</p>
+                </div>
+                 <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Category: </strong>${response.category}</p>
                 </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Create date: </strong>${response.createdDate}</p>
@@ -607,7 +583,7 @@
                 $('#table-area #modal-detail #categories').append(html);
                 html = "";
 
-                 $.each(response.ingredients, function (index, item) {
+                $.each(response.ingredients, function (index, item) {
 
                     html += `<li class="list-group-item">${item}</li>`
                 })
@@ -686,8 +662,6 @@
             url: `https://localhost:7247/api/admin/ingredient/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
-                $('#modal-small').modal('hide');
-                $(".page-loader").addClass("d-none")
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

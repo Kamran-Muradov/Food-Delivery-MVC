@@ -46,7 +46,7 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/category/create',
+                url: 'https://localhost:7247/api/admin/tag/create',
                 method: 'POST',
                 headers: {
                     'Authorization': header
@@ -81,7 +81,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Category with this name already exists",
+                            text: "Tag with this name already exists",
                         });
                     } else {
                         $("#form-create #create-btn").removeClass("d-none")
@@ -188,7 +188,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/category/getbyid/${id}`,
+            url: `https://localhost:7247/api/admin/tag/getbyid/${id}`,
             headers: {
                 'Authorization': header
             },
@@ -245,7 +245,7 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/category/edit/${id}`,
+                url: `https://localhost:7247/api/admin/tag/edit/${id}`,
                 method: 'PUT',
                 headers: {
                     'Authorization': header
@@ -260,7 +260,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Category with this name already exists",
+                            text: "Tag with this name already exists",
                         });
                     } else {
                         $("#form-edit #edit-btn").removeClass("d-none")
@@ -275,7 +275,7 @@
                 },
                 success: function () {
                     $.ajax({
-                        url: `https://localhost:7247/api/admin/categoryimage/getbycategoryid/${id}`,
+                        url: `https://localhost:7247/api/admin/tagimage/getbytagid/${id}`,
                         headers: {
                             'Authorization': header
                         },
@@ -345,7 +345,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/category/Delete?id=${id}`,
+            url: `https://localhost:7247/api/admin/tag/Delete?id=${id}`,
             headers: {
                 'Authorization': header
             },
@@ -388,7 +388,7 @@
             headers: {
                 'Authorization': header
             },
-            url: `https://localhost:7247/api/admin/category/GetPaginateDatas?page=${page}&take=5`,
+            url: `https://localhost:7247/api/admin/tag/GetPaginateDatas?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

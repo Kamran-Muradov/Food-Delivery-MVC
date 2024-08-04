@@ -7,6 +7,21 @@
     let pagination = $("#table-area .pagination-area .pagination")
     const header = "Bearer " + $.cookie("JWTToken");
 
+    $(document).on('click', '#toggle-create', function (e) {
+        e.preventDefault()
+
+        getTagsSelected()
+            .then(function (datas) {
+                $("#form-create #tags").empty()
+                let html = "";
+                $.each(datas, function (index, item) {
+
+                    html += `<option value="${item.id}">${item.name}</option>`;
+                })
+                $("#form-create #tags").append(html)
+            })
+    })
+
     $("#form-create").validate({
         errorClass: "my-error-class",
         rules: {
@@ -105,6 +120,10 @@
             formData.append('email', $('#table-area #email').val());
             formData.append('rating', $('#table-area #rating').val());
 
+            $('#table-area #form-create #tags option:selected').each(function () {
+                formData.append('tagIds', $(this).val());
+            });
+
             let files = $('#table-area #images')[0].files;
             for (var i = 0; i < files.length; i++) {
                 formData.append('images', files[i]);
@@ -126,6 +145,7 @@
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
+                    $("#form-create")[0].reset()
 
                     Swal.fire({
                         position: "top-end",
@@ -263,6 +283,21 @@
                 $('#table-area #modal-edit #website').val(response.website)
                 $(`#table-area #modal-edit #rating option[value="${response.rating}"]`).attr("selected", "selected")
                 $(`#table-area #modal-edit #active option[value="${response.isActive}"]`).attr("selected", "selected")
+                let html = ""
+
+                getTagsSelected()
+                    .then(function (datas) {
+                        $("#form-edit #tags").empty()
+                        $.each(datas, function (index, item) {
+                            if (response.tags.includes(item.name)) {
+                                html += `<option selected value="${item.id}">${item.name}</option>`;
+                            } else {
+                                html += `<option value="${item.id}">${item.name}</option>`;
+                            }
+                        })
+                        $("#form-edit #tags").append(html)
+                        html = "";
+                    })
             }
         });
     })
@@ -363,6 +398,10 @@
             formData.append('isActive', $('#table-area #modal-edit #active').val());
             formData.append('email', $('#table-area #modal-edit #email').val());
             formData.append('rating', $('#table-area #modal-edit #rating').val());
+
+            $('#table-area #form-edit #tags option:selected').each(function () {
+                formData.append('tagIds', $(this).val());
+            });
 
             let files = $('#table-area #modal-edit #images')[0].files;
             for (var i = 0; i < files.length; i++) {
@@ -716,6 +755,24 @@
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
                 $(".page-loader").addClass("d-none")
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            }
+        }));
+    }
+
+    function getTagsSelected(exludeid = null) {
+        return Promise.resolve($.ajax({
+            type: "GET",
+            headers: {
+                'Authorization': header
+            },
+            url: `https://localhost:7247/api/admin/tag/getallforselect?exludeId=${exludeid}`,
+            dataType: 'json',
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

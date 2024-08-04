@@ -39,6 +39,7 @@
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
+                    $("#form-create")[0].reset()
 
                     Swal.fire({
                         position: "top-end",
