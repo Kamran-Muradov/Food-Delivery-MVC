@@ -30,7 +30,7 @@
                                 <div class="pt-2">
                                     <h3 class="product-title fs-base mb-2"><a href="#">@item.Name</a></h3>
                                     <div class="fs-sm"><span class="text-muted me-2">Restaurant:</span>@item.Restaurant</div>
-                                    @foreach (var menuVariant in item.MenuVariants)
+                                    @foreach (var menuVariant in item.BasketVariants)
                                     {
                                         <div class="fs-sm"><span class="text-muted me-2">@menuVariant.Key:</span>@string.Join(", ", menuVariant.Value)</div>
                                     }
@@ -41,10 +41,10 @@
                                 @* <label class="form-label">Quantity</label>  *@
                                 <div class="count-area">
                                     <button id="decrement" class="decrement">-</button>
-                                    <input data-id="@item.Id" type="number" id="basket-count" class="basket-count" value="@item.Count" readonly="">
+                                    <input data-menuId="@item.MenuId" type="number" id="basket-count" class="basket-count" value="@item.Count" readonly="">
                                     <button id="increment" class="increment">+</button>
                                 </div>
-                                <button data-id="@item.Id" class="btn btn-link px-0 text-danger mt-3 basket-delete" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></button>
+                                <button data-menuId="@item.MenuId" class="btn btn-link px-0 text-danger mt-3 basket-delete" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></button>
                             </div>
                         </div>
                     }
@@ -67,7 +67,19 @@
                                 <div class="invalid-feedback">Please provide promo code.</div>
                             </div>
                             <button class="btn btn-outline-primary d-block w-100" type="submit">Apply promo code</button>
-                        </form><a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="food-delivery-checkout.html"><i class="ci-card fs-lg me-2"></i>Proceed to Checkout</a>
+                        </form>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="food-delivery-checkout.html">
+                                <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="#signin-modal" data-bs-toggle="modal">
+                                <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
+                            </a>
+                        }
                     </div>
                 </div>
             </div>

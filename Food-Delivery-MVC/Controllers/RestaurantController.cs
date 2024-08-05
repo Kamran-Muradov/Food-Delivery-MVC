@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Security.Claims;
 using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.UI.Restaurants;
 using Food_Delivery_MVC.ViewModels.UI.Tags;
@@ -75,11 +76,11 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detail(int? id)
+        public async Task<IActionResult> Detail(int? menuId)
         {
-            if (id == null) return BadRequest();
+            if (menuId == null) return BadRequest();
 
-            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getById/{id}");
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getById/{menuId}");
 
             responseMessage.EnsureSuccessStatusCode();
 
@@ -89,37 +90,67 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMenuToBasket([FromBody] BasketVM request)
+        public async Task<IActionResult> AddMenuToBasket([FromBody] BasketCreateVM request)
         {
             if (request == null) return BadRequest();
-            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{request.Id}");
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{request.MenuId}");
 
             if (responseMessage.StatusCode == HttpStatusCode.NoContent)
             {
                 return NotFound();
             }
 
-            List<BasketVM> basketDatas;
+            List<BasketVM> basketItems;
 
-            basketDatas = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+                request.UserId = userId;
 
+                string data = JsonConvert.SerializeObject(request);
 
-            var existBasketData = basketDatas.FirstOrDefault(m => m.Id == request.Id);
+                StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            if (existBasketData is not null)
+                responseMessage = await HttpClient.PostAsync("basketItem/create", content);
+
+                responseMessage.EnsureSuccessStatusCode();
+
+                basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+
+                return Ok(new { basketCount = basketItems.Sum(bi => bi.Count) });
+            }
+
+            basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+
+            var existBasketItem = basketItems.FirstOrDefault(m => m.MenuId == request.MenuId);
+
+            if (existBasketItem is not null)
             {
                 Response.Cookies.Delete("basket");
-                basketDatas.Remove(existBasketData);
-                basketDatas.Add(request);
+                basketItems.Remove(existBasketItem);
+                basketItems.Add(new BasketVM
+                {
+                    Count = request.Count,
+                    MenuId = request.MenuId,
+                    Price = request.Price,
+                    BasketVariants = request.BasketVariants
+                });
             }
             else
             {
-                basketDatas.Add(request);
+                basketItems.Add(new BasketVM
+                {
+                    Count = request.Count,
+                    MenuId = request.MenuId,
+                    Price = request.Price,
+                    BasketVariants = request.BasketVariants
+
+                });
             }
 
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketDatas));
+            Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItems));
 
-            return Ok(new { basketCount = basketDatas.Sum(bi => bi.Count) });
+            return Ok(new { basketCount = basketItems.Sum(bi => bi.Count) });
         }
     }
 }

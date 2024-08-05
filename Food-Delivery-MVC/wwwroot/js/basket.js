@@ -1,13 +1,9 @@
 ﻿$(function () {
-    const updateTotalPrice = () => {
-        $('#menu-detail .cart-btn span').html(`(${totalPrice.toFixed(2)})`);
-    };
-
     $(document).on('click', '.increment, .decrement', function () {
         let $countArea = $(this).closest('.count-area');
         let $basketCount = $countArea.find('.basket-count');
         let currentCount = parseInt($basketCount.val());
-        let id = $basketCount.attr('data-id');
+        let menuId = $basketCount.attr('data-menuId');
         let $itemPrice = $(this).closest('.basket-item').find('.price');
         let isIncrement = $(this).hasClass('increment');
 
@@ -22,7 +18,7 @@
         $basketCount.val(currentCount);
 
         axios.post(`/cart/changemenucount`, null, {
-            params: { id, count: currentCount }
+            params: { menuId, count: currentCount }
         })
             .then(function (response) {
                 $itemPrice.html(`$${response.data.newPrice.toFixed(2)}`);
@@ -39,11 +35,11 @@
     });
 
     $(document).on('click', '.basket-delete', function () {
-        let id = $(this).attr('data-id')
+        let menuId = $(this).attr('data-menuId')
         let $basketItem = $(this).closest('.basket-item')
 
         axios.post(`/cart/deletemenufrombasket`, null, {
-            params: { id }
+            params: { menuId }
         })
             .then(function (response) {
                 $basketItem.remove()

@@ -12,11 +12,11 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detail(int? id)
+        public async Task<IActionResult> Detail(int? menuId)
         {
-            if (id is null) return BadRequest();
+            if (menuId is null) return BadRequest();
 
-            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{id}");
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{menuId}");
 
             responseMessage.EnsureSuccessStatusCode();
 

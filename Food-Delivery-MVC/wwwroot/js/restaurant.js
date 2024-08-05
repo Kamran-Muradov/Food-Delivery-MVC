@@ -206,24 +206,24 @@ $(function () {
 
 
     $('#menu-detail').on('click', '.cart-btn', function () {
-        let id = $(this).attr('data-id')
+        let menuId = $(this).attr('data-id')
         let count = $('#menu-detail #basket-count').val();
-        let menuvariants = {}
+        let basketVariants = {}
         $('#menu-detail input:checked').each(function () {
             let value = $(this).next('label').html().trim()
             let key = $(this).attr('name');
 
-            if (!menuvariants[key]) {
-                menuvariants[key] = [];
+            if (!basketVariants[key]) {
+                basketVariants[key] = [];
             }
 
-            menuvariants[key].push(value)
+            basketVariants[key].push(value)
         })
         const data = JSON.stringify({
-            id,
+            menuId,
             count,
             price: totalPrice.toFixed(2),
-            menuvariants
+            basketVariants
         })
 
         axios.post(`/restaurant/addmenutobasket`, data, {

@@ -1,27 +1,27 @@
-﻿using Food_Delivery_MVC.Helpers.Account;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Food_Delivery_MVC.Helpers.Account;
 using Food_Delivery_MVC.Helpers.Extensions;
 using Food_Delivery_MVC.Services.Interfaces;
 using Food_Delivery_MVC.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
+using Food_Delivery_MVC.ViewModels.UI.Basket;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace Food_Delivery_MVC.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
-        private readonly HttpClient _httpClient;
         private readonly IWebHostEnvironment _env;
         private readonly IEmailService _emailService;
 
         public AccountController(HttpClient httpClient,
                                  IWebHostEnvironment env,
-                                 IEmailService emailService)
+                                 IEmailService emailService) : base(httpClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
             _env = env;
             _emailService = emailService;
         }
@@ -33,7 +33,7 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMsg = await _httpClient.PostAsync("account/signup", content);
+            HttpResponseMessage responseMsg = await HttpClient.PostAsync("account/signup", content);
 
             responseMsg.EnsureSuccessStatusCode();
 
@@ -64,7 +64,7 @@ namespace Food_Delivery_MVC.Controllers
 
             string encodedToken = WebUtility.UrlEncode(token);
 
-            HttpResponseMessage response = await _httpClient.GetAsync($"Account/ConfirmEmail?userid={userId}&token={encodedToken}");
+            HttpResponseMessage response = await HttpClient.GetAsync($"Account/ConfirmEmail?userid={userId}&token={encodedToken}");
 
             response.EnsureSuccessStatusCode();
 
@@ -84,7 +84,7 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/signin", content);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("account/signin", content);
 
             responseMessage.EnsureSuccessStatusCode();
 
@@ -108,8 +108,10 @@ namespace Food_Delivery_MVC.Controllers
             else
             {
                 Response.Cookies.Append("JWTToken", response.Token);
-
             }
+
+
+            await AddBasketToDatabaseAsync(response.Token);
 
             return Ok(response);
         }
@@ -137,7 +139,7 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/forgotpassword", content);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("account/forgotpassword", content);
             responseMessage.EnsureSuccessStatusCode();
 
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -183,7 +185,7 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await _httpClient.PostAsync("account/resetpassword", content);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("account/resetPassword", content);
 
             if (!responseMessage.IsSuccessStatusCode)
             {
@@ -198,6 +200,37 @@ namespace Food_Delivery_MVC.Controllers
             responseMessage.EnsureSuccessStatusCode();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task AddBasketToDatabaseAsync(string token)
+        {
+            List<BasketVM> basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+            var userId = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
+            foreach (var basketItem in basketItems)
+            {
+                BasketCreateVM request = new()
+                {
+                    Count = basketItem.Count,
+                    Price = basketItem.Price,
+                    MenuId = basketItem.MenuId,
+                    UserId = userId,
+                    BasketVariants = basketItem.BasketVariants
+                };
+
+                string data = JsonConvert.SerializeObject(request);
+
+                StringContent content = new(data, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage responseMessage = await HttpClient.PostAsync("basketItem/create", content);
+
+                responseMessage.EnsureSuccessStatusCode();
+            }
+
+            Response.Cookies.Delete("basket");
         }
     }
 }

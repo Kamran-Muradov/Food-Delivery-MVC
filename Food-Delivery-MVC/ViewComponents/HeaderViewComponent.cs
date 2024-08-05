@@ -1,6 +1,7 @@
 ﻿using Food_Delivery_MVC.ViewModels.UI.Basket;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace Food_Delivery_MVC.ViewComponents
 {
@@ -17,9 +18,17 @@ namespace Food_Delivery_MVC.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            List<BasketVM> basketDatas = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+            List<BasketVM> basketItems;
 
-            return await Task.FromResult(View(new HeaderVMVC { BasketCount = basketDatas.Sum(bi => bi.Count) }));
+            if (UserClaimsPrincipal.Identity.IsAuthenticated)
+            {
+                string userId = UserClaimsPrincipal.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+                basketItems = (List<BasketVM>)await _httpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+                return await Task.FromResult(View(new HeaderVMVC { BasketCount = basketItems.Sum(bi => bi.Count) }));
+            }
+
+            basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+            return await Task.FromResult(View(new HeaderVMVC { BasketCount = basketItems.Sum(bi => bi.Count) }));
         }
     }
 

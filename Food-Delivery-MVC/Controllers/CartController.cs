@@ -1,4 +1,6 @@
-﻿using Food_Delivery_MVC.ViewModels.UI.Basket;
+﻿using System.Security.Claims;
+using System.Text;
+using Food_Delivery_MVC.ViewModels.UI.Basket;
 using Food_Delivery_MVC.ViewModels.UI.Menus;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,29 +16,33 @@ namespace Food_Delivery_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<BasketVM> basketDatas;
-
-            if (HttpContext.Request.Cookies["basket"] is not null)
-            {
-                basketDatas = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
-            }
-            else
-            {
-                basketDatas = new List<BasketVM>();
-            }
-
             List<BasketDetailVM> model = new();
 
-            foreach (var item in basketDatas)
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+
+                model = (List<BasketDetailVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketDetailVM>>($"basketItem/getAllByUserId?userId={userId}");
+
+                ViewBag.TotalPrice = model.Sum(m => m.Price);
+
+                return View(model);
+            }
+
+            List<BasketVM> basketItems =
+                HttpContext.Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+
+
+            foreach (var item in basketItems)
             {
 
-                var menu = await HttpClient.GetFromJsonAsync<MenuDetailVM>($"menu/getById/{item.Id}");
+                var menu = await HttpClient.GetFromJsonAsync<MenuDetailVM>($"menu/getById/{item.MenuId}");
 
                 model.Add(new BasketDetailVM
                 {
-                    Id = item.Id,
+                    MenuId = item.MenuId,
                     Count = item.Count,
-                    MenuVariants = item.MenuVariants,
+                    BasketVariants = item.BasketVariants,
                     Price = item.Price,
                     Name = menu.Name,
                     Image = menu.Image,
@@ -50,71 +56,109 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangeMenuCount(int? id, int? count)
+        public async Task<IActionResult> ChangeMenuCount(int? menuId, int? count)
         {
-            if (id == null || count == null) return BadRequest();
+            if (menuId == null || count == null) return BadRequest();
 
-            List<BasketVM> basketDatas;
+            List<BasketVM> basketItems;
+            BasketVM basketItem;
 
-            if (HttpContext.Request.Cookies["basket"] is not null)
+            if (User.Identity.IsAuthenticated)
             {
-                basketDatas = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+                string data = JsonConvert.SerializeObject(new
+                {
+                    UserId = userId,
+                    MenuId = menuId,
+                    Count = count
+                });
+
+                StringContent content = new(data, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage responseMessage = await HttpClient.PutAsync("basketItem/changeCount", content);
+
+                responseMessage.EnsureSuccessStatusCode();
+
+                basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+
+                basketItem = basketItems.FirstOrDefault(bi => bi.MenuId == menuId);
+                if (basketItem == null) return NotFound();
             }
             else
             {
-                return BadRequest();
+                if (HttpContext.Request.Cookies["basket"] is not null)
+                {
+                    basketItems = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+                basketItem = basketItems.FirstOrDefault(bi => bi.MenuId == menuId);
+
+                if (basketItem == null) return NotFound();
+
+                var singlePrice = basketItem.Price / basketItem.Count;
+
+                basketItem.Count = (int)count;
+                basketItem.Price = (decimal)(singlePrice * count);
+
+                Response.Cookies.Delete("basket");
+
+                Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItems));
             }
-
-            var basketItem = basketDatas.FirstOrDefault(bi => bi.Id == id);
-
-            if (basketItem == null) return NotFound();
-
-            var singlePrice = basketItem.Price / basketItem.Count;
-
-            basketItem.Count = (int)count;
-            basketItem.Price = (decimal)(singlePrice * count);
-
-            Response.Cookies.Delete("basket");
-
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketDatas));
 
             return Ok(new
             {
-                NewPrice = basketItem.Price, 
-                TotalPrice = basketDatas.Sum(bi => bi.Price),
-                BasketCount = basketDatas.Sum(bi => bi.Count)
+                NewPrice = basketItem.Price,
+                TotalPrice = basketItems.Sum(bi => bi.Price),
+                BasketCount = basketItems.Sum(bi => bi.Count)
             });
         }
 
         [HttpPost]
-        public IActionResult DeleteMenuFromBasket(int? id)
+        public async Task<IActionResult> DeleteMenuFromBasket(int? menuId)
         {
-            if (id == null) return BadRequest();
+            if (menuId == null) return BadRequest();
 
-            List<BasketVM> basketDatas;
+            List<BasketVM> basketItems;
 
-            if (HttpContext.Request.Cookies["basket"] is not null)
+            if (User.Identity.IsAuthenticated)
             {
-                basketDatas = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+
+                HttpResponseMessage responseMessage = await HttpClient.DeleteAsync($"basketItem/delete?userId={userId}&menuId={menuId}");
+                responseMessage.EnsureSuccessStatusCode();
+
+                basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+
             }
             else
             {
-                return BadRequest();
+                if (HttpContext.Request.Cookies["basket"] is not null)
+                {
+                    basketItems = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+                var basketItem = basketItems.FirstOrDefault(bi => bi.MenuId == menuId);
+
+                if (basketItem == null) return NotFound();
+
+                Response.Cookies.Delete("basket");
+                basketItems.Remove(basketItem);
+
+                if (basketItems.Count > 0)
+                {
+                    Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItems));
+                }
             }
 
-            var basketItem = basketDatas.FirstOrDefault(bi => bi.Id == id);
-
-            if (basketItem == null) return NotFound();
-
-            Response.Cookies.Delete("basket");
-            basketDatas.Remove(basketItem);
-
-            if (basketDatas.Count > 0)
-            {
-                Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketDatas));
-            }
-
-            return Ok(new { TotalPrice = basketDatas.Sum(bi => bi.Price), BasketCount = basketDatas.Sum(bi => bi.Count) });
+            return Ok(new { TotalPrice = basketItems.Sum(bi => bi.Price), BasketCount = basketItems.Sum(bi => bi.Count) });
         }
     }
 }
