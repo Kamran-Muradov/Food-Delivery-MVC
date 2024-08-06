@@ -9,16 +9,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
-    options.MinimumSameSitePolicy = SameSiteMode.Lax; // or Strict, None
+    options.MinimumSameSitePolicy = SameSiteMode.Lax;
 });
 
 builder.Services.AddSession(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Lax; // or Strict, None
+    options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
@@ -68,10 +67,6 @@ builder.Services.AddAuthorization(o =>
     o.AddPolicy("RequireSuperAdminRole", p => p.RequireRole("SuperAdmin"));
 });
 builder.Services.AddControllersWithViews();
-    //.AddJsonOptions(options => 
-    //{
-    //    options.JsonSerializerOptions.DictionaryKeyPolicy = null; // or any other policy you prefer
-    //});
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -79,28 +74,8 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp
 
 builder.Services.AddDistributedMemoryCache();
 
-//builder.Services.AddSession(options =>
-//{
-//    options.Cookie.Name = "Food-Delivery-MVC.Session";
-//    options.IdleTimeout = TimeSpan.FromMinutes(30);
-//    options.Cookie.HttpOnly = true;
-//    options.Cookie.IsEssential = true;
-//});
-
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(options =>
-//    {
-//        options.Cookie.Name = "Food-Delivery.AuthCookie";
-//        options.Cookie.HttpOnly = true;
-//        options.Cookie.IsEssential = true;
-//        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-//        options.SlidingExpiration = true;
-//        options.Cookie.SameSite = SameSiteMode.Strict;
-//    });
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -114,8 +89,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseCookiePolicy();
-
-
 
 app.Use(async (context, next) =>
 {

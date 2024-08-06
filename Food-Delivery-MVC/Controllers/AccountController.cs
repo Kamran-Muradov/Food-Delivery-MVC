@@ -1,15 +1,14 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Food_Delivery_MVC.Helpers.Account;
+﻿using Food_Delivery_MVC.Helpers.Account;
 using Food_Delivery_MVC.Helpers.Extensions;
 using Food_Delivery_MVC.Services.Interfaces;
 using Food_Delivery_MVC.ViewModels.Account;
+using Food_Delivery_MVC.ViewModels.UI.Basket;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using Food_Delivery_MVC.ViewModels.UI.Basket;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace Food_Delivery_MVC.Controllers
 {
@@ -33,11 +32,11 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMsg = await HttpClient.PostAsync("account/signup", content);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("account/signup", content);
 
-            responseMsg.EnsureSuccessStatusCode();
+            responseMessage.EnsureSuccessStatusCode();
 
-            string responseData = await responseMsg.Content.ReadAsStringAsync();
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
 
             var response = JsonConvert.DeserializeObject<RegisterResponse>(responseData);
 
