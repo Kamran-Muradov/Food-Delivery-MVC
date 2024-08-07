@@ -19,21 +19,29 @@ namespace Food_Delivery_MVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             List<BasketVM> basketItems;
+            string userId = null;
 
             if (UserClaimsPrincipal.Identity.IsAuthenticated)
             {
-                string userId = UserClaimsPrincipal.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+                userId = UserClaimsPrincipal.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
                 basketItems = (List<BasketVM>)await _httpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
-                return await Task.FromResult(View(new HeaderVMVC { BasketCount = basketItems.Sum(bi => bi.Count) }));
+            }
+            else
+            {
+                basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
             }
 
-            basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
-            return await Task.FromResult(View(new HeaderVMVC { BasketCount = basketItems.Sum(bi => bi.Count) }));
+            return await Task.FromResult(View(new HeaderVMVC
+            {
+                BasketCount = basketItems.Sum(bi => bi.Count) ,
+                UserId = userId
+            }));
         }
     }
 
     public class HeaderVMVC
     {
         public int BasketCount { get; set; }
+        public string UserId { get; set; }
     }
 }

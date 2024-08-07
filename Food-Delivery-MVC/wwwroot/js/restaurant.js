@@ -242,27 +242,6 @@ $(function () {
                     text: "Something went wrong!",
                 });
             })
-
-        //$.ajax({
-        //    type: "POST",
-        //    url: `/restaurant/addmenutobasket`,
-        //    data: data,
-        //    contentType: 'application/json',
-        //    success: function (response) {
-        //        $('#menu-count').removeClass("d-none")
-        //        $('#menu-count').html(response.basketCount)
-        //    },
-        //    error: function (xhr, status, error) {
-        //        $('#modal-edit').modal('hide');
-        //        $(".page-loader").addClass("d-none")
-        //        Swal.fire({
-        //            icon: "error",
-        //            title: "Oops...",
-        //            text: "Something went wrong!",
-        //        });
-        //    },
-        //});
-
     })
 });
 

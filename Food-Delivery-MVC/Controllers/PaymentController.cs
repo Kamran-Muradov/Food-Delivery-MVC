@@ -24,7 +24,6 @@ namespace Food_Delivery_MVC.Controllers
                 UserId = userId,
                 SuccessUrl = Url.Action(nameof(PaymentSuccess), "Payment", values: null, protocol: Request.Scheme),
                 CancelUrl = Url.Action(nameof(PaymentCancel), "Payment", values: null, protocol: Request.Scheme),
-                Amount = 0
             });
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
@@ -52,7 +51,12 @@ namespace Food_Delivery_MVC.Controllers
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
             HttpResponseMessage responseMessage = await HttpClient.GetAsync($"payment/checkPaymentStatus?sessionId={sessionId}");
+            responseMessage.EnsureSuccessStatusCode();
 
+            string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+            responseMessage = await HttpClient.PostAsync($"checkout/createByUserId?userId={userId}", null);
             responseMessage.EnsureSuccessStatusCode();
 
             return View();

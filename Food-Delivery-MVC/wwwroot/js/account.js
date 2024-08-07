@@ -227,7 +227,7 @@
             }
         },
         messages: {
-           password: {
+            password: {
                 required: "Password is required",
             },
             confirmpassword: {
@@ -235,6 +235,25 @@
             }
         },
     });
+
+    $(document).on('click', '#profile-tabs a', function (e) {
+        e.preventDefault()
+        const $targetTab = $(this)
+        const url = $targetTab.data('url')
+        axios.get(url)
+            .then(function (response) {
+                $('#profile-section').html(response.data)
+                $('.active').removeClass('active')
+                $targetTab.addClass('active')
+            })
+            .catch(function (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            });
+    })
 })
 
 

@@ -1,0 +1,51 @@
+﻿@model UserVM
+
+<form>
+    @*    <div class="bg-secondary rounded-3 p-4 mb-4">
+    <div class="d-flex align-items-center">
+    <img class="rounded" src="img/shop/account/avatar.jpg" width="90" alt="Nigam Mishra">
+    <div class="ps-3">
+    <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change avatar</button>
+    <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
+    </div>
+    </div>
+    </div> *@
+    <div class="row gx-4 gy-3">
+        <div class="col-sm-6">
+            <label class="form-label" for="account-email">Email Address</label>
+            <input class="form-control" type="email" id="account-email" value="@Model.Email" disabled="">
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label" for="account-phone">Full name</label>
+            <input class="form-control" type="text" id="account-phone" value="@Model.FullName" required="">
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label" for="account-pass">New Password</label>
+            <div class="password-toggle">
+                <input class="form-control" type="password" id="account-pass">
+                <label class="password-toggle-btn" aria-label="Show/hide password">
+                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label" for="account-confirm-pass">Confirm Password</label>
+            <div class="password-toggle">
+                <input class="form-control" type="password" id="account-confirm-pass">
+                <label class="password-toggle-btn" aria-label="Show/hide password">
+                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-12">
+            <hr class="mt-2 mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="subscribe_me" checked="">
+                    <label class="form-check-label" for="subscribe_me">Subscribe me to Newsletter</label>
+                </div>
+                <button class="btn btn-primary mt-3 mt-sm-0" type="button">Update profile</button>
+            </div>
+        </div>
+    </div>
+</form>

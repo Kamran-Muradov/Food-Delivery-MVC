@@ -67,15 +67,18 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-lg-0" href="#" data-bs-toggle="dropdown"><i></i>@User.Identity.Name</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Account</a></li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="UserProfile" asp-action="Index">Profile</a>
+                            </li>
                             @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                             {
-                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Go to Admin</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Go to Admin</a>
+                                </li>
                             }
                             <form method="post" asp-controller="Account" asp-action="Logout">
                                 <input type="submit" class="dropdown-item" value="Logout" />
                             </form>
-                            
                         </ul>
                     </li>
                 </ul>
