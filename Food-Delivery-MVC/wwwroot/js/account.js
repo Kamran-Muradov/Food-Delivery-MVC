@@ -1,6 +1,4 @@
 ﻿$(function () {
-
-
     $.validator.addMethod("hasNumber", function (value, element) {
         return /[0-9]/.test(value);
     }, "Password must contain at least one number");
@@ -14,6 +12,9 @@
         // Use regex to define which characters are considered special
         return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
     }, "Password must contain at least one special character");
+    $.validator.addMethod("notEqualTo", function (value, element, param) {
+        return value !== $(param).val();
+    }, "New password must be different from the current password.");
 
     $("#signin-tab").validate({
         errorClass: "my-error-class",
@@ -157,7 +158,6 @@
                 type: "POST",
                 url: `/account/signup`,
                 data: data,
-                //contentType: 'application/json',
                 success: function (response) {
                     $("#signup-tab #signup-btn").removeClass("d-none")
                     $("#signup-tab #loading-btn").addClass("d-none")
@@ -254,6 +254,146 @@
                 });
             });
     })
+
+    $("#from-update").validate({
+        errorClass: "my-error-class",
+        rules: {
+            ignore: [],
+            fullname: {
+                required: true,
+                maxlength: 50
+            },
+            username: {
+                required: true,
+                maxlength: 50
+            }
+            //password: {
+            //    required: true,
+            //    minlength: 6,
+            //    hasNumber: true,
+            //    hasUpperCase: true,
+            //    hasLowerCase: true,
+            //    hasSpecialChar: true
+            //},
+            //confirmpassword: {
+            //    equalTo: "#form-update #password"
+            //}
+        },
+        messages: {
+            fullname: {
+                required: "",
+                maxlength: "Maximum 50 characters are allowed for full name"
+            },
+            username: {
+                required: "",
+                maxlength: "Maximum 50 characters are allowed for username"
+            },
+            email: {
+                required: "",
+                maxlength: "Maximum 50 characters are allowed for email"
+            }
+            //password: {
+            //    required: "Password is required",
+            //},
+            //confirmpassword: {
+            //    equalTo: "Passwords do not match"
+            //}
+        },
+
+        //submitHandler: function (form) {
+
+        //    return false; // Prevent normal form submission
+        //}
+    });
+
+    $('#password-modal').modal({
+        backdrop: true,
+        keyboard: true
+    });
+
+    $("#password-tab").validate({
+        errorClass: "my-error-class",
+        rules: {
+            ignore: [],
+            currentPassword: {
+                notEqualTo: "#password-tab #newPassword"
+            },
+            newPassword: {
+                required: true,
+                minlength: 6,
+                hasNumber: true,
+                hasUpperCase: true,
+                hasLowerCase: true,
+                hasSpecialChar: true
+            },
+            confirmPassword: {
+                equalTo: "#password-tab #newPassword"
+            }
+        },
+        messages: {
+            newPassword: {
+                required: "Password is required",
+            },
+            confirmPassword: {
+                equalTo: "Passwords do not match"
+            }
+        },
+
+        submitHandler: function (form) {
+            let modal = bootstrap.Modal.getInstance(document.getElementById('password-modal'));
+            modal._config.backdrop = 'static';
+            modal._config.keyboard = false;
+
+            $("#password-tab #password-btn").removeClass("d-none")
+            $("#password-tab #loading-btn").addClass("d-none")
+
+            const currentPassword = $('#password-tab #currentPassword').val()
+            const newPassword = $('#password-tab #newPassword').val()
+
+            const data = {
+                currentPassword,
+                newPassword
+            }
+
+
+            axios.post('/userprofile/editpassword', data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(function (response) {
+                    if (response.data.success == true) {
+                        window.location.reload()
+                    } else if (response.data.errors.includes('Incorrect password.')) {
+                        $("#password-tab #password-btn").removeClass("d-none")
+                        $("#password-tab #loading-btn").addClass("d-none")
+                        let modal = bootstrap.Modal.getInstance(document.getElementById('password-modal'));
+                        modal._config.backdrop = true;
+                        modal._config.keyboard = true;
+                        $('#incorrect-password').html('Incorrect password')
+                    } else {
+                        console.log(response.data.errors)
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                });
+
+            return false; // Prevent normal form submission
+        }
+
+    });
+
+
 })
 
 

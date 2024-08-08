@@ -68,7 +68,7 @@
                 </div><a class="btn btn-primary btn-sm d-none d-lg-inline-block" asp-action="Logout"><i class="ci-sign-out me-2"></i>Sign out</a>
             </div>
             <div id="profile-section">
-                <form>
+                <form id="from-update" method="post" asp-action="Edit">
                     @*    <div class="bg-secondary rounded-3 p-4 mb-4">
                     <div class="d-flex align-items-center">
                     <img class="rounded" src="img/shop/account/avatar.jpg" width="90" alt="Nigam Mishra">
@@ -78,45 +78,77 @@
                     </div>
                     </div>
                     </div> *@
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="row gx-4 gy-3">
                         <div class="col-sm-12">
                             <label class="form-label" for="account-email">Email Address</label>
-                            <input class="form-control" type="email" id="account-email" value="@Model.Email" disabled="">
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="account-phone">Username</label>
-                            <input class="form-control" type="text" id="account-phone" value="@Model.FullName" required="">
+                            <input asp-for="Email" class="form-control" type="email" id="account-email" value="@Model.Email" disabled="">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="account-phone">Full name</label>
-                            <input class="form-control" type="text" id="account-phone" value="@Model.UserName" required="">
+                            <input asp-for="FullName" class="form-control" type="text" id="fullname" name="fullname" value="@Model.FullName">
                         </div>
                         <div class="col-sm-6">
-                            <label class="form-label" for="account-pass">New Password</label>
-                            <div class="password-toggle">
-                                <input class="form-control" type="password" id="account-pass">
-                                <label class="password-toggle-btn" aria-label="Show/hide password">
-                                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                                </label>
-                            </div>
+                            <label class="form-label" for="account-phone">UserName</label>
+                            <input asp-for="UserName" class="form-control" type="text" id="username" name="username" value="@Model.UserName">
                         </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="account-confirm-pass">Confirm Password</label>
-                            <div class="password-toggle">
-                                <input class="form-control" type="password" id="account-confirm-pass">
-                                <label class="password-toggle-btn" aria-label="Show/hide password">
-                                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <hr class="mt-2 mb-3">
-                            <div class="d-flex flex-wrap justify-content-between align-items-center">
-                                <button class="btn btn-primary mt-3 mt-sm-0" type="button">Update profile</button>
+                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                <button class="btn btn-primary mt-3 mt-sm-0" type="submit">Update profile</button>
+                                <a id="toggle-password" class="btn btn-primary mt-3 mt-sm-0 mx-3" href="#password-modal" data-bs-toggle="modal">Change password</a>
                             </div>
                         </div>
                     </div>
                 </form>
+            </div>
+            
+            <div class="modal fade" id="password-modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-secondary">
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body tab-content py-4">
+                            <span class="text-danger signin-error"></span>
+                            <form class="needs-validation" autocomplete="off" novalidate id="password-tab">
+                                <div class="mb-3">
+                                    <label class="form-label required" for="currentPassword">Current password</label>
+                                    <div class="password-toggle">
+                                        <input autocomplete="off" class="form-control" type="password" id="currentPassword" name="currentPassword">
+                                        <span id="incorrect-password" class="text-danger"></span>
+                                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                                            <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label required" for="newPassword">New password</label>
+                                    <div class="password-toggle">
+                                        <input autocomplete="off" class="form-control" type="password" id="newPassword" name="newPassword">
+                                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                                            <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="confirmPassword">Confirm password</label>
+                                    <div class="password-toggle">
+                                        <input autocomplete="off" class="form-control" type="password" id="confirmPassword" name="confirmPassword">
+                                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                                            <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button id="password-btn" class="btn btn-primary btn-shadow d-block w-100" type="submit">Change password</button>
+                                <button id="loading-btn" class="btn btn-primary btn-shadow d-block w-100 d-none" type="button" disabled>
+                                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                    <span class="sr-only">Loading...</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Pagination-->
             @* <nav class="d-flex justify-content-between pt-2" aria-label="Page navigation">
