@@ -1,0 +1,20 @@
+﻿@model IEnumerable<SliderVMVC>
+
+<div class="owl-carousel owl theme">
+    @foreach (var slider in Model)
+    {
+        <section class="bg-darker bg-size-cover bg-position-center py-5 py-lg-10" style="background-image: url(@slider.Image); background-repeat:no-repeat; height:632px;">
+            <div class="container pb-5">
+                <div class="row justify-content-center pb-5">
+                    <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 text-center">
+                        <h5 class="text-light fw-light">@slider.Title</h5>
+                        <div class="h1 text-light mb-3 pb-4">
+                            @slider.Description
+                        </div><a class="btn btn-primary" href="#cuisine" data-scroll>What do you want to eat?</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+</div>

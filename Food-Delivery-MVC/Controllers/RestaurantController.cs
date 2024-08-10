@@ -36,6 +36,18 @@ namespace Food_Delivery_MVC.Controllers
             return View(new RestaurantResponse { Tags = tags, Restaurants = restaurants });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllByTagId(int tagId)
+        {
+
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getAllByTagId?tagId={tagId}");
+
+            responseMessage.EnsureSuccessStatusCode();
+
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+
+            return View(JsonConvert.DeserializeObject<IEnumerable<RestaurantVM>>(responseData));
+        }
 
         [HttpPost]
         public async Task<IActionResult> LoadMore([FromBody] RestaurantFilterVM request)
@@ -76,11 +88,11 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detail(int? menuId)
+        public async Task<IActionResult> Detail(int? id)
         {
-            if (menuId == null) return BadRequest();
+            if (id == null) return BadRequest();
 
-            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getById/{menuId}");
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getById/{id}");
 
             responseMessage.EnsureSuccessStatusCode();
 

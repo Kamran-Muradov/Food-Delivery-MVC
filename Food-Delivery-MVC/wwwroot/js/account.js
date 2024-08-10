@@ -16,6 +16,11 @@
         return value !== $(param).val();
     }, "New password must be different from the current password.");
 
+    $('#signin-modal').modal({
+        backdrop: true,
+        keyboard: true
+    });
+
     $("#signin-tab").validate({
         errorClass: "my-error-class",
         rules: {
@@ -38,6 +43,11 @@
         },
 
         submitHandler: function (form) {
+            let modal = bootstrap.Modal.getInstance(document.getElementById('signin-modal'));
+            modal._config.backdrop = 'static';
+            modal._config.keyboard = false;
+            $('#signin-tab :input').prop('disabled', true);
+            $('#signin-modal .modal-header .btn-close').prop('disabled', true);
 
             let emailorusername = $("#signin-tab #emailorusername").val()
             let password = $("#signin-tab #password").val()
@@ -56,6 +66,11 @@
                 url: `/account/signin`,
                 data: data,
                 success: function (response) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#signin-tab :input').prop('disabled', false);
+                    $('#signin-modal .modal-header .btn-close').prop('disabled', false);
+
                     $("#signin-tab #signin-btn").removeClass("d-none")
                     $("#signin-tab #loading-btn").addClass("d-none")
                     if (response.success == true) {
@@ -66,6 +81,11 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#signin-tab :input').prop('disabled', false);
+                    $('#signin-modal .modal-header .btn-close').prop('disabled', false);
+
                     $('#signin-modal').modal('hide');
                     $("#signin-tab #signin-btn").removeClass("d-none")
                     $("#signin-tab #loading-btn").addClass("d-none")
@@ -137,6 +157,12 @@
         },
 
         submitHandler: function (form) {
+            let modal = bootstrap.Modal.getInstance(document.getElementById('signin-modal'));
+            modal._config.backdrop = 'static';
+            modal._config.keyboard = false;
+            $('#signup-tab :input').prop('disabled', true);
+            $('#signin-modal .modal-header .btn-close').prop('disabled', true);
+
             $("#signup-tab .exist-email").empty()
             $("#signup-tab .exist-username").empty()
             $("#signup-tab #signup-btn").addClass("d-none")
@@ -159,6 +185,11 @@
                 url: `/account/signup`,
                 data: data,
                 success: function (response) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#signup-tab :input').prop('disabled', false);
+                    $('#signin-modal .modal-header .btn-close').prop('disabled', false);
+
                     $("#signup-tab #signup-btn").removeClass("d-none")
                     $("#signup-tab #loading-btn").addClass("d-none")
                     if (response.errors == null) {
@@ -178,11 +209,14 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#signup-tab :input').prop('disabled', false);
+                    $('#signin-modal .modal-header .btn-close').prop('disabled', false);
+
                     $("#signup-tab #signup-btn").removeClass("d-none")
                     $("#signup-tab #loading-btn").addClass("d-none")
                     $('#signin-modal').modal('hide');
-                    $('#modal-small').modal('hide');
-                    $(".page-loader").addClass("d-none")
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -355,7 +389,6 @@
                 newPassword
             }
 
-
             axios.post('/userprofile/editpassword', data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -372,7 +405,6 @@
                         modal._config.keyboard = true;
                         $('#incorrect-password').html('Incorrect password')
                     } else {
-                        console.log(response.data.errors)
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
@@ -392,7 +424,6 @@
         }
 
     });
-
 
 })
 

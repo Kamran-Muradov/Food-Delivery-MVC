@@ -1,4 +1,4 @@
-﻿@model PaginationResponse<IngredientVM>
+﻿@model PaginationResponse<SliderVM>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,7 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <h2 class="page-title">
-                    Ingredients
+                    Sliders
                 </h2>
             </div>
             <!-- Page title actions -->
@@ -38,8 +38,8 @@
                     <div class="col-2">
                         <div class="form-label">Sort by</div>
                         <select class="form-select">
+                            <option value="Title">Title</option>
                             <option value="Create date">Create date</option>
-                            <option value="Name">Name</option>
                             <option value="Update date">Update date</option>
                         </select>
                     </div>
@@ -55,7 +55,8 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Title</th>
                             <th>Create Date</th>
                             <th>Update Date</th>
                             <th>Operations</th>
@@ -65,7 +66,10 @@
                         @foreach (var item in Model.Datas)
                         {
                             <tr data-id="@item.Id">
-                                <td class="sort-name">@item.Name</td>
+                                <td class="sort-name">
+                                    <img data-id="@item.Id" src="@item.Image" style="width:90px;height:54px" alt="" />
+                                </td>
+                                <td class="sort-name">@item.Title</td>
                                 <td class="sort-name create-date">@item.CreatedDate</td>
                                 <td class="sort-name">@item.UpdatedDate</td>
                                 <td>
@@ -116,8 +120,20 @@
                     <form id="form-create" class="data-create" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label required">Name</label>
-                                <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
+                                <label class="form-label required">Title</label>
+                                <input autocomplete="off" id="title" type="text" class="form-control" name="title" placeholder="Title..." />
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label required">Description</label>
+                                <textarea autocomplete="off" id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label required">Upload image</label>
+                                <input autocomplete="off" id="image" type="file" class="form-control" name="image">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -146,8 +162,20 @@
                 <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label required">Name</label>
-                            <input autocomplete="off" id="name" type="text" class="form-control" name="name" placeholder="Name..." />
+                            <label class="form-label required">Title</label>
+                            <input autocomplete="off" id="title" type="text" class="form-control" name="title" placeholder="Name..." />
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label required">Description</label>
+                            <textarea autocomplete="off" id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Upload image</label>
+                            <input autocomplete="off" id="image" type="file" class="form-control" name="image">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -175,8 +203,8 @@
                 {
                     <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                 }
-                <li class="page-item">
-                    <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
+                <li class="page-item @(Model.TotalPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="#">Next</a>
                 </li>
             </ul>
         </nav>
@@ -185,6 +213,6 @@
 
 
 @section js {
-    <script src="~/admin/dist/js/ingredient.js"></script>
+    <script src="~/admin/dist/js/slider.js"></script>
 }
 

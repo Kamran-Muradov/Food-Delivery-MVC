@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\js\custom.js" />
+    <None Include="wwwroot\vendor\owlcarousel\owl.carousel.min.js" />
   </ItemGroup>
 
   <ItemGroup>

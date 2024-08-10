@@ -25,25 +25,33 @@
     $("#form-create").validate({
         errorClass: "my-error-class",
         rules: {
-            name: {
+            title: {
                 required: true,
                 maxlength: 50
+            },
+            desc: {
+                required: true,
+                maxlength: 200
             },
             image: {
                 required: true,
                 extension: "jpeg|img|svg|webp|avif|jpg|png",
-                filesize: 512000
+                filesize: 1024000
             }
         },
         messages: {
-            name: {
-                required: "Name is required",
-                maxlength: "Maximum 50 characters are allowed for name"
+            title: {
+                required: "Title is required",
+                maxlength: "Maximum 50 characters are allowed for Title"
+            },
+            desc: {
+                required: "Description is required",
+                maxlength: "Maximum 200 characters are allowed for description"
             },
             image: {
                 required: "Image is required",
                 extension: "File must be image type",
-                filesize: "Image size cannot exceed 500Kb"
+                filesize: "Image size cannot exceed 1MB"
             }
         },
 
@@ -55,7 +63,8 @@
             $('#modal-report .modal-header .btn-close').prop('disabled', true);
 
             let formData = new FormData();
-            formData.append('name', $('#table-area #name').val());
+            formData.append('title', $('#table-area #title').val());
+            formData.append('description', $('#table-area #desc').val());
 
             let files = $('#table-area #image')[0].files;
             for (var i = 0; i < files.length; i++) {
@@ -66,7 +75,7 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/tag/create',
+                url: 'https://localhost:7247/api/admin/slider/create',
                 method: 'POST',
                 headers: {
                     'Authorization': header
@@ -111,7 +120,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Tag with this name already exists",
+                            text: "Category with this name already exists",
                         });
                     } else {
                         $("#form-create #create-btn").removeClass("d-none")
@@ -218,17 +227,16 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/tag/getbyid/${id}`,
+            url: `https://localhost:7247/api/admin/slider/getbyid/${id}`,
             headers: {
                 'Authorization': header
             },
             dataType: 'json',
             success: function (response) {
-                $('#table-area #modal-edit #name').val(response.name)
+                $('#table-area #modal-edit #title').val(response.title)
+                $('#table-area #modal-edit #desc').val(response.description)
             },
             error: function (xhr, status, error) {
-                $('#modal-report').modal('hide');
-                $(".page-loader").addClass("d-none")
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -241,23 +249,31 @@
     $("#form-edit").validate({
         errorClass: "my-error-class",
         rules: {
-            name: {
+            title: {
                 required: true,
                 maxlength: 50
             },
+            desc: {
+                required: true,
+                maxlength: 200
+            },
             image: {
                 extension: "jpeg|img|svg|webp|avif|jpg|png",
-                filesize: 512000
+                filesize: 1024000
             }
         },
         messages: {
-            name: {
-                required: "Name is required",
-                maxlength: "Maximum 50 characters are allowed for name"
+            title: {
+                required: "Title is required",
+                maxlength: "Maximum 50 characters are allowed for title"
+            },
+            desc: {
+                required: "Description is required",
+                maxlength: "Maximum 200 characters are allowed for description"
             },
             image: {
                 extension: "File must be image type",
-                filesize: "Image size cannot exceed 500Kb"
+                filesize: "Image size cannot exceed 1MB"
             }
         },
 
@@ -270,7 +286,8 @@
 
             let id = $('#table-area #form-edit').attr('data-id')
             let formData = new FormData();
-            formData.append('name', $('#table-area #modal-edit #name').val());
+            formData.append('title', $('#table-area #modal-edit #title').val());
+            formData.append('description', $('#table-area #modal-edit #desc').val());
 
             let files = $('#table-area #modal-edit #image')[0].files;
             for (var i = 0; i < files.length; i++) {
@@ -281,7 +298,7 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/tag/edit/${id}`,
+                url: `https://localhost:7247/api/admin/slider/edit/${id}`,
                 method: 'PUT',
                 headers: {
                     'Authorization': header
@@ -301,7 +318,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Tag with this name already exists",
+                            text: "Category with this name already exists",
                         });
                     } else {
                         $("#form-edit #edit-btn").removeClass("d-none")
@@ -321,7 +338,7 @@
                     $('#modal-edit .modal-header .btn-close').prop('disabled', false);
 
                     $.ajax({
-                        url: `https://localhost:7247/api/admin/tagimage/getbytagid/${id}`,
+                        url: `https://localhost:7247/api/admin/sliderimage/getbysliderid/${id}`,
                         headers: {
                             'Authorization': header
                         },
@@ -333,12 +350,12 @@
                             let imageUrl = response.url
                             let createdDate = $(`#table-area tr[data-id="${id}"] .create-date`).html()
                             let updatedDate = moment().format('MM/DD/yyyy')
-                            let name = formData.get('name')
+                            let title = formData.get('title')
                             row.empty()
                             row.html(`    <td class="sort-name">
                                         <img data-id="${id}" src="${imageUrl}" style="width:90px;height:54px" alt="" />
                                     </td>
-                                    <td class="sort-name">${name}</td>
+                                    <td class="sort-name">${title}</td>
                                     <td class="sort-name create-date">${createdDate}</td>
                                     <td class="sort-name">${updatedDate}</td>
                                     <td>
@@ -395,14 +412,13 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/tag/Delete?id=${id}`,
+            url: `https://localhost:7247/api/admin/slider/Delete?id=${id}`,
             headers: {
                 'Authorization': header
             },
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
-
                 $('#modal-small').modal('hide');
                 $("#table-area .yes-btn").removeClass("d-none")
                 $("#table-area #loading-delete-btn").addClass("d-none")
@@ -424,7 +440,6 @@
             error: function (xhr, status, error) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
-
                 $("#table-area .yes-btn").removeClass("d-none")
                 $("#table-area #loading-delete-btn").addClass("d-none")
                 $('#modal-small').modal('hide');
@@ -444,7 +459,7 @@
             headers: {
                 'Authorization': header
             },
-            url: `https://localhost:7247/api/admin/tag/GetPaginateDatas?page=${page}&take=5`,
+            url: `https://localhost:7247/api/admin/slider/GetPaginateDatas?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -495,7 +510,7 @@
                                     <td class="sort-name">
                                         <img data-id="${item.id}" src="${item.image}" style="width:90px;height:54px" alt="" />
                                     </td>
-                                    <td class="sort-name">${item.name}</td>
+                                    <td class="sort-name">${item.title}</td>
                                     <td class="sort-name create-date">${item.createdDate}</td>
                                     <td class="sort-name">${item.updatedDate}</td>
                                     <td>

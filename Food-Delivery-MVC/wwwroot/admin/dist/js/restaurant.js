@@ -7,6 +7,21 @@
     let pagination = $("#table-area .pagination-area .pagination")
     const header = "Bearer " + $.cookie("JWTToken");
 
+    $('#modal-report').modal({
+        backdrop: true,
+        keyboard: true
+    });
+
+    $('#modal-edit').modal({
+        backdrop: true,
+        keyboard: true
+    });
+
+    $('#modal-small').modal({
+        backdrop: true,
+        keyboard: true
+    });
+
     $(document).on('click', '#toggle-create', function (e) {
         e.preventDefault()
 
@@ -106,6 +121,11 @@
         },
 
         submitHandler: function (form) {
+            let modal = bootstrap.Modal.getInstance(document.getElementById('modal-report'));
+            modal._config.backdrop = 'static';
+            modal._config.keyboard = false;
+            $('#form-create :input').prop('disabled', true);
+            $('#modal-report .modal-header .btn-close').prop('disabled', true);
 
             let formData = new FormData();
             formData.append('name', $('#table-area #name').val());
@@ -142,6 +162,10 @@
                 contentType: false,
                 data: formData,
                 success: function (response) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#form-create :input').prop('disabled', false);
+                    $('#modal-report .modal-header .btn-close').prop('disabled', false);
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
@@ -162,6 +186,10 @@
                         })
                 },
                 error: function (xhr, status, error) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#form-create :input').prop('disabled', false);
+                    $('#modal-report .modal-header .btn-close').prop('disabled', false);
                     $('#modal-report').modal('hide');
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
@@ -384,8 +412,13 @@
         },
 
         submitHandler: function (form) {
-            let id = $('#table-area #form-edit').attr('data-id')
+            let modal = bootstrap.Modal.getInstance(document.getElementById('modal-edit'));
+            modal._config.backdrop = 'static';
+            modal._config.keyboard = false;
+            $('#modal-edit .modal-header .btn-close').prop('disabled', true);
+            $('#form-edit :input').prop('disabled', true);
 
+            let id = $('#table-area #form-edit').attr('data-id')
             let formData = new FormData();
             formData.append('name', $('#table-area #modal-edit #name').val());
             formData.append('description', $('#table-area #modal-edit #desc').val());
@@ -421,6 +454,11 @@
                 contentType: false,
                 data: formData,
                 success: function (response) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#form-edit :input').prop('disabled', false);
+                    $('#modal-edit .modal-header .btn-close').prop('disabled', false);
+
                     let row = $(`#table-area tr[data-id="${id}"]`)
                     let imageUrl = $(`#table-area tr[data-id="${id}"] td img`).attr('src')
                     let name = formData.get('name')
@@ -462,6 +500,11 @@
                     });
                 },
                 error: function (xhr, status, error) {
+                    modal._config.backdrop = true;
+                    modal._config.keyboard = true;
+                    $('#form-edit :input').prop('disabled', false);
+                    $('#modal-edit .modal-header .btn-close').prop('disabled', false);
+
                     $('#modal-edit').modal('hide');
                     $("#form-edit #edit-btn").removeClass("d-none")
                     $("#form-edit #loading-edit-btn").addClass("d-none")
@@ -617,6 +660,9 @@
     })
 
     $(document).on("click", "#table-area .yes-btn", function () {
+        let modal = bootstrap.Modal.getInstance(document.getElementById('modal-small'));
+        modal._config.backdrop = 'static';
+        modal._config.keyboard = false;
         let id = parseInt($(this).attr("data-id"));
         $("#table-area .yes-btn").addClass("d-none")
         $("#table-area #loading-delete-btn").removeClass("d-none")
@@ -628,6 +674,8 @@
                 'Authorization': header
             },
             success: function (response) {
+                modal._config.backdrop = true;
+                modal._config.keyboard = true;
                 $('#modal-small').modal('hide');
                 $("#table-area .yes-btn").removeClass("d-none")
                 $("#table-area #loading-delete-btn").addClass("d-none")
@@ -647,6 +695,8 @@
                     })
             },
             error: function (xhr, status, error) {
+                modal._config.backdrop = true;
+                modal._config.keyboard = true;
                 $('#modal-small').modal('hide');
                 $("#table-area .yes-btn").removeClass("d-none")
                 $("#table-area #loading-delete-btn").addClass("d-none")
@@ -798,9 +848,15 @@
             }
         }
 
-        paginationHtml += `<li class="page-item">
+        if (response.totalPage == 1) {
+            paginationHtml += `<li class="page-item disabled">
                         <a class="page-link" href="#">Next</a>
                     </li>`
+        } else {
+            paginationHtml += `<li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>`
+        }
 
         pagination.html(paginationHtml)
     }

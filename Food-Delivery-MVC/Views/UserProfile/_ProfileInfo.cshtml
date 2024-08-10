@@ -1,50 +1,34 @@
 ﻿@model UserVM
 
-<form>
+<form id="from-update" method="post" asp-action="Edit">
     @*    <div class="bg-secondary rounded-3 p-4 mb-4">
-    <div class="d-flex align-items-center">
-    <img class="rounded" src="img/shop/account/avatar.jpg" width="90" alt="Nigam Mishra">
-    <div class="ps-3">
-    <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change avatar</button>
-    <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
-    </div>
-    </div>
-    </div> *@
+                    <div class="d-flex align-items-center">
+                    <img class="rounded" src="img/shop/account/avatar.jpg" width="90" alt="Nigam Mishra">
+                    <div class="ps-3">
+                    <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change avatar</button>
+                    <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
+                    </div>
+                    </div>
+                    </div> *@
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="row gx-4 gy-3">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <label class="form-label" for="account-email">Email Address</label>
-            <input class="form-control" type="email" id="account-email" value="@Model.Email" disabled="">
+            <input asp-for="Email" class="form-control" type="email" id="account-email" value="@Model.Email" disabled="">
         </div>
         <div class="col-sm-6">
-            <label class="form-label" for="account-phone">Full name</label>
-            <input class="form-control" type="text" id="account-phone" value="@Model.FullName" required="">
+            <label class="form-label" for="fullname">Full name</label>
+            <input asp-for="FullName" class="form-control" type="text" id="fullname" name="fullname" value="@Model.FullName">
         </div>
         <div class="col-sm-6">
-            <label class="form-label" for="account-pass">New Password</label>
-            <div class="password-toggle">
-                <input class="form-control" type="password" id="account-pass">
-                <label class="password-toggle-btn" aria-label="Show/hide password">
-                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                </label>
-            </div>
+            <label class="form-label" for="username">UserName</label>
+            <input asp-for="UserName" class="form-control" type="text" id="username" name="username" value="@Model.UserName">
         </div>
-        <div class="col-sm-6">
-            <label class="form-label" for="account-confirm-pass">Confirm Password</label>
-            <div class="password-toggle">
-                <input class="form-control" type="password" id="account-confirm-pass">
-                <label class="password-toggle-btn" aria-label="Show/hide password">
-                    <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col-12">
+        <div class="col-6">
             <hr class="mt-2 mb-3">
-            <div class="d-flex flex-wrap justify-content-between align-items-center">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="subscribe_me" checked="">
-                    <label class="form-check-label" for="subscribe_me">Subscribe me to Newsletter</label>
-                </div>
-                <button class="btn btn-primary mt-3 mt-sm-0" type="button">Update profile</button>
+            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                <button class="btn btn-primary mt-3 mt-sm-0" type="submit">Update profile</button>
+                <a id="toggle-password" class="btn btn-primary mt-3 mt-sm-0 mx-3" href="#password-modal" data-bs-toggle="modal">Change password</a>
             </div>
         </div>
     </div>

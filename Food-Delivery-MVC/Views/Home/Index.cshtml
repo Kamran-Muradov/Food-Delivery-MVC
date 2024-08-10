@@ -3,27 +3,11 @@
 }
 
 <!-- Hero section-->
-<section class="bg-darker bg-size-cover bg-position-center py-5 py-lg-10" style="background-image: url(img/food-delivery/hero-bg.jpg);">
-    <div class="container pb-5">
-        <div class="row justify-content-center pb-5">
-            <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 text-center">
-                <h5 class="text-light fw-light">#1 Food Delivery Service since 2010</h5>
-                <div class="h1 text-light mb-3 pb-4">
-                    We deliver your favorite food fresh &amp; fast in
-                    <div class="dropdown d-inline-block ms-1">
-                        <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">New York</a>
-                        <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item fs-base" href="#">Los Angeles</a><a class="dropdown-item fs-base" href="#">Chicago</a><a class="dropdown-item fs-base" href="#">Houston</a><a class="dropdown-item fs-base" href="#">Philadelphia</a><a class="dropdown-item fs-base" href="#">San Diego</a><a class="dropdown-item fs-base" href="#">Miami</a></div>
-                    </div>
-                </div><a class="btn btn-primary" href="#cuisine" data-scroll>What do you want to eat?</a>
-            </div>
-        </div>
-    </div>
-    <p class="text-danger">@ViewBag.test</p>
-</section>
+@await Component.InvokeAsync("Slider")
 <!-- Categories (cuisine) grid-->
-@await Component.InvokeAsync("Category")
+@await Component.InvokeAsync("Tag")
 <!-- Mobile app CTA-->
-<section class="bg-primary bg-size-cover bg-position-center pt-5" style="background-image: url(img/food-delivery/mobile-app-bg.jpg);">
+<section class="bg-primary bg-size-cover bg-position-center pt-5" style="background-image: url(img/food-delivery/mobile-app-bg.jpg); ">
     <div class="container pt-2 pt-sm-0">
         <div class="row align-items-center">
             <div class="col-xl-4 col-lg-5 col-sm-6 offset-xl-2 offset-lg-1 mt-md-n5 text-center text-sm-start">
