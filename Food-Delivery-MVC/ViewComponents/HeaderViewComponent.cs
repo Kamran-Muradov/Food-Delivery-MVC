@@ -31,9 +31,13 @@ namespace Food_Delivery_MVC.ViewComponents
                 basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
             }
 
+            string profilePic = Request.Cookies["ProfilePic"];
+
+            ViewBag.ProfilePic = profilePic;
+
             return await Task.FromResult(View(new HeaderVMVC
             {
-                BasketCount = basketItems.Sum(bi => bi.Count) ,
+                BasketCount = basketItems.Sum(bi => bi.Count),
                 UserId = userId
             }));
         }

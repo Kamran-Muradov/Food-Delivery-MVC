@@ -14,6 +14,7 @@ namespace Food_Delivery_MVC.ViewModels.UI.Restaurants
         public int MinDeliveryTime { get; set; }
         public int Rating { get; set; }
         public double AverageRating { get; set; }
+        public int ReviewCount { get; set; }
         public string Address { get; set; }
         public string? Website { get; set; }
         public IEnumerable<RestaurantImageVM> RestaurantImages { get; set; }

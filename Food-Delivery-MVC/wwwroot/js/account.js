@@ -26,6 +26,11 @@
         keyboard: true
     });
 
+    $('#cropperModal').modal({
+        backdrop: true,
+        keyboard: true
+    });
+
     $("#signin-tab").validate({
         errorClass: "my-error-class",
         rules: {
@@ -106,7 +111,6 @@
         }
     });
 
-    ///
     $(document).on("click", "#signup-tab #signup-btn", function () {
         $("#signup-tab .exist-email").empty()
         $("#signup-tab .exist-username").empty()
@@ -477,6 +481,106 @@
                 $("#review-create #create-btn").removeClass("d-none")
                 $("#review-create #loading-btn").addClass("d-none")
             })
+    })
+
+
+    let cropper;
+
+    $(document).on('change', '#inputImage', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const image = $('#cropperImage');
+                image.attr('src', event.target.result);
+
+                $('#cropperModal').modal('show');
+
+                $(document).on('shown.bs.modal', '#cropperModal', function () {
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(image[0], {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 0.75
+                    });
+                })
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+    $(document).on('click', '#cropButton', function () {
+        let modal = bootstrap.Modal.getInstance(document.getElementById('cropperModal'));
+        modal._config.backdrop = 'static';
+        modal._config.keyboard = false;
+        $("#cropperModal #cropButton").addClass("d-none")
+        $("#cropperModal #loading-btn").removeClass("d-none")
+        $('#cropperModal .btn-secondary').prop('disabled', true)
+
+        const canvas = cropper.getCroppedCanvas();
+        const userId = $(this).attr('data-id')
+
+        if (canvas != null) {
+            canvas.toBlob(function (blob) {
+                const formData = new FormData();
+                formData.append('profilePicture', blob, 'profile-picture.jpg');
+
+                axios.post('/UserProfile/UploadProfilePicture', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    params: { userId }
+                })
+                    .then(response => {
+                        $('#profile-pic').attr('src', response.data.url)
+                        $('#header-pic').attr('src', response.data.url)
+                        modal._config.backdrop = true;
+                        modal._config.keyboard = true
+                        $("#cropperModal #cropButton").removeClass("d-none")
+                        $("#cropperModal #loading-btn").addClass("d-none")
+                        $('#cropperModal .btn-secondary').prop('disabled', false)
+                        $('#cropperModal').modal('hide')
+
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Data successfully created",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                    .catch(error => {
+                        modal._config.backdrop = true;
+                        modal._config.keyboard = true
+                        $("#cropperModal #cropButton").removeClass("d-none")
+                        $("#cropperModal #loading-btn").addClass("d-none")
+                        $('#cropperModal .btn-secondary').prop('disabled', false)
+
+                        if (error.response.status == 409) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: error.response.data.message,
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!"
+                            });
+                        }
+                    });
+
+                // Hide cropper modal
+            });
+        }
+    });
+
+    $(document).on('click', '#cropperModal .btn-secondary', function () {
+        $('#cropperModal').modal('hide')
     })
 })
 

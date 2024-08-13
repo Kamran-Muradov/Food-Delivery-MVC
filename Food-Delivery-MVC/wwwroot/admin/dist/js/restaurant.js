@@ -149,7 +149,6 @@
             formData.append('website', $('#table-area #website').val());
             formData.append('isActive', $('#table-area #active').val());
             formData.append('email', $('#table-area #email').val());
-            formData.append('rating', $('#table-area #rating').val());
             formData.append('brandId', $('#table-area #brands').val());
 
             $('#table-area #form-create #tags option:selected').each(function () {
@@ -321,7 +320,6 @@
                 $('#table-area #modal-edit #mintime').val(response.minDeliveryTime)
                 $('#table-area #modal-edit #maxtime').val(response.maxDeliveryTime)
                 $('#table-area #modal-edit #website').val(response.website)
-                $(`#table-area #modal-edit #rating option[value="${response.rating}"]`).attr("selected", "selected")
                 $(`#table-area #modal-edit #active option[value="${response.isActive}"]`).attr("selected", "selected")
                 let html = ""
 
@@ -457,7 +455,6 @@
             formData.append('website', $('#table-area #modal-edit #website').val());
             formData.append('isActive', $('#table-area #modal-edit #active').val());
             formData.append('email', $('#table-area #modal-edit #email').val());
-            formData.append('rating', $('#table-area #modal-edit #rating').val());
             formData.append('brandId', $('#table-area #modal-edit #brands').val());
 
             $('#table-area #form-edit #tags option:selected').each(function () {
@@ -800,7 +797,7 @@
                     <p class="mb-0 font-weight-light"><strong>Minimum delivery time: </strong>${response.minDeliveryTime}</p>
                 </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Rating: </strong>${response.rating}</p>
+                    <p class="mb-0 font-weight-light"><strong>Rating: </strong>${response.averageRating}</p>
                 </div>
                   <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Tags: </strong>${response.tags}</p>

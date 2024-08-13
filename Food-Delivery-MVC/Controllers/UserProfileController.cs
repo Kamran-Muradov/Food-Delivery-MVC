@@ -87,7 +87,8 @@ namespace Food_Delivery_MVC.Controllers
 
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
-            HttpResponseMessage responseMessage = await HttpClient.PostAsync($"account/editUser?userId={userId}", content);
+            HttpResponseMessage responseMessage =
+                await HttpClient.PostAsync($"account/editUser?userId={userId}", content);
 
             responseMessage.EnsureSuccessStatusCode();
 
@@ -131,7 +132,8 @@ namespace Food_Delivery_MVC.Controllers
 
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
-            HttpResponseMessage responseMessage = await HttpClient.PostAsync($"account/editPassword?userId={userId}", content);
+            HttpResponseMessage responseMessage =
+                await HttpClient.PostAsync($"account/editPassword?userId={userId}", content);
 
             responseMessage.EnsureSuccessStatusCode();
 
@@ -146,6 +148,40 @@ namespace Food_Delivery_MVC.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UploadProfilePicture(string userId, IFormFile profilePicture)
+        {
+            if (profilePicture is null || userId is null) return BadRequest();
+
+            if (profilePicture.Length / 1024 > 2048) return Conflict(new { Message = "File size cannot exceed 2Mb" });
+            if (!profilePicture.ContentType.Contains("image/")) return Conflict(new { Message = "File must be image type" });
+
+            using var form = new MultipartFormDataContent();
+
+            var streamContent = new StreamContent(profilePicture.OpenReadStream());
+            streamContent.Headers.ContentType = new MediaTypeHeaderValue(profilePicture.ContentType);
+            form.Add(streamContent, "ProfilePicture", profilePicture.FileName);
+
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync($"account/editProfilePicture?userId={userId}", form);
+            responseMessage.EnsureSuccessStatusCode();
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+
+            var model = JsonConvert.DeserializeObject<UserImageVM>(responseData);
+
+            Response.Cookies.Delete("ProfilePic");
+
+            Response.Cookies.Append("ProfilePic", model.Url, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
+
+            return Ok(model);
         }
     }
 }

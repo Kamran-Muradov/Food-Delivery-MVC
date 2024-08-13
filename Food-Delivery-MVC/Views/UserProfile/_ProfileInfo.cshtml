@@ -1,15 +1,43 @@
 ﻿@model UserVM
 
+<div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cropperModalLabel">Crop Image</h5>
+            </div>
+            <div class="modal-body">
+                <div id="cropperContainer">
+                    <img id="cropperImage" src="" alt="Crop Image" style="width:100% !important" />
+                </div>
+            </div>
+            <div class="modal-footer mt-3">
+                <button data-id="@Model.Id" type="button" class="btn btn-primary" id="cropButton">Crop</button>
+                <button id="loading-btn" class="btn btn-primary btn-shadow d-none" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-secondary rounded-3 p-4 mb-4">
+    <div class="d-flex align-items-center">
+        <img id="profile-pic" class="rounded" src="@Model.ProfilePicture" width="90" alt="Profile pic">   
+        <div class="ps-3">
+            <div class="col-7">
+                <label for="inputImage">Change profile picture</label>
+                <input class="btn btn-light btn-shadow btn-sm mb-2 form-control mt-2" type="file" name="profilePic" id="inputImage" accept="image/*"/>
+            </div>
+            <img id="imagePreview" src="" alt="Profile Picture Preview" style="display:none; max-width: 100%;"/>
+            <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image.</div>
+        </div>
+    </div>
+</div>
+
 <form id="from-update" method="post" asp-action="Edit">
-    @*    <div class="bg-secondary rounded-3 p-4 mb-4">
-                    <div class="d-flex align-items-center">
-                    <img class="rounded" src="img/shop/account/avatar.jpg" width="90" alt="Nigam Mishra">
-                    <div class="ps-3">
-                    <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change avatar</button>
-                    <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
-                    </div>
-                    </div>
-                    </div> *@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="row gx-4 gy-3">
         <div class="col-sm-12">

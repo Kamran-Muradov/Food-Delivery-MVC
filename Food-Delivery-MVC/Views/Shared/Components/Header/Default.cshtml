@@ -2,7 +2,7 @@
 
 <header class="navbar d-block navbar-sticky navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand d-none d-sm-block me-4 order-lg-1" href="index.html"><img src="~/img/logo-dark.png" width="142" alt="Cartzilla"></a><a class="navbar-brand d-sm-none me-2 order-lg-1" href="index.html"><img src="~/img/logo-icon.png" width="74" alt="Cartzilla"></a>
+        <a class="navbar-brand d-none d-sm-block me-4 order-lg-1" asp-controller="Home" asp-action="Index"><img src="~/img/logo-dark.png" width="142" alt="Cartzilla"></a><a class="navbar-brand d-sm-none me-2 order-lg-1" href="index.html"><img src="~/img/logo-icon.png" width="74" alt="Cartzilla"></a>
         <div class="navbar-toolbar d-flex align-items-center order-lg-3">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button><a class="navbar-tool d-none d-lg-flex" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#searchBox" role="button" aria-expanded="false" aria-controls="searchBox">
                 <span class="navbar-tool-tooltip">Search</span>
@@ -20,49 +20,15 @@
                     <span id="menu-count" class="navbar-tool-label @(Model.BasketCount == 0 ? "d-none" : "")">@Model.BasketCount</span>
                     <i class="navbar-tool-icon ci-cart"></i>
                 </a>
-                <!-- Cart dropdown-->
-                <div class="dropdown-menu dropdown-menu-end">
-                    <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 20rem;">
-                        <div style="height: 15rem;" data-simplebar data-simplebar-auto-hide="false">
-                            <div class="widget-cart-item pb-2 border-bottom">
-                                <button class="btn-close text-danger" type="button" aria-label="Remove"><span aria-hidden="true">&times;</span></button>
-                                <div class="d-flex align-items-center">
-                                    <a class="d-block" href="#"><img src="img/food-delivery/cart/th01.jpg" width="64" alt="Pizza"></a>
-                                    <div class="ps-2">
-                                        <h6 class="widget-product-title"><a href="#">Pizza Pepperoni with Tomatoes</a></h6>
-                                        <div class="widget-product-meta"><span class="text-accent me-2">$9.<small>00</small></span><span class="text-muted">x 1</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="widget-cart-item py-2 border-bottom">
-                                <button class="btn-close text-danger" type="button" aria-label="Remove"><span aria-hidden="true">&times;</span></button>
-                                <div class="d-flex align-items-center">
-                                    <a class="d-block" href="#"><img src="img/food-delivery/cart/th02.jpg" width="64" alt="Burger"></a>
-                                    <div class="ps-2">
-                                        <h6 class="widget-product-title"><a href="#">Beef Burger with Fries</a></h6>
-                                        <div class="widget-product-meta"><span class="text-accent me-2">$12.<small>00</small></span><span class="text-muted">x 1</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="widget-cart-item py-2 border-bottom">
-                                <button class="btn-close text-danger" type="button" aria-label="Remove"><span aria-hidden="true">&times;</span></button>
-                                <div class="d-flex align-items-center">
-                                    <a class="d-block" href="#"><img src="img/food-delivery/cart/th03.jpg" width="64" alt="Drink"></a>
-                                    <div class="ps-2">
-                                        <h6 class="widget-product-title"><a href="#">Coca Cola Can, 335ml</a></h6>
-                                        <div class="widget-product-meta"><span class="text-accent me-2">$1.<small>00</small></span><span class="text-muted">x 3</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
-                            <div class="fs-sm me-2 py-2"><span class="text-muted">Total:</span><span class="text-accent fs-base ms-1">$24.<small>00</small></span></div><a class="btn btn-outline-secondary btn-sm" href="food-delivery-cart.html">Expand cart<i class="ci-arrow-right ms-1 me-n1"></i></a>
-                        </div><a class="btn btn-primary btn-sm d-block w-100" href="food-delivery-checkout.html"><i class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
-                    </div>
-                </div>
             </div>
+
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
+                <div class="navbar-tool dropdown ms-4">
+                    <div class="navbar-tool-icon-box" style="border-radius: 50% !important;">
+                        <img id="header-pic" src="@ViewBag.ProfilePic" style="border-radius: 50% !important;" alt="profile-pic" />
+                    </div>
+                </div>
                 <ul class="navbar-nav navbar-mega-nav ms-lg-4 pe-lg-2 me-lg-2">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-lg-0" href="#" data-bs-toggle="dropdown"><i></i>@User.Identity.Name</a>

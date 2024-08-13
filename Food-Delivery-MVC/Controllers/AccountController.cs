@@ -94,21 +94,34 @@ namespace Food_Delivery_MVC.Controllers
 
             if (request.RememberMe)
             {
-                var cookieOptions = new CookieOptions
+
+                Response.Cookies.Append("JWTToken", response.Token, new CookieOptions
                 {
                     Expires = DateTime.UtcNow.AddDays(30),
                     IsEssential = true,
                     HttpOnly = false,
                     SameSite = SameSiteMode.Strict
-                };
+                });
 
-                Response.Cookies.Append("JWTToken", response.Token, cookieOptions);
+                Response.Cookies.Append("ProfilePic", response.ProfilePicture, new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddDays(30),
+                    IsEssential = true,
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict
+                });
             }
             else
             {
                 Response.Cookies.Append("JWTToken", response.Token);
-            }
 
+                Response.Cookies.Append("ProfilePic", response.ProfilePicture, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict
+                });
+            }
 
             await AddBasketToDatabaseAsync(response.Token);
 
@@ -119,6 +132,7 @@ namespace Food_Delivery_MVC.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("JWTToken");
+            Response.Cookies.Delete("ProfilePic");
 
             return RedirectToAction("Index", "Home");
         }
