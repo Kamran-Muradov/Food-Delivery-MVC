@@ -47,6 +47,8 @@ namespace Food_Delivery_MVC.Controllers
 
             string data = await responseMessage.Content.ReadAsStringAsync();
 
+            var deserializeObject = JsonConvert.DeserializeObject<IEnumerable<CheckoutVM>>(data);
+
             return PartialView("_Checkouts", JsonConvert.DeserializeObject<IEnumerable<CheckoutVM>>(data));
         }
 

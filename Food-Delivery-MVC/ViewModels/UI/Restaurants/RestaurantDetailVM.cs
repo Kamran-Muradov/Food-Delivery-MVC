@@ -1,5 +1,4 @@
-﻿using Food_Delivery_MVC.ViewModels.UI.Categories;
-using Food_Delivery_MVC.ViewModels.UI.Menus;
+﻿using Food_Delivery_MVC.ViewModels.UI.Menus;
 
 namespace Food_Delivery_MVC.ViewModels.UI.Restaurants
 {
@@ -14,6 +13,7 @@ namespace Food_Delivery_MVC.ViewModels.UI.Restaurants
         public decimal MinimumOrder { get; set; }
         public int MinDeliveryTime { get; set; }
         public int Rating { get; set; }
+        public double AverageRating { get; set; }
         public string Address { get; set; }
         public string? Website { get; set; }
         public IEnumerable<RestaurantImageVM> RestaurantImages { get; set; }

@@ -3,8 +3,6 @@
     ViewData["Title"] = "Index";
 }
 
-<p>@Model.Count</p>
-
 <div id="basket-area" class="container pt-4 pb-3 py-sm-4 @(Model.Count == 0 ? "d-none" : "")">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
@@ -14,8 +12,7 @@
     </nav>
     <div class="rounded-3 shadow-lg mt-4 mb-5">
         <ul class="nav nav-tabs nav-justified mb-4">
-            <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="food-delivery-cart.html">1. Your order</a></li>
-            <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="food-delivery-checkout.html">2. Checkout</a></li>
+            <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="#">Your order</a></li>
         </ul>
         <div class="px-3 px-sm-4 px-xl-5 pt-1 pb-4 pb-sm-5">
             <div class="row">

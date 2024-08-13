@@ -125,6 +125,11 @@ namespace Food_Delivery_MVC.Controllers
 
                 responseMessage = await HttpClient.PostAsync("basketItem/create", content);
 
+                if (responseMessage.StatusCode == HttpStatusCode.Conflict)
+                {
+                    return Conflict();
+                }
+
                 responseMessage.EnsureSuccessStatusCode();
 
                 basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
@@ -133,6 +138,11 @@ namespace Food_Delivery_MVC.Controllers
             }
 
             basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
+
+            if (basketItems.Count > 0)
+            {
+                if (basketItems.First().RestaurantId != request.RestaurantId) return Conflict();
+            }
 
             var existBasketItem = basketItems.FirstOrDefault(m => m.MenuId == request.MenuId);
 
@@ -144,6 +154,7 @@ namespace Food_Delivery_MVC.Controllers
                 {
                     Count = request.Count,
                     MenuId = request.MenuId,
+                    RestaurantId = request.RestaurantId,
                     Price = request.Price,
                     BasketVariants = request.BasketVariants
                 });
@@ -154,6 +165,7 @@ namespace Food_Delivery_MVC.Controllers
                 {
                     Count = request.Count,
                     MenuId = request.MenuId,
+                    RestaurantId = request.RestaurantId,
                     Price = request.Price,
                     BasketVariants = request.BasketVariants
 

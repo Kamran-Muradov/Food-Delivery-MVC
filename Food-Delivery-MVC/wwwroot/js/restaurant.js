@@ -207,6 +207,7 @@ $(function () {
 
     $('#menu-detail').on('click', '.cart-btn', function () {
         let menuId = $(this).attr('data-id')
+        let restaurantId = $(this).attr('data-restaurantId')
         let count = $('#menu-detail #basket-count').val();
         let basketVariants = {}
         $('#menu-detail input:checked').each(function () {
@@ -221,6 +222,7 @@ $(function () {
         })
         const data = JSON.stringify({
             menuId,
+            restaurantId,
             count,
             price: totalPrice.toFixed(2),
             basketVariants
@@ -236,11 +238,38 @@ $(function () {
                 $('#menu-count').html(response.data.basketCount)
             })
             .catch(function (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                });
+                if (error.response.status == 409) {
+                    Swal.fire({
+                        title: "This will remove your previous order.",
+                        showCancelButton: true,
+                        confirmButtonText: "Proceed",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            axios.post(`/cart/reset`, data, {
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then(function (response) {
+                                    $('#menu-count').removeClass("d-none")
+                                    $('#menu-count').html(response.data.basketCount)
+                                })
+                                .catch(function (error) {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: "Something went wrong!",
+                                    });
+                                })
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                }
             })
     })
 });

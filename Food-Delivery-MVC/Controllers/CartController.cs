@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using System.Text;
 using Food_Delivery_MVC.ViewModels.UI.Basket;
 using Food_Delivery_MVC.ViewModels.UI.Menus;
@@ -159,6 +160,54 @@ namespace Food_Delivery_MVC.Controllers
             }
 
             return Ok(new { TotalPrice = basketItems.Sum(bi => bi.Price), BasketCount = basketItems.Sum(bi => bi.Count) });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reset([FromBody] BasketCreateVM request)
+        {
+            if (request == null) return BadRequest();
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{request.MenuId}");
+
+            if (responseMessage.StatusCode == HttpStatusCode.NoContent)
+            {
+                return NotFound();
+            }
+
+            List<BasketVM> basketItems;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+                request.UserId = userId;
+
+                string data = JsonConvert.SerializeObject(request);
+
+                StringContent content = new(data, Encoding.UTF8, "application/json");
+
+                responseMessage = await HttpClient.PostAsync("basketItem/reset", content);
+
+                responseMessage.EnsureSuccessStatusCode();
+
+                basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+            }
+            else
+            {
+                basketItems = new List<BasketVM>();
+
+                Response.Cookies.Delete("basket");
+                basketItems.Add(new BasketVM
+                {
+                    Count = request.Count,
+                    MenuId = request.MenuId,
+                    RestaurantId = request.RestaurantId,
+                    Price = request.Price,
+                    BasketVariants = request.BasketVariants
+                });
+
+                Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItems));
+            }
+
+            return Ok(new { basketCount = basketItems.Sum(bi => bi.Count) });
         }
     }
 }

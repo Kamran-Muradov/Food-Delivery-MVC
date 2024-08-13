@@ -11,10 +11,8 @@
                 <div class="d-flex align-items-center justify-content-between mt-3">
                     <div class="product-price"><span class="text-accent">$@item.MinimumOrder</span></div>
                     <div>
-                        @for (int i = 0; i < item.Rating; i++)
-                        {
-                            <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
-                        }
+                        <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
+                        <span>@item.AverageRating</span>
                     </div>
                 </div>
             </div>

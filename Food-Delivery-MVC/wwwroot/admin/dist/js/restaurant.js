@@ -35,6 +35,17 @@
                 })
                 $("#form-create #tags").append(html)
             })
+
+        getBrandsSelected()
+            .then(function (datas) {
+                $("#form-create #brands").empty()
+                let html = `<option value="${null}">--</option>`;
+                $.each(datas, function (index, item) {
+
+                    html += `<option value="${item.id}">${item.name}</option>`;
+                })
+                $("#form-create #brands").append(html)
+            })
     })
 
     $("#form-create").validate({
@@ -139,6 +150,7 @@
             formData.append('isActive', $('#table-area #active').val());
             formData.append('email', $('#table-area #email').val());
             formData.append('rating', $('#table-area #rating').val());
+            formData.append('brandId', $('#table-area #brands').val());
 
             $('#table-area #form-create #tags option:selected').each(function () {
                 formData.append('tagIds', $(this).val());
@@ -326,6 +338,21 @@
                         $("#form-edit #tags").append(html)
                         html = "";
                     })
+
+                getBrandsSelected()
+                    .then(function (datas) {
+                        $("#form-edit #brands").empty()
+                        html = `<option value="">--</option>`
+                        $.each(datas, function (index, item) {
+                            if (response.brand == item.name) {
+                                html += `<option selected value="${item.id}">${item.name}</option>`;
+                            } else {
+                                html += `<option value="${item.id}">${item.name}</option>`;
+                            }
+                        })
+                        $("#form-edit #brands").append(html)
+                        html = "";
+                    })
             }
         });
     })
@@ -431,6 +458,7 @@
             formData.append('isActive', $('#table-area #modal-edit #active').val());
             formData.append('email', $('#table-area #modal-edit #email').val());
             formData.append('rating', $('#table-area #modal-edit #rating').val());
+            formData.append('brandId', $('#table-area #modal-edit #brands').val());
 
             $('#table-area #form-edit #tags option:selected').each(function () {
                 formData.append('tagIds', $(this).val());
@@ -756,6 +784,9 @@
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Phone: </strong>${response.phone}</p>
                 </div>
+                  <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Brand: </strong>${response.brand}</p>
+                </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Email: </strong>${response.email}</p>
                 </div>
@@ -768,28 +799,34 @@
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Minimum delivery time: </strong>${response.minDeliveryTime}</p>
                 </div>
-                 <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Maximum delivery time: </strong>${response.maxDeliveryTime}</p>
-                </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Rating: </strong>${response.rating}</p>
+                </div>
+                  <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Tags: </strong>${response.tags}</p>
                 </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Create date: </strong>${response.createdDate}</p>
                 </div>
+                 <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Created by: </strong>${response.createdBy}</p>
+                </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Update date: </strong>${response.updatedDate}</p>
+                </div>
+                <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Updated by: </strong>${response.updatedBy}</p>
                 </div>`
 
                 $('#table-area #modal-detail .data-area').append(dataHtml);
 
-                let categoryHtml = "";
+                //let categoryHtml = "";
 
-                $.each(response.categories, function (index, item) {
+                //$.each(response.categories, function (index, item) {
 
-                    categoryHtml += `<li class="list-group-item">${item}</li>`
-                })
-                $('#table-area #modal-detail ul').append(categoryHtml);
+                //    categoryHtml += `<li class="list-group-item">${item}</li>`
+                //})
+                //$('#table-area #modal-detail ul').append(categoryHtml);
             }
         });
     })
@@ -821,6 +858,24 @@
                 'Authorization': header
             },
             url: `https://localhost:7247/api/admin/tag/getallforselect?exludeId=${exludeid}`,
+            dataType: 'json',
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            }
+        }));
+    }
+
+    function getBrandsSelected(exludeid = null) {
+        return Promise.resolve($.ajax({
+            type: "GET",
+            headers: {
+                'Authorization': header
+            },
+            url: `https://localhost:7247/api/admin/brand/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

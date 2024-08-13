@@ -1,0 +1,129 @@
+﻿@model PaginationResponse<CheckoutVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header d-print-none mb-5">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <h2 class="page-title">
+                    Checkouts
+                </h2>
+            </div>
+            <!-- Page title actions -->
+        </div>
+    </div>
+</div>
+<section id="table-area">
+    <div class="card">
+        <div class="card-body">
+     @*        <div class="card-body border-bottom py-3">
+                <div class="d-flex">
+                    <div class="col-2">
+                        <div class="form-label">Sort by</div>
+                        <select class="form-select">
+                            <option value="Name">Name</option>
+                            <option value="Create date">Create date</option>
+                            <option value="Update date">Update date</option>
+                        </select>
+                    </div>
+                    <div class="ms-auto text-muted">
+                        Search:
+                        <div class="ms-2 d-inline-block">
+                            <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
+                        </div>
+                    </div>
+                </div>
+            </div> *@
+            <div id="table-default" class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Create Date</th>
+                            <th>Status</th>
+                            <th>Total price</th>
+                            <th>Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-tbody">
+                        @foreach (var item in Model.Datas)
+                        {
+                            <tr data-id="@item.Id">
+                                <td class="sort-name">@item.UserName</td>
+                                <td class="sort-name create-date">@item.CreatedDate</td>
+                                <td class="sort-name status-row">@item.Status</td>
+                                <td class="sort-name">@item.TotalPrice</td>
+                                <td>
+                                    <a class="btn btn-outline-warning" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                        Change status
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    @* Modal-Edit *@
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select id="status" class="form-select">
+                                <option value="Pending">Pending</option>
+                                <option value="Canceled">Canceled</option>
+                                <option value="Delivered">Delivered</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="edit-btn" type="submit" href="#" class="btn btn-warning ms-auto ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                            Edit
+                        </button>
+                        <button id="loading-edit-btn" class="btn btn-warning ms-auto d-none" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination-area d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item disabled prev">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPage; i++)
+                {
+                    <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
+                }
+                <li class="page-item @(Model.TotalPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+
+@section js {
+    <script src="~/admin/dist/js/checkout.js"></script>
+}
+

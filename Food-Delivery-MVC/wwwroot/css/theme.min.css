@@ -138,6 +138,102 @@ h2,
     }
 }
 
+/*.owl-carousel .owl-nav {
+    position: absolute;
+    top: 10px;*/ /* Adjust as needed */
+/*right: 10px;*/ /* Adjust as needed */
+/*width: auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;*/ /* Space between the buttons */
+/*}
+
+.owl-carousel .owl-prev,
+.owl-carousel .owl-next {
+    background: #fff;*/ /* Background color for buttons */
+/*border: 1px solid #ccc;*/ /* Border for buttons */
+/*padding: 5px 10px;*/ /* Adjust padding as needed */
+/*border-radius: 5px;*/ /* Rounded corners */
+/*color: #333;*/ /* Text color */
+/*cursor: pointer;
+}*/
+
+.rating {
+    /*float: left;*/
+    border: none;
+    position: absolute;
+    top: 0px;
+    left: 175px;
+}
+
+    .rating:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+        clip: rect(0, 0, 0, 0);
+    }
+
+    .rating:not(:checked) > label {
+        float: right;
+        width: 1em;
+        padding: 0 .1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 200%;
+        line-height: 1.2;
+        color: #ddd;
+    }
+
+        .rating:not(:checked) > label:before {
+            content: '★ ';
+        }
+
+    .rating > input:checked ~ label {
+        color: #f70;
+    }
+
+    .rating:not(:checked) > label:hover, .rating:not(:checked) > label:hover ~ label {
+        color: gold;
+    }
+
+    .rating > input:checked + label:hover, .rating > input:checked + label:hover ~ label, .rating > input:checked ~ label:hover, .rating > input:checked ~ label:hover ~ label, .rating > label:hover ~ input:checked ~ label {
+        color: #ea0;
+    }
+
+    .rating > label:active {
+        position: relative;
+    }
+
+.owl-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+    .owl-carousel::before,
+    .owl-carousel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 50px; /* Adjust the width of the gradient */
+        height: 100%;
+        z-index: 2;
+    }
+
+    .owl-carousel::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+    }
+
+    .owl-carousel::after {
+        right: 0;
+        background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+    }
+
+#slider-area .owl-carousel::before,
+#slider-area .owl-carousel::after {
+    content: none;
+}
+
 h3,
 .h3 {
     font-size: calc(1.3rem + 0.6vw);
@@ -21396,13 +21492,13 @@ html:not([dir="rtl"]) .range-slider-ui.noUi-horizontal .noUi-handle {
 
 
 
-.count-area button,
-.count-area input {
-    outline: none;
-    border: none;
-    padding: 9px;
-    font-size: 18px;
-}
+    .count-area button,
+    .count-area input {
+        outline: none;
+        border: none;
+        padding: 9px;
+        font-size: 18px;
+    }
 
 .basket-item .count-area button,
 .basket-item .count-area input {

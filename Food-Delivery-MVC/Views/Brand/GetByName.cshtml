@@ -6,7 +6,7 @@
     <div class="container pt-2 pb-3 pt-lg-3 pb-lg-4">
         <div class="d-lg-flex justify-content-between pb-3">
             <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
-                <h1 class="h3 text-light mb-0">Restaurants</h1>
+                <h1 class="h3 text-light mb-0">@ViewBag.BrandName</h1>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
         @foreach (var item in Model)
         {
             <div class="col-md-4 col-sm-6 mb-grid-gutter">
-                <a class="card product-card h-100 border-0 shadow pb-2" asp-action="Detail" asp-route-id="@item.Id">
+                <a class="card product-card h-100 border-0 shadow pb-2" asp-controller="Restaurant" asp-action="Detail" asp-route-id="@item.Id">
                     <span class="badge badge-end badge-shadow bg-success fs-md fw-medium" data-bs-toggle="tooltip" title="Average meal cost">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
                     <div class="card-body text-center pt-3 pb-4">
                         <h3 class="h5 mb-2">@item.Name</h3>
@@ -24,8 +24,10 @@
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div class="product-price"><span class="text-accent">$@item.DeliveryFee</span></div>
                             <div>
-                                <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
-                                <span>@item.AverageRating</span>
+                                @for (int i = 0; i < item.Rating; i++)
+                                {
+                                    <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
+                                }
                             </div>
                         </div>
                     </div>
@@ -43,5 +45,7 @@
         </div>
     </div>
 </div>
+
+
 
 

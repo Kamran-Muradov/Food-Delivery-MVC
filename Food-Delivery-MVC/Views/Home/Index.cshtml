@@ -6,19 +6,9 @@
 @await Component.InvokeAsync("Slider")
 <!-- Categories (cuisine) grid-->
 @await Component.InvokeAsync("Tag")
-<!-- Mobile app CTA-->
-<section class="bg-primary bg-size-cover bg-position-center pt-5" style="background-image: url(img/food-delivery/mobile-app-bg.jpg); ">
-    <div class="container pt-2 pt-sm-0">
-        <div class="row align-items-center">
-            <div class="col-xl-4 col-lg-5 col-sm-6 offset-xl-2 offset-lg-1 mt-md-n5 text-center text-sm-start">
-                <h2 class="text-light mb-3">Order food on the go with EasyShopApp</h2>
-                <p class="text-light opacity-70 mb-0 d-block d-sm-none d-md-block">Pay with in app wallet, collect loyalty points, track your orders in real time and much more.</p>
-                <div class="mt-4 pt-2"><a class="btn-market btn-apple me-3 mb-2" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">App Store</span></a><a class="btn-market btn-google mb-2" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">Google Play</span></a></div>
-            </div>
-            <div class="col-lg-5 col-sm-6 offset-lg-1 pt-5 pt-sm-3"><img class="d-block mx-auto mx-sm-0" src="~/img/food-delivery/phone.png" width="331" alt="Mobile App Screen"></div>
-        </div>
-    </div>
-</section>
+
+@await Component.InvokeAsync("Brand")
+
 <!-- Become Courier / Partner CTA-->
 <section class="container pb-4 pt-lg-5 pb-sm-5">
     <div class="row pt-4 mt-2 mt-lg-3 mb-md-2">

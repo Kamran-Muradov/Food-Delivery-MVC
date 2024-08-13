@@ -73,10 +73,8 @@
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div class="product-price"><span class="text-accent">$@item.DeliveryFee</span></div>
                             <div>
-                                @for (int i = 0; i < item.Rating; i++)
-                                {
-                                    <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
-                                }
+                                <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
+                                <span>@item.AverageRating</span>
                             </div>
                         </div>
                     </div>
@@ -88,67 +86,6 @@
         <button id="loadMore" class="btn btn-outline-secondary @(Model.Restaurants.TotalPage == 1 ? "d-none" : "")" type="button">Load more items</button>
     </div>
 </section>
-
-<div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Pizza with Salami and Olives</h4>
-            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <!-- Product gallery-->
-                <div class="col-lg-7 col-md-6 pe-lg-0"><img src="img/food-delivery/restaurants/single/large-preview.jpg" alt="Pizza"></div>
-                <!-- Product details-->
-                <div class="col-lg-5 col-md-6 pt-4 pt-lg-0">
-                    <div class="product-details ms-auto pb-3">
-                        <div class="mb-3"><span class="h3 fw-normal text-accent me-1">$15.<small>99</small></span></div>
-                        <form class="mb-grid-gutter">
-                            <div class="row mx-n2">
-                                <div class="col-6 px-2">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="pizza-size">Size:</label>
-                                        <select class="form-select" id="pizza-size">
-                                            <option value="small">Small</option>
-                                            <option value="medium">Medium</option>
-                                            <option value="large">Large</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6 px-2">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="pizza-base">Base:</label>
-                                        <select class="form-select" id="pizza-base">
-                                            <option value="standard">Standard</option>
-                                            <option value="thin">Thin</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3 d-flex align-items-center">
-                                <select class="form-select me-3" style="width: 5rem;">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                                <button class="btn btn-primary btn-shadow d-block w-100" type="submit"><i class="ci-cart fs-lg me-2"></i>Add to Cart</button>
-                            </div>
-                        </form>
-                        <h5 class="h6 mb-3 pb-3 border-bottom"><i class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i>Product info</h5>
-                        <h6 class="fs-sm mb-2">Ingredients:</h6>
-                        <p class="fs-sm">Salami, Olives, Bell pepper, Mushrooms, Mozzarella, Parmesan</p>
-                        <h6 class="fs-sm mb-2">Allergies</h6>
-                        <p class="fs-sm">Gluten, Dairy</p>
-                        <h6 class="fs-sm mb-2">Calories</h6>
-                        <p class="fs-sm mb-0">811</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section js {
     <script src="~/js/restaurant.js"></script>

@@ -20,7 +20,5 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 
             return View(model);
         }
-
-       
     }
 }
