@@ -33,9 +33,14 @@
         </div>
     </div>
 </nav>
-<section class="container tab-content py-4 py-sm-5">
-    <h2 class="text-center pt-2 pt-sm-0 mb-sm-5">Pizza</h2>
-    <div class="row pt-3 pt-sm-0">
+<section class="container tab-content py-4 py-sm-3">
+    <a class="mx-3" href="#modal-info" data-bs-toggle="modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
+        See more information
+    </a>
+    <i class="fa-solid fa-star" style="color: #fe9f41;" aria-hidden="true"></i>
+    <span>@Model.AverageRating (@Model.ReviewCount)</span>
+    <div class="row pt-3 pt-sm-0 mt-5">
         <!-- Item-->
         @foreach (var menu in Model.Menus)
         {
@@ -46,7 +51,7 @@
 
                         <div class="card-body pt-1 pb-2">
                             <h3 class="product-title fs-md"><a href="#quick-view" data-bs-toggle="modal">@menu.Name</a></h3>
-                            <p class="fs-ms text-muted">@string.Join(", ", menu.Ingredients)</p>
+                            <p class="fs-ms text-muted">@string.Join(", ", menu.Ingredients.Take(4))</p>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="product-price"><span class="text-accent">$@menu.Price</span></div>
                                 @* <button class="btn btn-primary btn-sm" type="button">+<i class="ci-cart fs-base ms-1"></i></button> *@
@@ -61,6 +66,53 @@
     <div class="modal fade" id="quick-view" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div id="menu-detail" class="modal-content">
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal-info" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div id="restaurant-info" class="modal-content">
+                <div class="modal-header">
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="container mt-2">
+                    <h3 style="font-weight:bold">@Model.Name</h3>
+                    <p>@Model.Description</p>
+                    <h3 class="mt-4">Address</h3>
+                    <p>@Model.Address</p>
+                    <h3 class="mt-4">Delivery information</h3>
+                    <div class="d-flex justify-content-between">
+                        <p class="my-0">Delivery fee</p>
+                        <span class="fs-sm">$@Model.DeliveryFee</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="my-0 text-dark">Estimated delivery time</p>
+                        <span class="fs-sm">@Model.MinDeliveryTime min</span>
+                    </div>
+                    <div class="my-4">
+                        <h3>Contact</h3>
+                        <div class="d-flex justify-content-between">
+                            <p class="my-0">Phone number</p>
+                            <a href="tel:@Model.Phone">@Model.Phone</a>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="my-0">Email</p>
+                            <a href="mailto:@Model.Email">@Model.Email</a>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="my-0">Website</p>
+                            @if (Model.Website != null)
+                            {
+                                <a href="@Model.Website">@Model.Website</a>
+                            }
+                            else
+                            {
+                                <p class="my-0">N/A</p>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

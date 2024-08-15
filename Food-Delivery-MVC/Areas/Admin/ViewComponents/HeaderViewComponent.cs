@@ -1,8 +1,4 @@
-﻿using Food_Delivery_MVC.ViewComponents;
-using Food_Delivery_MVC.ViewModels.UI.Basket;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Food_Delivery_MVC.Areas.Admin.ViewComponents
 {

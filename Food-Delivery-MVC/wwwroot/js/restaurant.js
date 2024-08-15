@@ -134,7 +134,7 @@ $(function () {
     let counter = 1;
 
     const updateTotalPrice = () => {
-        $('#menu-detail .cart-btn span').html(`(${totalPrice.toFixed(2)})`);
+        $('#menu-detail .cart-btn span').html(` ($${totalPrice.toFixed(2)})`);
     };
 
     $('#menu-detail').on('click', '#increment', function () {

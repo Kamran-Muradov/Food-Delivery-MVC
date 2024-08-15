@@ -9,7 +9,6 @@
         return /[a-z]/.test(value);
     }, "Password must contain at least one lowercase letter");
     $.validator.addMethod("hasSpecialChar", function (value, element) {
-        // Use regex to define which characters are considered special
         return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
     }, "Password must contain at least one special character");
     $.validator.addMethod("notEqualTo", function (value, element, param) {
@@ -118,6 +117,7 @@
 
     $("#signup-tab").validate({
         errorClass: "my-error-class",
+
         rules: {
             ignore: [],
             fullname: {
@@ -146,15 +146,15 @@
         },
         messages: {
             fullname: {
-                required: "",
+                required: "Full name is required",
                 maxlength: "Maximum 50 characters are allowed for full name"
             },
             username: {
-                required: "",
+                required: "Username is required",
                 maxlength: "Maximum 50 characters are allowed for username"
             },
             email: {
-                required: "",
+                required: "Email is required",
                 maxlength: "Maximum 50 characters are allowed for email"
             },
             password: {
@@ -547,7 +547,7 @@
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
-                            title: "Data successfully created",
+                            title: "Your profile picture is updated",
                             showConfirmButton: false,
                             timer: 1500
                         });
@@ -573,8 +573,6 @@
                             });
                         }
                     });
-
-                // Hide cropper modal
             });
         }
     });

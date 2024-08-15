@@ -23,73 +23,12 @@
         $("#review-create").attr('data-checkoutId', checkoutId)
     }
 
-    //$(document).on('submit', '#review-create', function (e) {
-    //    e.preventDefault()
-
-    //    let modal = bootstrap.Modal.getInstance(document.getElementById('review-create-modal'));
-    //    modal._config.backdrop = 'static';
-    //    modal._config.keyboard = false;
-    //    $('#review-create :input').prop('disabled', true);
-    //    $('#review-create-modal .modal-header .btn-close').prop('disabled', true);
-    //    $("#review-create #create-btn").addClass("d-none")
-    //    $("#review-create #loading-btn").removeClass("d-none")
-
-    //    const checkoutId = $(this).attr('data-checkoutId')
-    //    const rating = $('input[name="rating"]:checked').val();
-    //    const comment = $('#comment').val()
-
-    //    const data = JSON.stringify({
-    //        rating,
-    //        comment,
-    //        checkoutId
-    //    })
-
-    //    axios.post(`/review/create`, data, {
-    //        headers: {
-    //            'Content-Type': 'application/json'
-    //        }
-    //    })
-    //        .then(function (response) {
-    //            $('#review-create-modal').modal('hide')
-    //            modal._config.backdrop = true;
-    //            modal._config.keyboard = true;
-    //            $('#review-create :input').prop('disabled', false);
-    //            $('#review-create-modal .modal-header .btn-close').prop('disabled', false);
-
-    //            $("#review-create #create-btn").removeClass("d-none")
-    //            $("#review-create #loading-btn").addClass("d-none")
-    //            $(`.toggle-create[data-checkoutId=${checkoutId}]`).addClass('d-none')
-
-    //            Swal.fire({
-    //                position: "top-end",
-    //                icon: "success",
-    //                title: "Your review submitted successfully",
-    //                showConfirmButton: false,
-    //                timer: 1500
-    //            });
-    //        })
-    //        .catch(function (error) {
-    //            Swal.fire({
-    //                icon: "error",
-    //                title: "Oops...",
-    //                text: "Something went wrong!",
-    //            });
-
-    //            $('#review-create-modal').modal('hide')
-    //            modal._config.backdrop = true;
-    //            modal._config.keyboard = true;
-    //            $('#review-create :input').prop('disabled', false);
-    //            $('#review-create-modal .modal-header .btn-close').prop('disabled', false);
-
-    //            $("#review-create #create-btn").removeClass("d-none")
-    //            $("#review-create #loading-btn").addClass("d-none")
-    //        })
-    //})
-
 
     $('#slider-area .owl-carousel').owlCarousel({
         loop: true,
-        margin: 10,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        margin: 0,
         nav: false,
         responsive: {
             0: {
@@ -107,6 +46,8 @@
     $('#brand-area .owl-carousel').owlCarousel({
         center: true,
         loop: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
         margin: 30,
         stageContainer: true,
         nav: false,

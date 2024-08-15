@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using Food_Delivery_MVC.Helpers;
+using Food_Delivery_MVC.ViewModels.UI.Restaurants;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Food_Delivery_MVC.ViewComponents
@@ -17,23 +20,27 @@ namespace Food_Delivery_MVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
 
-            HttpResponseMessage response = await _httpClient.GetAsync("restaurant/getall");
+            string data = JsonConvert.SerializeObject(new RestaurantFilterVM { Sorting = "rating", Take = 12 });
 
-            response.EnsureSuccessStatusCode();
+            StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            string data = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage responseMessage = await _httpClient.PostAsync("restaurant/getAllFiltered", content);
+            responseMessage.EnsureSuccessStatusCode();
 
-            IEnumerable<RestaurantVMVC> model = JsonConvert.DeserializeObject<IEnumerable<RestaurantVMVC>>(data);
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+            PaginationResponse<RestaurantVMVC> model = JsonConvert.DeserializeObject<PaginationResponse<RestaurantVMVC>>(responseData);
 
             return await Task.FromResult(View(model));
         }
 
-       
+
     }
+
     public class RestaurantVMVC
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string MainImage { get; set; }
+        public string Description { get; set; }
+        public IEnumerable<RestaurantImageVM> RestaurantImages { get; set; }
     }
 }

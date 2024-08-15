@@ -1,15 +1,33 @@
-﻿@model IEnumerable<RestaurantVMVC>
+﻿@model PaginationResponse<RestaurantVMVC>
 
 <section class="container pb-4 pt-2 pt-sm-0 pt-md-2 pb-sm-5">
     <h2 class="text-center">Popular restaurants in your city</h2>
     <p class="text-muted pb-4 text-center">Check the best restaurants near you</p>
     <div class="row pb-2 pb-sm-0 pb-md-3">
-        @foreach (var restaurant in Model.Take(12))
+        @foreach (var restaurant in Model.Datas)
         {
             <div class="col-md-3 col-sm-4 col-6 text-center">
-                <a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" href="food-delivery-single.html">
-                    <img class="d-block mx-auto" src="@restaurant.MainImage" style="width: 150px; height:80px;" alt="Brand">
-                    <p class="text-dark">@restaurant.Name</p>
+                <a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" asp-controller="Restaurant" asp-action="Detail" asp-route-id="@restaurant.Id">
+                    <img class="d-block mx-auto" src="@restaurant.RestaurantImages.FirstOrDefault(ri => ri.IsMain).Url" style="width:100%; height:140px;" alt="Brand">
+                    <p class="text-dark mt-2">@restaurant.Name</p>
+                    <span style="color: darkgray; font-size: smaller;">@(restaurant.Description.Length > 35 ? $"{restaurant.Description.Substring(0, 35)}..." : restaurant.Description)</span>
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="container pb-4 pt-2 pt-sm-0 pt-md-2 pb-sm-5">
+    <h2 class="text-center">New restaurants in your city</h2>
+    <p class="text-muted pb-4 text-center">Check new restaurants near you</p>
+    <div class="row pb-2 pb-sm-0 pb-md-3">
+        @foreach (var restaurant in Model.Datas.OrderByDescending(r => r.Id))
+        {
+            <div class="col-md-3 col-sm-4 col-6 text-center">
+                <a class="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter" asp-controller="Restaurant" asp-action="Detail" asp-route-id="@restaurant.Id">
+                    <img class="d-block mx-auto" src="@restaurant.RestaurantImages.FirstOrDefault(ri => ri.IsMain).Url" style="width:100%; height:140px;" alt="Brand">
+                    <p class="text-dark mt-2">@restaurant.Name</p>
+                    <span style="color: darkgray; font-size: smaller;">@(restaurant.Description.Length > 35 ? $"{restaurant.Description.Substring(0, 35)}..." : restaurant.Description)</span>
                 </a>
             </div>
         }

@@ -25,7 +25,7 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await HttpClient.PostAsync("restaurant/getLoadMore", content);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("restaurant/getAllFiltered", content);
 
             responseMessage.EnsureSuccessStatusCode();
 
@@ -58,7 +58,7 @@ namespace Food_Delivery_MVC.Controllers
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage responseMessage = await HttpClient.PostAsync("restaurant/getLoadMore", content);
+            HttpResponseMessage responseMessage = await HttpClient.PostAsync("restaurant/getAllFiltered", content);
 
             responseMessage.EnsureSuccessStatusCode();
 

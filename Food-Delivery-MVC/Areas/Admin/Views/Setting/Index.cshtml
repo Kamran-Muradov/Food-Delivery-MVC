@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SettingVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header d-print-none mb-5">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <h2 class="page-title">
+                    Ingredients
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="table-area">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-body border-bottom py-3">
+            </div>
+            <div id="table-default" class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Update Date</th>
+                            <th>Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-tbody">
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.Id">
+                                <td class="sort-name">@item.Key</td>
+                                <td id="value" class="sort-name">@item.Value</td>
+                                <td id="updateDate" class="sort-name">@item.UpdatedDate</td>
+                                <td>
+                                    <a class="btn btn-warning btn-icon" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* Modal Delete *@
+    <div class="modal modal-blur fade" id="modal-small" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-title">Are you sure?</div>
+                    <div>If you proceed, you will delete data permanently.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger yes-btn" data-id="0">Yes, delete this data</button>
+                    <button id="loading-delete-btn" class="btn btn-danger ms-auto d-none" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">Loading...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Modal-Edit *@
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label required">Value</label>
+                            <input autocomplete="off" id="value" type="text" class="form-control" name="valule" placeholder="Value..." />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="edit-btn" type="submit" href="#" class="btn btn-warning ms-auto ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                            Edit
+                        </button>
+                        <button id="loading-edit-btn" class="btn btn-warning ms-auto d-none" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section js {
+    <script src="~/admin/dist/js/setting.js"></script>
+}
+
