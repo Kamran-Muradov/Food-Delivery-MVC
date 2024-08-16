@@ -1,4 +1,4 @@
-﻿@model PaginationResponse<SliderVM>
+﻿@model PaginationResponse<AboutVM>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,7 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <h2 class="page-title">
-                    Sliders
+                    About
                 </h2>
             </div>
             <!-- Page title actions -->
@@ -33,24 +33,6 @@
 <section id="table-area">
     <div class="card">
         <div class="card-body">
-            <div class="card-body border-bottom py-3">
-                <div class="d-flex">
-                    <div class="col-2">
-                        <div class="form-label">Sort by</div>
-                        <select class="form-select">
-                            <option value="Title">Title</option>
-                            <option value="Create date">Create date</option>
-                            <option value="Update date">Update date</option>
-                        </select>
-                    </div>
-                    <div class="ms-auto text-muted">
-                        Search:
-                        <div class="ms-2 d-inline-block">
-                            <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="table-default" class="table-responsive">
                 <table class="table">
                     <thead>
@@ -235,6 +217,6 @@
 
 
 @section js {
-    <script src="~/admin/dist/js/slider.js"></script>
+    <script src="~/admin/dist/js/about.js"></script>
 }
 

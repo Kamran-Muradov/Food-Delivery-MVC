@@ -38,13 +38,13 @@
         rules: {
             value: {
                 required: true,
-                maxlength: 100
+                maxlength: 200
             },
         },
         messages: {
             value: {
                 required: "Value is required",
-                maxlength: "Maximum 100 characters are allowed for value"
+                maxlength: "Maximum 200 characters are allowed for value"
             },
         },
 
@@ -106,16 +106,6 @@
                         title: "Operation is successfull",
                         showConfirmButton: false,
                         timer: 1500
-                    });
-                },
-                error: function (xhr, status, error) {
-                    $('#modal-edit').modal('hide');
-                    $("#form-edit #edit-btn").removeClass("d-none")
-                    $("#form-edit #loading-edit-btn").addClass("d-none")
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Something went wrong!",
                     });
                 }
             });

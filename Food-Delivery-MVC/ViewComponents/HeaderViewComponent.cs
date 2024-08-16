@@ -20,7 +20,6 @@ namespace Food_Delivery_MVC.ViewComponents
         {
             List<BasketVM> basketItems;
             string userId = null;
-
             if (UserClaimsPrincipal.Identity.IsAuthenticated)
             {
                 userId = UserClaimsPrincipal.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
@@ -31,14 +30,16 @@ namespace Food_Delivery_MVC.ViewComponents
                 basketItems = Request.Cookies["basket"] is not null ? JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]) : new List<BasketVM>();
             }
 
-            string profilePic = Request.Cookies["ProfilePic"];
+            var settings = await _httpClient.GetFromJsonAsync<Dictionary<string, string>>("setting/getAll");
 
+            string profilePic = Request.Cookies["ProfilePic"];
             ViewBag.ProfilePic = profilePic;
 
             return await Task.FromResult(View(new HeaderVMVC
             {
                 BasketCount = basketItems.Sum(bi => bi.Count),
-                UserId = userId
+                UserId = userId,
+                Settings = settings
             }));
         }
     }
@@ -47,5 +48,6 @@ namespace Food_Delivery_MVC.ViewComponents
     {
         public int BasketCount { get; set; }
         public string UserId { get; set; }
+        public Dictionary<string,string> Settings { get; set; }
     }
 }

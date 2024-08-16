@@ -27,11 +27,7 @@
         rules: {
             title: {
                 required: true,
-                maxlength: 50
-            },
-            desc: {
-                required: true,
-                maxlength: 200
+                maxlength: 100
             },
             image: {
                 required: true,
@@ -42,11 +38,7 @@
         messages: {
             title: {
                 required: "Title is required",
-                maxlength: "Maximum 50 characters are allowed for Title"
-            },
-            desc: {
-                required: "Description is required",
-                maxlength: "Maximum 200 characters are allowed for description"
+                maxlength: "Maximum 100 characters are allowed for Title"
             },
             image: {
                 required: "Image is required",
@@ -75,7 +67,7 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/slider/create',
+                url: 'https://localhost:7247/api/admin/about/create',
                 method: 'POST',
                 headers: {
                     'Authorization': header
@@ -227,7 +219,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/slider/getbyid/${id}`,
+            url: `https://localhost:7247/api/admin/about/getbyid/${id}`,
             headers: {
                 'Authorization': header
             },
@@ -251,11 +243,7 @@
         rules: {
             title: {
                 required: true,
-                maxlength: 50
-            },
-            desc: {
-                required: true,
-                maxlength: 200
+                maxlength: 100
             },
             image: {
                 extension: "jpeg|img|svg|webp|avif|jpg|png",
@@ -265,11 +253,7 @@
         messages: {
             title: {
                 required: "Title is required",
-                maxlength: "Maximum 50 characters are allowed for title"
-            },
-            desc: {
-                required: "Description is required",
-                maxlength: "Maximum 200 characters are allowed for description"
+                maxlength: "Maximum 100 characters are allowed for title"
             },
             image: {
                 extension: "File must be image type",
@@ -298,7 +282,7 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/slider/edit/${id}`,
+                url: `https://localhost:7247/api/admin/about/edit/${id}`,
                 method: 'PUT',
                 headers: {
                     'Authorization': header
@@ -338,7 +322,7 @@
                     $('#modal-edit .modal-header .btn-close').prop('disabled', false);
 
                     $.ajax({
-                        url: `https://localhost:7247/api/admin/sliderimage/getbysliderid/${id}`,
+                        url: `https://localhost:7247/api/admin/aboutimage/getbyaboutid/${id}`,
                         headers: {
                             'Authorization': header
                         },
@@ -359,7 +343,7 @@
                                     <td class="sort-name create-date">${createdDate}</td>
                                     <td class="sort-name">${updatedDate}</td>
                                     <td>
-                                       <a class="btn btn-info btn-icon detail" data-id="${id}" data-bs-toggle="modal" data-bs-target="#modal-detail">
+                                      <a class="btn btn-info btn-icon detail" data-id="${id}" data-bs-toggle="modal" data-bs-target="#modal-detail">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
                                       </a>
                                         <a class="btn btn-warning btn-icon" data-id="${id}" data-bs-toggle="modal" data-bs-target="#modal-edit">
@@ -399,7 +383,7 @@
         }
     });
 
-     $(document).on('click', '#table-area .detail', function (e) {
+    $(document).on('click', '#table-area .detail', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
 
@@ -409,7 +393,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/slider/getbyid/${id}`,
+            url: `https://localhost:7247/api/admin/about/getbyid/${id}`,
             headers: {
                 'Authorization': header
             },
@@ -459,7 +443,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/slider/Delete?id=${id}`,
+            url: `https://localhost:7247/api/admin/about/Delete?id=${id}`,
             headers: {
                 'Authorization': header
             },
@@ -506,7 +490,7 @@
             headers: {
                 'Authorization': header
             },
-            url: `https://localhost:7247/api/admin/slider/GetPaginateDatas?page=${page}&take=5`,
+            url: `https://localhost:7247/api/admin/about/GetPaginateDatas?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -561,7 +545,7 @@
                                     <td class="sort-name create-date">${item.createdDate}</td>
                                     <td class="sort-name">${item.updatedDate}</td>
                                     <td>
-                                     <a class="btn btn-info btn-icon detail" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-detail">
+                                      <a class="btn btn-info btn-icon detail" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-detail">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
                                       </a>
                                         <a class="btn btn-warning btn-icon" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-edit">

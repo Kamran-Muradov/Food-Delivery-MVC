@@ -91,7 +91,7 @@
             images: {
                 required: true,
                 extension: "jpeg|img|svg|webp|avif|jpg|png",
-                filesize: 512000
+                filesize: 2048000
             }
         },
         messages: {
@@ -127,7 +127,7 @@
             images: {
                 required: "At least one image is required",
                 extension: "File must be image type",
-                filesize: "Image size cannot exceed 500Kb"
+                filesize: "Image size cannot exceed 2Mb"
             }
         },
 
@@ -397,7 +397,7 @@
             },
             images: {
                 extension: "jpeg|img|svg|webp|avif|jpg|png",
-                filesize: 512000
+                filesize: 2048000
             }
         },
         messages: {
@@ -432,7 +432,7 @@
             },
             images: {
                 extension: "File must be image type",
-                filesize: "Image size cannot exceed 500Kb"
+                filesize: "Image size cannot exceed 2Mb"
             }
         },
 

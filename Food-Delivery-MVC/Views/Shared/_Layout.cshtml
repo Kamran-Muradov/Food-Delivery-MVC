@@ -24,6 +24,7 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
     <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link rel="stylesheet" media="screen" href="~/vendor/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" media="screen" href="~/vendor/simplebar/dist/simplebar.min.css" />
     <link rel="stylesheet" media="screen" href="~/vendor/tiny-slider/dist/tiny-slider.css" />
     <link rel="stylesheet" media="screen" href="~/vendor/owlcarousel/owl.carousel.min.css" />
@@ -176,79 +177,7 @@
         @await Component.InvokeAsync(typeof(HeaderViewComponent))
         @RenderBody()
     </main>
-    <footer class="footer bg-darker pt-5">
-        <div class="container pt-2">
-            <div class="row pb-2">
-                <div class="col-lg-2 col-sm-4 pb-2 mb-4">
-                    <div class="mt-n1"><a class="d-inline-block align-middle" href="#"><img class="d-block mb-4" src="~/img/footer-logo-light.png" width="117" alt="Cartzilla"></a></div>
-                    <div class="btn-group dropdown disable-autohide">
-                        <button class="btn btn-outline-light border-light btn-sm dropdown-toggle px-2" type="button" data-bs-toggle="dropdown"><img class="me-2" src="~/img/flags/en.png" width="20" alt="English">Eng / $</button>
-                        <ul class="dropdown-menu my-1">
-                            <li class="dropdown-item">
-                                <select class="form-select form-select-sm">
-                                    <option value="usd">$ USD</option>
-                                    <option value="eur">€ EUR</option>
-                                    <option value="ukp">£ UKP</option>
-                                    <option value="jpy">¥ JPY</option>
-                                </select>
-                            </li>
-                            <li><a class="dropdown-item pb-1" href="#"><img class="me-2" src="~/img/flags/fr.png" width="20" alt="Français">Français</a></li>
-                            <li><a class="dropdown-item pb-1" href="#"><img class="me-2" src="~/img/flags/de.png" width="20" alt="Deutsch">Deutsch</a></li>
-                            <li><a class="dropdown-item" href="#"><img class="me-2" src="~/img/flags/it.png" width="20" alt="Italiano">Italiano</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="widget widget-links widget-light pb-2 mb-4">
-                        <h3 class="widget-title text-light">Join us</h3>
-                        <ul class="widget-list">
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Careers</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Restaurants</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Become a Courier</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">About</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="widget widget-links widget-light pb-2 mb-4">
-                        <h3 class="widget-title text-light">Let us help you</h3>
-                        <ul class="widget-list">
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Help Center</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Support</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Contacts</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="widget widget-links widget-light pb-2 mb-4">
-                        <h3 class="widget-title text-light">Follow us</h3>
-                        <ul class="widget-list">
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Facebook</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Twitter</a></li>
-                            <li class="widget-list-item"><a class="widget-list-link" href="#">Instagram</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-8">
-                    <div class="widget pb-2 mb-4">
-                        <h3 class="widget-title text-light pb-1">Download our app</h3>
-                        <div class="d-flex flex-wrap"><a class="btn-market btn-apple border border-light me-3 mb-2" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">App Store</span></a><a class="btn-market btn-google border border-light mb-2" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">Google Play</span></a></div>
-                    </div>
-                </div>
-            </div>
-            <hr class="hr-light mt-md-2 mb-3">
-            <div class="d-md-flex justify-content-between pt-4 pb-1">
-                <div class="pb-4 fs-xs text-light opacity-50 text-center text-md-start">© All rights reserved. Made by <a class="text-light" href="https://nigammishra.github.io/nigam-portfolio/" target="_blank" rel="noopener">Nigam Mishra</a></div>
-                <div class="widget widget-links widget-light pb-4">
-                    <ul class="widget-list d-flex flex-wrap justify-content-center justify-content-md-start">
-                        <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Privacy Policy</a></li>
-                        <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Terms &amp; Conditions</a></li>
-                        <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Cookies Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @await Component.InvokeAsync("Footer")
     <!-- Toolbar for handheld devices (Food delivery)-->
     <div class="handheld-toolbar">
         <div class="d-table table-layout-fixed w-100"><a class="d-table-cell handheld-toolbar-item" href="#signin-modal" data-bs-toggle="modal"><span class="handheld-toolbar-icon"><i class="ci-user"></i></span><span class="handheld-toolbar-label">Account</span></a><a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" onclick="window.scrollTo(0, 0)"><span class="handheld-toolbar-icon"><i class="ci-menu"></i></span><span class="handheld-toolbar-label">Menu</span></a><a class="d-table-cell handheld-toolbar-item" href="food-delivery-cart.html"><span class="handheld-toolbar-icon"><i class="ci-cart"></i><span class="badge bg-primary rounded-pill ms-1">3</span></span><span class="handheld-toolbar-label">$24.00</span></a></div>
@@ -257,18 +186,16 @@
     <a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
     <!-- Vendor scrits: js libraries and plugins-->
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/vendor/jquery/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>
+    <script src="~/vendor/jquery/jquery.validate.min.js"></script>
+    <script src="~/vendor/jquery/additional-methods.min.js"></script>
     <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/vendor/simplebar/dist/simplebar.min.js"></script>
     <script src="~/vendor/tiny-slider/dist/min/tiny-slider.js"></script>
     <script src="~/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <script src="~/vendor/owlcarousel/owl.carousel.min.js"></script>
-    @*  <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/js/star-rating.min.js" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.js"></script> *@
     <script src="https://kit.fontawesome.com/b8714a14d2.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.25/signalr.min.js" integrity="sha512-hJP90Q+3UdSvwBhVIze6qNNDZ+tEbuTv+HBAtoC0tpRrZ0r48hbcUmTdtumkC7m0z16bqNu4pSytecT3/js+VQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

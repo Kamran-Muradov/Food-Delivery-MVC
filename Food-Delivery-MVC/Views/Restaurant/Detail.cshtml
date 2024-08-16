@@ -4,7 +4,7 @@
     ViewData["Title"] = "Detail";
 }
 
-<section class="bg-darker bg-size-cover bg-position-center py-5" style=" background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('@Model.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url') no-repeat center center;">
+<section class="bg-darker bg-size-cover bg-position-center py-5" style=" background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('@Model.RestaurantImages.FirstOrDefault(m => !m.IsMain)?.Url') no-repeat center center;">
     <div class="container py-md-4">
         <h1 class="text-light text-center text-lg-start py-3">@Model.Name</h1>
     </div>
@@ -39,7 +39,7 @@
         See more information
     </a>
     <i class="fa-solid fa-star" style="color: #fe9f41;" aria-hidden="true"></i>
-    <span>@Model.AverageRating (@Model.ReviewCount)</span>
+    <span>@Model.AverageRating (@Model.Reviews.Count())</span>
     <div class="row pt-3 pt-sm-0 mt-5">
         <!-- Item-->
         @foreach (var menu in Model.Menus)
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="modal-info" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div id="restaurant-info" class="modal-content">
@@ -117,7 +117,46 @@
         </div>
     </div>
 </section>
-
+@if (Model.Reviews.Any())
+{
+    <section id="review-area" class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- customer reviews -->
+                <!-- customer reviews list -->
+                <div class="col-lg-8 col-md-7 col-12">
+                    <h4 class="mb-5" style="font-weight:bold">Ratings &amp; Reviews</h4>
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <!-- reviews -->
+                        <div class="mb-4 pb-4 border-bottom">
+                            <div class="d-flex mb-3 align-items-center">
+                                <img src="@review.UserImage" alt="" style="width: 3.125rem;height: 3.125rem;font-size: 1.04167rem;border-radius: 50% !important;">
+                                <div class="ml-2">
+                                    <h5 class="mb-1">
+                                        @review.UserName
+                                    </h5>
+                                    <p class="font-12 mb-0">
+                                        <span>@review.CreatedDate</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <span class="font-14 mr-2">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="@(i <= review.Rating ? "fas" : "far") fa-star text-warning"></i>
+                                    }
+                                </span>
+                            </div>
+                            <p>@review.Comment</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}
 
 @section js {
     <script src="~/js/restaurant.js"></script>
