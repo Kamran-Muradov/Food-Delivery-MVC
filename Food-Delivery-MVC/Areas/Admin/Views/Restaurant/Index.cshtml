@@ -106,6 +106,7 @@
                     <div class="modal-header">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                   
                     <form id="form-create" class="data-create" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="mb-3">
@@ -119,62 +120,76 @@
                                 <textarea autocomplete="off" id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
                             </div>
                         </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Phone</label>
-                                <input autocomplete="off" id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Email</label>
-                                <input autocomplete="off" id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Delivery fee</label>
-                                <input autocomplete="off" id="delfee" type="number" class="form-control" name="delfee">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Minimum order</label>
-                                <input autocomplete="off" id="minorder" type="number" class="form-control" name="minorder">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Minimum delivery time</label>
-                                <input autocomplete="off" id="mintime" type="number" class="form-control" name="mintime">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Address</label>
-                                <input autocomplete="off" id="address" type="text" class="form-control" name="address" placeholder="Address...">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">Website</label>
-                                <input autocomplete="off" id="website" type="text" class="form-control" name="website">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label required">Upload images</label>
-                                <input autocomplete="off" id="images" type="file" multiple class="form-control" name="images">
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-6">
                                 <div class="modal-body">
                                     <div class="mb-3">
-                                        <label class="form-label">Active</label>
-                                        <select id="active" class="form-select">
-                                            <option value="true">true</option>
-                                            <option value="false">false</option>
+                                        <label class="form-label required">Phone</label>
+                                        <input autocomplete="off" id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Email</label>
+                                        <input autocomplete="off" id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Delivery fee</label>
+                                        <input autocomplete="off" id="delfee" type="number" class="form-control" name="delfee">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Minimum order</label>
+                                        <input autocomplete="off" id="minorder" type="number" class="form-control" name="minorder">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Minimum delivery time</label>
+                                        <input autocomplete="off" id="mintime" type="number" class="form-control" name="mintime">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Address</label>
+                                        <input autocomplete="off" id="address" type="text" class="form-control" name="address" placeholder="Address...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Website</label>
+                                        <input autocomplete="off" id="website" type="text" class="form-control" name="website">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Upload images</label>
+                                        <input autocomplete="off" id="images" type="file" multiple class="form-control" name="images">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Choose city</label>
+                                        <select id="cities" name="cities" class="form-select">
                                         </select>
                                     </div>
                                 </div>
@@ -238,62 +253,76 @@
                             <textarea autocomplete="off" id="desc" type="text" class="form-control" name="desc" placeholder="Description..."></textarea>
                         </div>
                     </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Phone</label>
-                            <input autocomplete="off" id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Email</label>
-                            <input autocomplete="off" id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Delivery fee</label>
-                            <input autocomplete="off" id="delfee" type="number" class="form-control" name="delfee">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Minimum order</label>
-                            <input autocomplete="off" id="minorder" type="number" class="form-control" name="minorder">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Minimum delivery time (minutes)</label>
-                            <input autocomplete="off" id="mintime" type="number" class="form-control" name="mintime">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Address</label>
-                            <input autocomplete="off" id="address" type="text" class="form-control" name="address" placeholder="Address...">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Website</label>
-                            <input autocomplete="off" id="website" type="text" class="form-control" name="website">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label required">Upload images</label>
-                            <input autocomplete="off" id="images" type="file" multiple class="form-control" name="images">
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-6">
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label class="form-label">Active</label>
-                                    <select id="active" class="form-select">
-                                        <option value="true">true</option>
-                                        <option value="false">false</option>
+                                    <label class="form-label required">Phone</label>
+                                    <input autocomplete="off" id="phone" type="text" class="form-control" name="phone" placeholder="Phone...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Email</label>
+                                    <input autocomplete="off" id="email" type="text" class="form-control" name="email" placeholder="example@example.com">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Delivery fee</label>
+                                    <input autocomplete="off" id="delfee" type="number" class="form-control" name="delfee">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Minimum order</label>
+                                    <input autocomplete="off" id="minorder" type="number" class="form-control" name="minorder">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Minimum delivery time (minutes)</label>
+                                    <input autocomplete="off" id="mintime" type="number" class="form-control" name="mintime">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Address</label>
+                                    <input autocomplete="off" id="address" type="text" class="form-control" name="address" placeholder="Address...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Website</label>
+                                    <input autocomplete="off" id="website" type="text" class="form-control" name="website">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Upload images</label>
+                                    <input autocomplete="off" id="images" type="file" multiple class="form-control" name="images">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">Choose city</label>
+                                    <select id="cities" name="cities" class="form-select">
                                     </select>
                                 </div>
                             </div>

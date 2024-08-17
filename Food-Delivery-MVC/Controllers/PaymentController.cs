@@ -26,6 +26,9 @@ namespace Food_Delivery_MVC.Controllers
                 CancelUrl = Url.Action(nameof(PaymentCancel), "Payment", values: null, protocol: Request.Scheme),
             });
 
+            var comments = Request.Form["checkoutComments"];
+            HttpContext.Session.SetString("checkoutComments", comments);
+             
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
             string authToken = Request.Cookies["JWTToken"];
@@ -54,10 +57,18 @@ namespace Food_Delivery_MVC.Controllers
             responseMessage.EnsureSuccessStatusCode();
 
             string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+            var comments = HttpContext.Session.GetString("checkoutComments");
+
+            string data = JsonConvert.SerializeObject(new { userId, comments });
+
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
-            responseMessage = await HttpClient.PostAsync($"checkout/createByUserId?userId={userId}", null);
+            responseMessage = await HttpClient.PostAsync("checkout/create", content);
             responseMessage.EnsureSuccessStatusCode();
+
+            HttpContext.Session.Remove("checkoutComments");
 
             return View();
         }

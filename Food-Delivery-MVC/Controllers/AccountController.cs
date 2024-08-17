@@ -108,7 +108,7 @@ namespace Food_Delivery_MVC.Controllers
                     Expires = DateTime.UtcNow.AddDays(30),
                     IsEssential = true,
                     HttpOnly = true,
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Lax
                 });
             }
             else
@@ -119,7 +119,7 @@ namespace Food_Delivery_MVC.Controllers
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Lax
                 });
             }
 

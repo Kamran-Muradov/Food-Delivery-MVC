@@ -46,6 +46,16 @@
                 })
                 $("#form-create #brands").append(html)
             })
+
+        getCitiesSelected()
+            .then(function (datas) {
+                let html = ``;
+                $.each(datas, function (index, item) {
+
+                    html += `<option value="${item.id}">${item.name}</option>`;
+                })
+                $("#form-create #cities").html(html)
+            })
     })
 
     $("#form-create").validate({
@@ -150,6 +160,7 @@
             formData.append('isActive', $('#table-area #active').val());
             formData.append('email', $('#table-area #email').val());
             formData.append('brandId', $('#table-area #brands').val());
+            formData.append('cityId', $('#table-area #cities').val());
 
             $('#table-area #form-create #tags option:selected').each(function () {
                 formData.append('tagIds', $(this).val());
@@ -325,7 +336,6 @@
 
                 getTagsSelected()
                     .then(function (datas) {
-                        $("#form-edit #tags").empty()
                         $.each(datas, function (index, item) {
                             if (response.tags.includes(item.name)) {
                                 html += `<option selected value="${item.id}">${item.name}</option>`;
@@ -333,13 +343,12 @@
                                 html += `<option value="${item.id}">${item.name}</option>`;
                             }
                         })
-                        $("#form-edit #tags").append(html)
+                        $("#form-edit #tags").html(html)
                         html = "";
                     })
 
                 getBrandsSelected()
                     .then(function (datas) {
-                        $("#form-edit #brands").empty()
                         html = `<option value="">--</option>`
                         $.each(datas, function (index, item) {
                             if (response.brand == item.name) {
@@ -348,7 +357,20 @@
                                 html += `<option value="${item.id}">${item.name}</option>`;
                             }
                         })
-                        $("#form-edit #brands").append(html)
+                        $("#form-edit #brands").html(html)
+                        html = "";
+                    })
+
+                getCitiesSelected()
+                    .then(function (datas) {
+                        $.each(datas, function (index, item) {
+                            if (response.city == item.name) {
+                                html += `<option selected value="${item.id}">${item.name}</option>`;
+                            } else {
+                                html += `<option value="${item.id}">${item.name}</option>`;
+                            }
+                        })
+                        $("#form-edit #cities").html(html)
                         html = "";
                     })
             }
@@ -456,6 +478,7 @@
             formData.append('isActive', $('#table-area #modal-edit #active').val());
             formData.append('email', $('#table-area #modal-edit #email').val());
             formData.append('brandId', $('#table-area #modal-edit #brands').val());
+            formData.append('cityId', $('#table-area #modal-edit #cities').val());
 
             $('#table-area #form-edit #tags option:selected').each(function () {
                 formData.append('tagIds', $(this).val());
@@ -781,6 +804,12 @@
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Phone: </strong>${response.phone}</p>
                 </div>
+                   <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Address: </strong>${response.address}</p>
+                </div>
+                   <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>City: </strong>${response.city}</p>
+                </div>
                   <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Brand: </strong>${response.brand}</p>
                 </div>
@@ -873,6 +902,24 @@
                 'Authorization': header
             },
             url: `https://localhost:7247/api/admin/brand/getallforselect?exludeId=${exludeid}`,
+            dataType: 'json',
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            }
+        }));
+    }
+
+    function getCitiesSelected(exludeid = null) {
+        return Promise.resolve($.ajax({
+            type: "GET",
+            headers: {
+                'Authorization': header
+            },
+            url: `https://localhost:7247/api/admin/city/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

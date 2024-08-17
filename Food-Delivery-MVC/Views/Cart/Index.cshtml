@@ -53,10 +53,7 @@
                             <h3 class="h5 mb-3 pb-1">Total</h3>
                             <h4 id="total-price" class="fw-normal">$@ViewBag.TotalPrice</h4>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
-                            <textarea class="form-control" rows="4" id="order-comments"></textarea>
-                        </div>
+                       
                         <h3 class="h6 mb-4">Apply promo code</h3>
                         <form class="needs-validation" method="post" novalidate="">
                             <div class="mb-3">
@@ -67,7 +64,11 @@
                         </form>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <form method="post" asp-controller="Payment" asp-action="CreateCheckoutSession">
+                            <form class="mt-3" method="post" asp-controller="Payment" asp-action="CreateCheckoutSession">
+                                <div class="mb-4">
+                                    <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
+                                    <textarea class="form-control" rows="4" id="order-comments" name="checkoutComments"></textarea>
+                                </div>
                                 <button type="submit" class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="food-delivery-checkout.html">
                                     <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
                                 </button>
@@ -75,6 +76,10 @@
                         }
                         else
                         {
+                            <div class="mb-4">
+                                <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
+                                <textarea class="form-control" rows="4" id="order-comments"></textarea>
+                            </div>
                             <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="#signin-modal" data-bs-toggle="modal">
                                 <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
                             </a>
