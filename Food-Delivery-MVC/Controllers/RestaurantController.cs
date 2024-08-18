@@ -1,12 +1,13 @@
-﻿using System.Net;
-using System.Security.Claims;
-using Food_Delivery_MVC.Helpers;
+﻿using Food_Delivery_MVC.Helpers;
+using Food_Delivery_MVC.ViewModels.UI.Basket;
 using Food_Delivery_MVC.ViewModels.UI.Restaurants;
 using Food_Delivery_MVC.ViewModels.UI.Tags;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
-using Food_Delivery_MVC.ViewModels.UI.Basket;
 
 namespace Food_Delivery_MVC.Controllers
 {
@@ -98,7 +99,18 @@ namespace Food_Delivery_MVC.Controllers
 
             string data = await responseMessage.Content.ReadAsStringAsync();
 
-            return View(JsonConvert.DeserializeObject<RestaurantDetailVM>(data));
+            var response = JsonConvert.DeserializeObject<RestaurantDetailVM>(data);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
+
+                string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+                bool isFavourite = await HttpClient.GetFromJsonAsync<bool>($"favourite/isFavourite?userId={userId}&restaurantId={response.Id}");
+                response.IsFavourite = isFavourite;
+            }
+
+            return View(response);
         }
 
         [HttpPost]

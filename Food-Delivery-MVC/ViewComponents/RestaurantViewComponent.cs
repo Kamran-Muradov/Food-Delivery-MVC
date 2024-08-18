@@ -41,6 +41,7 @@ namespace Food_Delivery_MVC.ViewComponents
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public double AverageRating { get; set; }
         public IEnumerable<RestaurantImageVM> RestaurantImages { get; set; }
     }
 }

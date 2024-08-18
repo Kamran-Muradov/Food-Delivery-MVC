@@ -69,13 +69,12 @@
                         <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab">
                             <div class="mb-3">
                                 <label class="form-label required" for="emailorusername">Email or username</label>
-                                <input autocomplete="off" class="form-control" type="text" id="emailorusername" required>
-                                <div class="invalid-feedback">Please provide a valid email address.</div>
+                                <input autocomplete="off" class="form-control" type="text" id="emailorusername" name="emailorusername" required="">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label required" for="password">Password</label>
                                 <div class="password-toggle">
-                                    <input autocomplete="off" class="form-control" type="password" id="password" required>
+                                    <input autocomplete="off" class="form-control" type="password" id="password" name="password" required="">
                                     <label class="password-toggle-btn" aria-label="Show/hide password">
                                         <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                                     </label>
@@ -96,7 +95,7 @@
                         <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
                             <div class="mb-3">
                                 <label class="form-label required" for="fullname">Full name</label>
-                                <input autocomplete="off" class="form-control" name="fullname" type="text" id="fullname" placeholder="Nigam Mishra" required="">
+                                <input autocomplete="off" class="form-control" name="fullname" type="text" id="fullname" placeholder="Your full name" required="">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label required" for="username">User name</label>
@@ -105,7 +104,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label required" for="email">Email address</label>
-                                <input autocomplete="off" class="form-control" type="email" id="email" name="email" placeholder="nigammishra826@gmail.com" required="">
+                                <input autocomplete="off" class="form-control" type="email" id="email" name="email" placeholder="example@example.com" required="">
                                 <span class="text-danger exist-email"></span>
                             </div>
                             <div class="mb-3">
@@ -190,7 +189,6 @@
     <script src="~/vendor/jquery/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="~/vendor/jquery/jquery.validate.min.js"></script>
-    <script src="~/vendor/jquery/additional-methods.min.js"></script>
     <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/vendor/simplebar/dist/simplebar.min.js"></script>
     <script src="~/vendor/tiny-slider/dist/min/tiny-slider.js"></script>

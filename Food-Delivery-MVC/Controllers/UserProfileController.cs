@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using Food_Delivery_MVC.ViewModels.UI.Favourites;
 
 namespace Food_Delivery_MVC.Controllers
 {
@@ -178,10 +179,26 @@ namespace Food_Delivery_MVC.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.Lax
             });
 
             return Ok(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllFavourites()
+        {
+            string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
+
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"favourite/getAllByUserId?userId={userId}");
+
+            responseMessage.EnsureSuccessStatusCode();
+
+            string data = await responseMessage.Content.ReadAsStringAsync();
+
+            return PartialView("_Favourites", JsonConvert.DeserializeObject<IEnumerable<FavouriteVM>>(data));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Food_Delivery_MVC.ViewModels.UI.Brands;
-using Food_Delivery_MVC.ViewModels.UI.Restaurants;
+﻿using Food_Delivery_MVC.ViewModels.UI.Restaurants;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -11,7 +10,6 @@ namespace Food_Delivery_MVC.Controllers
         {
         }
 
-        [Route("brands/{name}")]
         public async Task<IActionResult> GetByName(string name)
         {
             HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getAllByBrandName?brandName={name}");

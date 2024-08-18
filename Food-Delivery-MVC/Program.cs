@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Food_Delivery_MVC.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,10 +104,24 @@ app.Use(async (context, next) =>
     await next();
 });
 
+
+app.UseSession();
+
+app.UseMiddleware<UrlRewriteMiddleware>();
+
+app.UseRouting();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
-app.UseSession();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "brands",
+        pattern: "brands/{name?}",
+        defaults: new { controller = "Brand", action = "GetByName" });
+});
 
 app.MapControllerRoute(
     name: "areas",

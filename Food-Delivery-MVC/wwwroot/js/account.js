@@ -15,6 +15,13 @@
         return value !== $(param).val();
     }, "New password must be different from the current password.");
 
+    $(document).on('click', 'a[href="#signin-modal"]', function () {
+        $('#signin-tab')[0].reset()
+        $('#signin-tab').validate().resetForm()
+        $('#signup-tab')[0].reset()
+        $('#signup-tab').validate().resetForm()
+    })
+
     $('#signin-modal').modal({
         backdrop: true,
         keyboard: true
@@ -31,9 +38,11 @@
     });
 
     $("#signin-tab").validate({
+        ignore: [],
+
         errorClass: "my-error-class",
         rules: {
-            emailorusername: {
+            fullname: {
                 required: true,
                 maxlength: 50
             },
@@ -44,7 +53,7 @@
         messages: {
             emailorusername: {
                 required: "Email or username is required",
-                maxlength: "Maximum 50 characters are allowed for full name"
+                maxlength: "Maximum 50 characters are allowed"
             },
             password: {
                 required: "Password is required",
@@ -579,6 +588,36 @@
 
     $(document).on('click', '#cropperModal .btn-secondary', function () {
         $('#cropperModal').modal('hide')
+    })
+
+    $(document).on('click', '.user-favourite .delete-favourite', function (e) {
+        e.preventDefault()
+        const restaurantId = $(this).attr('data-restaurantId')
+        const $favouriteArea = $(this).closest('.user-favourite')
+
+        axios.post(`/favourite/delete`, null, {
+            params: {
+                restaurantId
+            }
+        })
+            .then(function (response) {
+                $favouriteArea.remove()
+                if ($('.user-favourite').length == 0) {
+                    $('#profile-section').html(
+                        `  <div class="row justify-content-center pt-lg-4 text-center">
+        <div class="col-lg-5 col-md-7 col-sm-9">
+            <h1 class="h3">Your don't have any favourites yet</h1>
+        </div>
+    </div>`)
+                }
+            })
+            .catch(function (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            })
     })
 })
 
