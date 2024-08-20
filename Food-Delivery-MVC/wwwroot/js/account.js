@@ -15,6 +15,11 @@
         return value !== $(param).val();
     }, "New password must be different from the current password.");
 
+    $(document).on('shown.bs.modal', '#password-modal', function () {
+        $('#password-tab')[0].reset()
+        $('#password-tab').validate().resetForm()
+    });
+
     $(document).on('click', 'a[href="#signin-modal"]', function () {
         $('#signin-tab')[0].reset()
         $('#signin-tab').validate().resetForm()
@@ -307,7 +312,7 @@
             });
     })
 
-    $("#from-update").validate({
+    $("#form-update").validate({
         errorClass: "my-error-class",
         rules: {
             ignore: [],
@@ -421,6 +426,10 @@
 
     });
 
+    $(document).on('click', '#password-btn', function () {
+        $('#incorrect-password').html("")
+    })
+
     $(document).on('click', '.toggle-create', function (e) {
         e.preventDefault()
         $('#review-create')[0].reset();
@@ -440,7 +449,11 @@
         $("#review-create #loading-btn").removeClass("d-none")
 
         const checkoutId = $(this).attr('data-checkoutId')
-        const rating = $('input[name="rating"]:checked').val();
+        let rating = $('input[name="rating"]:checked').val();
+
+        if (typeof rating === 'undefined') {
+            rating = 0;
+        }
         const comment = $('#comment').val()
 
         const data = JSON.stringify({
@@ -498,25 +511,42 @@
     $(document).on('change', '#inputImage', function (event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const image = $('#cropperImage');
-                image.attr('src', event.target.result);
+            if (!file.type.includes('image/')) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File must be image type!"
+                });
+            } else if (file.size / 1024 > 2048) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File size cannot exceed 2Mb!"
+                });
+            } else {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const image = $('#cropperImage');
+                    image.attr('src', event.target.result);
 
-                $('#cropperModal').modal('show');
-
-                $(document).on('shown.bs.modal', '#cropperModal', function () {
-                    if (cropper) {
-                        cropper.destroy();
+                    if (event.target.result.includes('image')) {
                     }
-                    cropper = new Cropper(image[0], {
-                        aspectRatio: 1,
-                        viewMode: 1,
-                        autoCropArea: 0.75
-                    });
-                })
-            };
-            reader.readAsDataURL(file);
+
+                    $('#cropperModal').modal('show');
+
+                    $(document).on('shown.bs.modal', '#cropperModal', function () {
+                        if (cropper) {
+                            cropper.destroy();
+                        }
+                        cropper = new Cropper(image[0], {
+                            aspectRatio: 1,
+                            viewMode: 1,
+                            autoCropArea: 0.75
+                        });
+                    })
+                };
+                reader.readAsDataURL(file);
+            }
         }
     });
 
@@ -552,6 +582,7 @@
                         $("#cropperModal #loading-btn").addClass("d-none")
                         $('#cropperModal .btn-secondary').prop('disabled', false)
                         $('#cropperModal').modal('hide')
+                        $('#delete-picture').prop('disabled', false)
 
                         Swal.fire({
                             position: "top-end",
@@ -588,6 +619,29 @@
 
     $(document).on('click', '#cropperModal .btn-secondary', function () {
         $('#cropperModal').modal('hide')
+    })
+
+    $(document).on('click', '#delete-picture', function (e) {
+        e.preventDefault()
+        const userId = $(this).attr('data-id')
+
+        axios.delete(`/UserProfile/DeleteProfilePicture`, {
+            params: {
+                userId
+            }
+        })
+            .then(function (response) {
+                $('#profile-pic').attr('src', response.data.url)
+                $('#header-pic').attr('src', response.data.url)
+                $('#delete-picture').prop('disabled', true)
+            })
+            .catch(function (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            })
     })
 
     $(document).on('click', '.user-favourite .delete-favourite', function (e) {

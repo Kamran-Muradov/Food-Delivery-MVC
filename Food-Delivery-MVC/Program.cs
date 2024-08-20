@@ -107,21 +107,11 @@ app.Use(async (context, next) =>
 
 app.UseSession();
 
-app.UseMiddleware<UrlRewriteMiddleware>();
-
 app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "brands",
-        pattern: "brands/{name?}",
-        defaults: new { controller = "Brand", action = "GetByName" });
-});
 
 app.MapControllerRoute(
     name: "areas",

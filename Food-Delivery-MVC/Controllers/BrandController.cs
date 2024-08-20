@@ -10,14 +10,14 @@ namespace Food_Delivery_MVC.Controllers
         {
         }
 
-        public async Task<IActionResult> GetByName(string name)
+        [Route("/brands/{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getAllByBrandName?brandName={name}");
+            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getAllByBrandId?brandId={id}");
             responseMessage.EnsureSuccessStatusCode();
 
             var data = await responseMessage.Content.ReadAsStringAsync();
 
-            ViewBag.BrandName = name;
             return View(JsonConvert.DeserializeObject<IEnumerable<RestaurantVM>>(data));
         }
     }

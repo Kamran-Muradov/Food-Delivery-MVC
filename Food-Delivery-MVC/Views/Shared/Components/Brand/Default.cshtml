@@ -9,7 +9,7 @@
             <div class="owl-stage">
                 @foreach (var brand in Model)
                 {
-                    <a class="owl-item card border-0 shadow" asp-controller="Brand" asp-action="GetByName" asp-route-name="@brand.Name">
+                    <a class="owl-item card border-0 shadow" asp-controller="Brand" asp-action="GetById" asp-route-id="@brand.Id">
                         <img class="card-img-top" src="@brand.Logo" style="height: 140px" alt="Burgers &amp; Fries">
                         <div class="card-body py-4 text-center">
                             <h3 class="h5 mt-1">@brand.Name</h3>

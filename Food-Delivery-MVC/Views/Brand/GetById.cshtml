@@ -6,7 +6,7 @@
     <div class="container pt-2 pb-3 pt-lg-3 pb-lg-4">
         <div class="d-lg-flex justify-content-between pb-3">
             <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
-                <h1 class="h3 text-light mb-0">@ViewBag.BrandName</h1>
+                <h1 class="h3 text-light mb-0">@Model.FirstOrDefault().Brand</h1>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                             <div class="product-price"><span class="text-accent">$@item.DeliveryFee</span></div>
                             <div>
                                 <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
-                                <span class="text-dark">@item.AverageRating (@item.ReviewCount)</span>
+                                <span class="text-dark">@item.AverageRating.ToString("F1") (@item.ReviewCount)</span>
                             </div>
                         </div>
                     </div>

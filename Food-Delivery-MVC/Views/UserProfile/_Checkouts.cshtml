@@ -1,70 +1,56 @@
 ﻿@model IEnumerable<CheckoutVM>
 <!-- Orders list-->
-<div class="table-responsive fs-md mb-4">
-    <table class="table table-hover mb-0">
-        <thead>
-            <tr>
-                <th>Date Purchased</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Restaurant</th>
-                <th>Review Operations</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var checkout in Model)
-            {
+@if (Model.Any())
+{
+    <div class="table-responsive fs-md mb-4">
+        <table class="table table-hover mb-0">
+            <thead>
                 <tr>
-                    <td class="py-3">@checkout.CreatedDate</td>
-                    <td class="py-3"><span class="badge bg-info m-0">@checkout.Status</span></td>
-                    <td class="py-3">$@checkout.TotalPrice</td>
-                    <td class="py-3">@checkout.Restaurant</td>
-                    <td>
-                        <a data-checkoutId="@checkout.Id" 
-                           class="btn btn-outline-primary toggle-create @((checkout.Status != "Delivered" || checkout.Review != null ) ? "d-none" : "")" 
-                           href="#review-create-modal" 
-                           data-bs-toggle="modal">
-                            Add review
-                        </a>
-                    </td>
+                    <th>Date Purchased</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Restaurant</th>
+                    <th>Review Operations</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var checkout in Model)
+                {
+                    <tr>
+                        <td class="py-3">@checkout.CreatedDate</td>
+                        <td class="py-3"><span class="badge bg-info m-0">@checkout.Status</span></td>
+                        <td class="py-3">$@checkout.TotalPrice</td>
+                        <td class="py-3">@checkout.Restaurant</td>
+                        <td>
+                            @if (checkout.Status == "Delivered" && checkout.Review == null)
+                            {
+                                <a data-checkoutId="@checkout.Id"
+                                   class="btn btn-outline-primary toggle-create"
+                                   href="#review-create-modal"
+                                   data-bs-toggle="modal">
+                                    Add review
+                                </a>
+                            }
+                            else if (checkout.Review != null)
+                            {
+                                <button 
+                                   class="btn btn-outline-primary" disabled="">
+                                    Your review was submitted
+                                </button>
+                            }
 
-    @* <div class="modal fade" id="review-create-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-secondary">
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-4">
-                    <span class="text-danger signin-error"></span>
-                    <form data-checkoutId="0" autocomplete="off" id="review-create" class="needs-validation fade show active">
-                        <div class="rating text-center d-block mb-3">
-                            <input type="radio" id="star5" name="rating" value="5" />
-                            <label for="star5">5 stars</label>
-                            <input type="radio" id="star4" name="rating" value="4" />
-                            <label for="star4">4 stars</label>
-                            <input type="radio" id="star3" name="rating" value="3" />
-                            <label for="star3">3 stars</label>
-                            <input type="radio" id="star2" name="rating" value="2" />
-                            <label for="star2">2 stars</label>
-                            <input type="radio" id="star1" name="rating" value="1" />
-                            <label for="star1">1 star</label>
-                        </div>
-                        <div class="mb-3 mt-5">
-                            <label class="form-label" for="comment">Add Review</label>
-                            <textarea id="comment" class="form-control"></textarea>
-                        </div>
-                        <button id="create-btn" class="btn btn-primary btn-shadow d-block w-100" type="submit">Submit</button>
-                        <button id="loading-btn" class="btn btn-primary btn-shadow d-block w-100 d-none" type="button" disabled>
-                            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                            <span class="sr-only">Loading...</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="row justify-content-center pt-lg-4 text-center">
+        <div class="col-lg-5 col-md-7 col-sm-9">
+            <h1 class="h3">Your don't have any orders </h1>
         </div>
-    </div> *@
-</div>
+    </div>
+}

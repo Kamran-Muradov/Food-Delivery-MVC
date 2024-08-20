@@ -163,12 +163,12 @@
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="MenuVariant" asp-action="Index">
                                         Menu Variants
                                     </a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Tag" asp-action="Index">
-                                        Tags
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="VariantType" asp-action="Index">
+                                        Variant types
                                     </a>
                                     @if (User.IsInRole("SuperAdmin"))
                                     {
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Account" asp-action="Index">
                                             Users
                                         </a>
                                     }
@@ -200,6 +200,9 @@
                                     </a>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="City" asp-action="Index">
                                         Cities
+                                    </a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Tag" asp-action="Index">
+                                        Tags
                                     </a>
                                 </div>
                             </div>

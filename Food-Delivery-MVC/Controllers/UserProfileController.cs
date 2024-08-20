@@ -7,10 +7,12 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using Food_Delivery_MVC.Helpers.Constants;
 using Food_Delivery_MVC.ViewModels.UI.Favourites;
 
 namespace Food_Delivery_MVC.Controllers
 {
+    [Authorize]
     public class UserProfileController : BaseController
     {
         public UserProfileController(HttpClient httpClient) : base(httpClient)
@@ -18,7 +20,6 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
@@ -28,12 +29,16 @@ namespace Food_Delivery_MVC.Controllers
             responseMessage.EnsureSuccessStatusCode();
 
             string data = await responseMessage.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<UserVM>(data);
+            if (model.ProfilePicture == DefaultProfilePic.Url)
+            {
+                model.IsPictureDefault = true;
+            }
 
-            return View(JsonConvert.DeserializeObject<UserVM>(data));
+            return View(model);
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Checkouts()
         {
             string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
@@ -48,13 +53,10 @@ namespace Food_Delivery_MVC.Controllers
 
             string data = await responseMessage.Content.ReadAsStringAsync();
 
-            var deserializeObject = JsonConvert.DeserializeObject<IEnumerable<CheckoutVM>>(data);
-
             return PartialView("_Checkouts", JsonConvert.DeserializeObject<IEnumerable<CheckoutVM>>(data));
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> ProfileInfo()
         {
             string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
@@ -65,11 +67,16 @@ namespace Food_Delivery_MVC.Controllers
 
             string data = await responseMessage.Content.ReadAsStringAsync();
 
-            return PartialView("_ProfileInfo", JsonConvert.DeserializeObject<UserVM>(data));
+            var model = JsonConvert.DeserializeObject<UserVM>(data);
+            if (model.ProfilePicture == DefaultProfilePic.Url)
+            {
+                model.IsPictureDefault = true;
+            }
+
+            return PartialView("_ProfileInfo", model);
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Edit(UserVM request)
         {
             if (request is null) return BadRequest();
@@ -114,7 +121,6 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> EditPassword([FromBody] PasswordEditVM request)
         {
             if (request is null) return BadRequest();
@@ -152,7 +158,6 @@ namespace Food_Delivery_MVC.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> UploadProfilePicture(string userId, IFormFile profilePicture)
         {
             if (profilePicture is null || userId is null) return BadRequest();
@@ -177,6 +182,30 @@ namespace Food_Delivery_MVC.Controllers
 
             Response.Cookies.Append("ProfilePic", model.Url, new CookieOptions
             {
+                Expires = DateTime.UtcNow.AddDays(30),
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax
+            });
+
+            return Ok(model);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProfilePicture([FromQuery] string userId)
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
+            HttpResponseMessage responseMessage = await HttpClient.DeleteAsync($"account/deleteProfilePicture?userId={userId}");
+            responseMessage.EnsureSuccessStatusCode();
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+
+            var model = JsonConvert.DeserializeObject<UserImageVM>(responseData);
+
+            Response.Cookies.Delete("ProfilePic");
+
+            Response.Cookies.Append("ProfilePic", model.Url, new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(30),
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Lax

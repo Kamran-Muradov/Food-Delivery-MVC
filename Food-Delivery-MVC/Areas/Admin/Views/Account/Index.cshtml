@@ -1,0 +1,129 @@
+﻿@model PaginationResponse<UserVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header d-print-none mb-5">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <h2 class="page-title">
+                   Users
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="table-area">
+    <div class="card">
+        <div class="card-body">
+            <div id="table-default" class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Profile picture</th>
+                            <th>Full name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-tbody">
+                        @foreach (var item in Model.Datas)
+                        {
+                            <tr data-id="@item.Id">
+                                <td class="sort-name">
+                                    <img data-id="@item.Id" src="@item.ProfilePicture" style="width:90px;height:54px" alt="" />
+                                </td>
+                                <td class="sort-name">@item.FullName</td>
+                                <td class="sort-name">@item.UserName</td>
+                                <td class="sort-name">@item.Email</td>
+                                <td>
+                                    <a class="btn btn-info btn-icon detail" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-detail">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
+                                    </a>
+                                    <a class="btn btn-warning" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                        Edit roles
+                                    </a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* Modal-Edit *@
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form data-id="" id="form-edit" class="data-create" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3 roles">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="edit-btn" type="submit" href="#" class="btn btn-warning ms-auto ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                            Edit
+                        </button>
+                        <button id="loading-edit-btn" class="btn btn-warning ms-auto d-none" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    @* Modal-Detail *@
+    <div class="modal modal-blur fade" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content container">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">Detailed View</h5>
+                </div>
+                <div class="row images-area">
+                </div>
+                <div class="data-area">
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination-area d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item disabled prev">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPage; i++)
+                {
+                    <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
+                }
+                <li class="page-item">
+                    <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+
+@section js {
+    <script src="~/admin/dist/js/account.js"></script>
+}
+

@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer mt-3">
-                                <button data-id="@Model.Id" type="button" class="btn btn-primary" id="cropButton">Crop</button>
+                                <button data-id="@Model.Id" type="button" class="btn btn-primary" id="cropButton">Save profile picture</button>
                                 <button id="loading-btn" class="btn btn-primary btn-shadow d-none" type="button" disabled>
                                     <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                     <span class="sr-only">Loading...</span>
@@ -103,17 +103,24 @@
                                     <input class="btn btn-light btn-shadow btn-sm mb-2 form-control mt-2" type="file" name="profilePic" id="inputImage" accept="image/*"/>
                             </div>
                             <img id="imagePreview" src="" alt="Profile Picture Preview" style="display:none; max-width: 100%;"/>
-                            <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image.</div>
+                            @if (Model.IsPictureDefault)
+                            {
+                                <button disabled="" id="delete-picture" data-id="@Model.Id" class="btn btn-link px-0 text-danger mt-3" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Delete profile picture</span></button>
+                            }
+                            else
+                            {
+                                <button id="delete-picture" data-id="@Model.Id" class="btn btn-link px-0 text-danger mt-3" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Delete profile picture</span></button>
+                            }
                         </div>
                     </div>
                 </div>
 
-                <form id="from-update" method="post" asp-action="Edit">
+                <form id="form-update" method="post" asp-action="Edit">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="row gx-4 gy-3">
                         <div class="col-sm-12">
                             <label class="form-label" for="account-email">Email Address</label>
-                            <input asp-for="Email" class="form-control" type="email" id="account-email" value="@Model.Email" disabled="">
+                            <input asp-for="Email" class="form-control" type="email" name="email" id="account-email" value="@Model.Email" disabled="">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="fullname">Full name</label>

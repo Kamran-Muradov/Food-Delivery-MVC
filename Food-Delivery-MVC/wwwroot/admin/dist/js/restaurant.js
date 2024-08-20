@@ -826,7 +826,7 @@
                     <p class="mb-0 font-weight-light"><strong>Minimum delivery time: </strong>${response.minDeliveryTime}</p>
                 </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Rating: </strong>${response.averageRating}</p>
+                    <p class="mb-0 font-weight-light"><strong>Rating: </strong>${response.averageRating.toFixed(2)}</p>
                 </div>
                   <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Tags: </strong>${response.tags}</p>
@@ -845,14 +845,6 @@
                 </div>`
 
                 $('#table-area #modal-detail .data-area').append(dataHtml);
-
-                //let categoryHtml = "";
-
-                //$.each(response.categories, function (index, item) {
-
-                //    categoryHtml += `<li class="list-group-item">${item}</li>`
-                //})
-                //$('#table-area #modal-detail ul').append(categoryHtml);
             }
         });
     })

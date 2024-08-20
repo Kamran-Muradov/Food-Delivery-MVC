@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="modal-footer mt-3">
-                <button data-id="@Model.Id" type="button" class="btn btn-primary" id="cropButton">Crop</button>
+                <button data-id="@Model.Id" type="button" class="btn btn-primary" id="cropButton">Save profile picture</button>
                 <button id="loading-btn" class="btn btn-primary btn-shadow d-none" type="button" disabled>
                     <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                     <span class="sr-only">Loading...</span>
@@ -25,14 +25,21 @@
 
 <div class="bg-secondary rounded-3 p-4 mb-4">
     <div class="d-flex align-items-center">
-        <img id="profile-pic" class="rounded" src="@Model.ProfilePicture" width="90" alt="Profile pic">   
+        <img id="profile-pic" class="rounded" src="@Model.ProfilePicture" width="90" alt="Profile pic">
         <div class="ps-3">
             <div class="col-7">
                 <label for="inputImage">Change profile picture</label>
-                <input class="btn btn-light btn-shadow btn-sm mb-2 form-control mt-2" type="file" name="profilePic" id="inputImage" accept="image/*"/>
+                <input class="btn btn-light btn-shadow btn-sm mb-2 form-control mt-2" type="file" name="profilePic" id="inputImage" accept="image/*" />
             </div>
-            <img id="imagePreview" src="" alt="Profile Picture Preview" style="display:none; max-width: 100%;"/>
-            <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image.</div>
+            <img id="imagePreview" src="" alt="Profile Picture Preview" style="display:none; max-width: 100%;" />
+            @if (Model.IsPictureDefault)
+            {
+                <button disabled="" id="delete-picture" data-id="@Model.Id" class="btn btn-link px-0 text-danger mt-3" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Delete profile picture</span></button>
+            }
+            else
+            {
+                <button id="delete-picture" data-id="@Model.Id" class="btn btn-link px-0 text-danger mt-3" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Delete profile picture</span></button>
+            }
         </div>
     </div>
 </div>

@@ -15,7 +15,7 @@
         {
             <div class="col-md-4 col-sm-6 mb-grid-gutter">
                 <a class="card product-card h-100 border-0 shadow pb-2" asp-action="Detail" asp-route-id="@item.Id">
-                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium" data-bs-toggle="tooltip" title="Average meal cost">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
+                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
                     <div class="card-body text-center pt-3 pb-4">
                         <h3 class="h5 mb-2">@item.Name</h3>
                         <div class="fs-ms text-muted">@string.Join(", ", item.Tags.Select(m => m.Name))</div>
@@ -23,7 +23,7 @@
                             <div class="product-price"><span class="text-accent">$@item.MinimumOrder</span></div>
                             <div>
                                 <i class="fa-solid fa-star" style="color: #fe9f41;"></i>
-                                <span class="text-dark">@item.AverageRating</span>
+                                <span class="text-dark">@item.AverageRating.ToString("F1")</span>
                             </div>
                         </div>
                     </div>

@@ -8,14 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\admin\dist\js\account.js" />
     <Content Remove="wwwroot\js\custom.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\admin\dist\js\account.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\custom.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\admin\dist\js\account.js" />
     <None Include="wwwroot\js\custom.js" />
   </ItemGroup>
 

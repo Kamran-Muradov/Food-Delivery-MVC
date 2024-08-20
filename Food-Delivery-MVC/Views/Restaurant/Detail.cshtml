@@ -39,7 +39,7 @@
         See more information
     </a>
     <i class="fa-solid fa-star" style="color: #fe9f41;" aria-hidden="true"></i>
-    <span>@Model.AverageRating (@Model.Reviews.Count())</span>
+    <span>@Model.AverageRating.ToString("F1") (@Model.Reviews.Count())</span>
     <div id="favourites" data-restaurantId="@Model.Id" class="mx-4" style="float:right">
         @if (!User.Identity.IsAuthenticated)
         {
