@@ -45,7 +45,7 @@
     $("#signin-tab").validate({
         ignore: [],
 
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
         rules: {
             fullname: {
                 required: true,
@@ -130,7 +130,7 @@
     })
 
     $("#signup-tab").validate({
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
 
         rules: {
             ignore: [],
@@ -253,7 +253,7 @@
     });
 
     $("#forgot-password-tab").validate({
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
         rules: {
             emailorusername: {
                 required: true,
@@ -269,7 +269,7 @@
     });
 
     $("#reset-password-tab").validate({
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
         rules: {
             newpassword: {
                 required: true,
@@ -313,7 +313,7 @@
     })
 
     $("#form-update").validate({
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
         rules: {
             ignore: [],
             fullname: {
@@ -347,7 +347,7 @@
     });
 
     $("#password-tab").validate({
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
         rules: {
             ignore: [],
             currentPassword: {

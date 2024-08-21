@@ -1,4 +1,5 @@
-﻿using Food_Delivery_MVC.Helpers;
+﻿using System.Net;
+using Food_Delivery_MVC.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace Food_Delivery_MVC.Controllers
 
             var comments = Request.Form["checkoutComments"];
             HttpContext.Session.SetString("checkoutComments", comments);
-             
+
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
             string authToken = Request.Cookies["JWTToken"];
@@ -54,7 +55,10 @@ namespace Food_Delivery_MVC.Controllers
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
             HttpResponseMessage responseMessage = await HttpClient.GetAsync($"payment/checkPaymentStatus?sessionId={sessionId}");
-            responseMessage.EnsureSuccessStatusCode();
+            if (responseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                return RedirectToAction(nameof(PaymentCancel));
+            }
 
             string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
             var comments = HttpContext.Session.GetString("checkoutComments");
@@ -66,7 +70,10 @@ namespace Food_Delivery_MVC.Controllers
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
             responseMessage = await HttpClient.PostAsync("checkout/create", content);
-            responseMessage.EnsureSuccessStatusCode();
+            if (responseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                return RedirectToAction(nameof(PaymentCancel));
+            }
 
             HttpContext.Session.Remove("checkoutComments");
 

@@ -3,120 +3,180 @@
     ViewData["Title"] = "Index";
 }
 
-<div id="basket-area" class="container pt-4 pb-3 py-sm-4 @(Model.Count == 0 ? "d-none" : "")">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
-            <li class="breadcrumb-item"><a class="text-nowrap" href="index.html"><i class="ci-home"></i>Home</a></li>
-            <li class="breadcrumb-item text-nowrap active" aria-current="page">Cart</li>
-        </ol>
-    </nav>
-    <div class="rounded-3 shadow-lg mt-4 mb-5">
-        <ul class="nav nav-tabs nav-justified mb-4">
-            <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="#">Your order</a></li>
-        </ul>
-        <div class="px-3 px-sm-4 px-xl-5 pt-1 pb-4 pb-sm-5">
-            <div class="row">
-                <!-- Items in cart-->
-                <div class="col-lg-8 col-md-7 pt-sm-2">
-                    @foreach (var item in Model)
-                    {
-                        <!-- Item-->
-                        <div class="d-sm-flex justify-content-between align-items-center mt-3 mb-4 pb-3 border-bottom basket-item">
-                            <div class="d-block d-sm-flex align-items-center text-center text-sm-start">
-                                <a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#"><img src="@item.Image" width="120" alt="Pizza"></a>
-                                <div class="pt-2">
-                                    <h3 class="product-title fs-base mb-2"><a href="#">@item.Name</a></h3>
-                                    <div class="fs-sm"><span class="text-muted me-2">Restaurant:</span>@item.Restaurant</div>
-                                    @foreach (var menuVariant in item.BasketVariants)
+<section id="basket-area">
+    @if (Model.Any())
+    {
+        <div class="container pt-4 pb-3 py-sm-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
+                    <li class="breadcrumb-item"><a class="text-nowrap" asp-controller="Home" asp-action="Index"><i class="ci-home"></i>Home</a></li>
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">Cart</li>
+                </ol>
+            </nav>
+            <div class="rounded-3 shadow-lg mt-4 mb-5">
+                <ul class="nav nav-tabs nav-justified mb-4">
+                    <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="#">Your order</a></li>
+                </ul>
+                <div class="px-3 px-sm-4 px-xl-5 pt-1 pb-4 pb-sm-5">
+                    <div class="row">
+                        <!-- Items in cart-->
+                        <div class="col-lg-8 col-md-7 pt-sm-2">
+                            @foreach (var item in Model)
+                            {
+                                <!-- Item-->
+                                <div class="d-sm-flex justify-content-between align-items-center mt-3 mb-4 pb-3 border-bottom basket-item">
+                                    <div class="d-block d-sm-flex align-items-center text-center text-sm-start">
+                                        <a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#"><img src="@item.Image" width="120" alt="Pizza"></a>
+                                        <div class="pt-2">
+                                            <h3 class="product-title fs-base mb-2"><a href="#">@item.Name</a></h3>
+                                            <div class="fs-sm"><span class="text-muted me-2">Restaurant:</span>@item.Restaurant</div>
+                                            @foreach (var menuVariant in item.BasketVariants)
+                                            {
+                                                <div class="fs-sm"><span class="text-muted me-2">@menuVariant.Key:</span>@string.Join(", ", menuVariant.Value)</div>
+                                            }
+                                            <div class="price-area">
+                                                <div class="fs-lg text-accent pt-2 d-inline-block">$<span class="price">@(item.DiscountPrice ?? item.Price)</span></div>
+                                                @if (item.DiscountPrice != null)
+                                                {
+                                                    <div style="color:lightslategray;text-decoration:line-through" class="fs-lg pt-2 d-inline-block">$<span class="old-price">@item.Price</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem;">
+                                        @* <label class="form-label">Quantity</label>  *@
+                                        <div class="count-area">
+                                            <button id="decrement" class="decrement">-</button>
+                                            <input data-menuId="@item.MenuId" type="number" id="basket-count" class="basket-count" value="@item.Count" readonly="">
+                                            <button id="increment" class="increment">+</button>
+                                        </div>
+                                        <button data-menuId="@item.MenuId" class="btn btn-link px-0 text-danger mt-3 basket-delete" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- Sidebar-->
+                        <div class="col-lg-4 col-md-5 pt-3 pt-sm-4">
+                            <div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
+                                <div class="border-bottom py-2 d-flex justify-content-between align-items-center">
+                                    <p class="mb-0 pb-1">Item Subtotal</p>
+                                    <div id="subtotal-area">
+                                        <p id="total-amount" class="fw-normal mb-0 d-inline-block">$<span>@ViewBag.TotalAmount</span></p>
+                                        @if (Model.First().DiscountPrice != null)
+                                        {
+                                            <p id="old-amount" style="color:lightslategray;text-decoration:line-through" class="fw-normal mb-0 d-inline-block">$<span>@Model.Sum(bi => bi.Price)</span></p>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="border-bottom py-2 d-flex justify-content-between align-items-center">
+                                    <p class="mb-0 pb-1">Delivery fee</p>
+                                    <p class="fw-normal mb-0">$@Model.FirstOrDefault()?.DeliveryFee</p>
+                                </div>
+                                <div id="total-price-area" class="text-center mb-4 pb-3 mt-4 border-bottom">
+                                    <h3 class="h5 mb-3 pb-1">Total</h3>
+                                    <h4 id="total-price" class="fw-normal d-inline-block">$<span>@ViewBag.TotalPrice</span></h4>
+                                    @if (Model.FirstOrDefault()?.DiscountPrice != null)
                                     {
-                                        <div class="fs-sm"><span class="text-muted me-2">@menuVariant.Key:</span>@string.Join(", ", menuVariant.Value)</div>
+                                        <h4 id="old-price" style="color:lightslategray;text-decoration:line-through" class="fw-normal d-inline-block">$<span>@(Model.Sum(bi => bi.Price) + Model.First().DeliveryFee)</span></h4>
                                     }
-                                    <div class="fs-lg text-accent pt-2 price">$@item.Price</div>
                                 </div>
-                            </div>
-                            <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem;">
-                                @* <label class="form-label">Quantity</label>  *@
-                                <div class="count-area">
-                                    <button id="decrement" class="decrement">-</button>
-                                    <input data-menuId="@item.MenuId" type="number" id="basket-count" class="basket-count" value="@item.Count" readonly="">
-                                    <button id="increment" class="increment">+</button>
-                                </div>
-                                <button data-menuId="@item.MenuId" class="btn btn-link px-0 text-danger mt-3 basket-delete" type="button"><i class="ci-close-circle me-2"></i><span class="fs-sm">Remove</span></button>
+
+                                <h3 class="h6 mb-4">Apply promo code</h3>
+                                <form autocomplete="off" id="form-code" method="post" novalidate="">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        @if (Model.FirstOrDefault()?.AppliedPromoCode != null)
+                                        {
+                                            <div class="mb-3">
+                                                <input disabled="" value="@Model.First().AppliedPromoCode" id="promoCode" name="promoCode" class="form-control" type="text" placeholder="Promo code" required="">
+                                                <label id="validate-code" class="invalid-feedback"></label>
+                                            </div>
+                                            <div id="btn-area">
+                                                <button id="remove-code-btn" class="btn btn-outline-warning d-block w-100" type="button">Remove promo code</button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="mb-3">
+                                                <input id="promoCode" name="promoCode" class="form-control" type="text" placeholder="Promo code" required="">
+                                                <label id="validate-code" class="invalid-feedback"></label>
+                                            </div>
+                                            <div id="btn-area">
+                                                <button id="promo-code-btn" class="btn btn-outline-primary d-block w-100" type="submit">Apply promo code</button>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="mb-3">
+                                            <input id="promoCode" name="promoCode" class="form-control" type="text" placeholder="Promo code" required="">
+                                            <label id="validate-code" class="invalid-feedback"></label>
+                                        </div>
+                                        <a class="btn btn-outline-primary d-block w-100" href="#signin-modal" data-bs-toggle="modal">Apply promo code</a>
+                                    }
+                                    <p>21ae97</p>
+                                </form>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <form class="mt-3" method="post" asp-controller="Payment" asp-action="CreateCheckoutSession">
+                                        <div class="mb-4">
+                                            <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
+                                            <textarea class="form-control" rows="4" id="order-comments" name="checkoutComments"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="food-delivery-checkout.html">
+                                            <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <div class="mb-4">
+                                        <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
+                                        <textarea class="form-control" rows="4" id="order-comments"></textarea>
+                                    </div>
+                                    <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="#signin-modal" data-bs-toggle="modal">
+                                        <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
+                                    </a>
+                                }
                             </div>
                         </div>
-                    }
-                </div>
-                <!-- Sidebar-->
-                <div class="col-lg-4 col-md-5 pt-3 pt-sm-4">
-                    <div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
-                        <div class="text-center mb-4 pb-3 border-bottom">
-                            <h3 class="h5 mb-3 pb-1">Total</h3>
-                            <h4 id="total-price" class="fw-normal">$@ViewBag.TotalPrice</h4>
-                        </div>
-                       
-                        <h3 class="h6 mb-4">Apply promo code</h3>
-                        <form class="needs-validation" method="post" novalidate="">
-                            <div class="mb-3">
-                                <input class="form-control" type="text" placeholder="Promo code" required="">
-                                <div class="invalid-feedback">Please provide promo code.</div>
-                            </div>
-                            <button class="btn btn-outline-primary d-block w-100" type="submit">Apply promo code</button>
-                        </form>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <form class="mt-3" method="post" asp-controller="Payment" asp-action="CreateCheckoutSession">
-                                <div class="mb-4">
-                                    <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
-                                    <textarea class="form-control" rows="4" id="order-comments" name="checkoutComments"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="food-delivery-checkout.html">
-                                    <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <div class="mb-4">
-                                <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
-                                <textarea class="form-control" rows="4" id="order-comments"></textarea>
-                            </div>
-                            <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="#signin-modal" data-bs-toggle="modal">
-                                <i class="ci-card fs-lg me-2"></i>Proceed to Checkout
-                            </a>
-                        }
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div id="empty-basket" class="container py-5 mb-lg-3 @(Model.Count != 0 ? "d-none" : "")">
-    <div class="row justify-content-center pt-lg-4 text-center">
-        <div class="col-lg-5 col-md-7 col-sm-9">
-            <img class="d-block mx-auto mb-5" src="https://res.cloudinary.com/duta72kmn/image/upload/v1723994092/404_yqjznn.png" width="340" alt="404 Error">
-            <h1 class="h3">Your cart is empty</h1>
-        </div>
-    </div>
-    <div class="row justify-content-center mt-3">
-        <div class="col-xl-8 col-lg-10">
-            <div class="row justify-content-center">
-                <div class="col-sm-4 mb-3">
-                    <a class="card h-100 border-0 shadow-sm" asp-controller="Home" asp-action="Index">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <i class="ci-home text-primary h4 mb-0"></i>
-                                <div class="ps-3">
-                                    <h5 class="fs-sm mb-0">Homepage</h5><span class="text-muted fs-ms">Return to homepage</span>
+    }
+    else
+    {
+        <div id="empty-basket" class="container py-5 mb-lg-3">
+            <div class="row justify-content-center pt-lg-4 text-center">
+                <div class="col-lg-5 col-md-7 col-sm-9">
+                    <img class="d-block mx-auto mb-5" src="https://res.cloudinary.com/duta72kmn/image/upload/v1723994092/404_yqjznn.png" width="340" alt="404 Error">
+                    <h1 class="h3">Your cart is empty</h1>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <div class="col-xl-8 col-lg-10">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-4 mb-3">
+                            <a class="card h-100 border-0 shadow-sm" asp-controller="Home" asp-action="Index">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <i class="ci-home text-primary h4 mb-0"></i>
+                                        <div class="ps-3">
+                                            <h5 class="fs-sm mb-0">Homepage</h5><span class="text-muted fs-ms">Return to homepage</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    }
+</section>
+
+
 
 @section js {
     <script src="~/js/basket.js"></script>

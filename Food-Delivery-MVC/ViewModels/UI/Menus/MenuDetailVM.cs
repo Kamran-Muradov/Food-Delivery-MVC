@@ -11,6 +11,7 @@ namespace Food_Delivery_MVC.ViewModels.UI.Menus
         public string Image { get; set; }
         public int RestaurantId { get; set; }
         public string Restaurant { get; set; }
+        public decimal DeliveryFee { get; set; }
         public Dictionary<string, IEnumerable<MenuVariantVM>> MenuVariants { get; set; }
     }
 }

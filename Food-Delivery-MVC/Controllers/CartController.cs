@@ -1,10 +1,13 @@
-﻿using System.Net;
-using System.Security.Claims;
-using System.Text;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.UI.Basket;
 using Food_Delivery_MVC.ViewModels.UI.Menus;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 
 namespace Food_Delivery_MVC.Controllers
 {
@@ -25,7 +28,9 @@ namespace Food_Delivery_MVC.Controllers
 
                 model = (List<BasketDetailVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketDetailVM>>($"basketItem/getAllByUserId?userId={userId}");
 
-                ViewBag.TotalPrice = model.Sum(m => m.Price);
+                ViewBag.TotalAmount = model.FirstOrDefault()?.DiscountPrice != null ? model.Sum(m => m.DiscountPrice) : model.Sum(m => m.Price);
+
+                ViewBag.TotalPrice = ViewBag.TotalAmount + model.FirstOrDefault()?.DeliveryFee;
 
                 return View(model);
             }
@@ -45,13 +50,17 @@ namespace Food_Delivery_MVC.Controllers
                     Count = item.Count,
                     BasketVariants = item.BasketVariants,
                     Price = item.Price,
+                    DiscountPrice = item.DiscountPrice,
                     Name = menu.Name,
                     Image = menu.Image,
+                    DeliveryFee = item.DeliveryFee,
                     Restaurant = menu.Restaurant
                 });
             }
 
-            ViewBag.TotalPrice = model.Sum(m => m.Price);
+            ViewBag.TotalAmount = (model.FirstOrDefault()?.DiscountPrice != null ? model.Sum(m => m.DiscountPrice) : model.Sum(m => m.Price)) ?? 0;
+
+            ViewBag.TotalPrice = ViewBag.TotalAmount + model.FirstOrDefault()?.DeliveryFee;
 
             return View(model);
         }
@@ -63,6 +72,14 @@ namespace Food_Delivery_MVC.Controllers
 
             List<BasketVM> basketItems;
             BasketVM basketItem;
+
+            decimal? discountAmount;
+            decimal? oldAmount;
+            decimal? discountPrice;
+            decimal? oldPrice;
+            decimal newItemPrice;
+            decimal? newItemDiscountPrice;
+            int basketCount;
 
             if (User.Identity.IsAuthenticated)
             {
@@ -84,6 +101,14 @@ namespace Food_Delivery_MVC.Controllers
 
                 basketItem = basketItems.FirstOrDefault(bi => bi.MenuId == menuId);
                 if (basketItem == null) return NotFound();
+
+                discountAmount = basketItems.Sum(bi => bi.DiscountPrice);
+                oldAmount = basketItems.Sum(bi => bi.Price);
+                discountPrice = discountAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                oldPrice = oldAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                basketCount = basketItems.Sum(bi => bi.Count);
+                newItemPrice = basketItem.Price;
+                newItemDiscountPrice = basketItem.DiscountPrice;
             }
             else
             {
@@ -108,13 +133,25 @@ namespace Food_Delivery_MVC.Controllers
                 Response.Cookies.Delete("basket");
 
                 Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItems));
+
+                discountAmount = basketItems.Sum(bi => bi.DiscountPrice);
+                oldAmount = basketItems.Sum(bi => bi.Price);
+                discountPrice = discountAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                oldPrice = oldAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                basketCount = basketItems.Sum(bi => bi.Count);
+                newItemPrice = basketItem.Price;
+                newItemDiscountPrice = basketItem.DiscountPrice;
             }
 
             return Ok(new
             {
-                NewPrice = basketItem.Price,
-                TotalPrice = basketItems.Sum(bi => bi.Price),
-                BasketCount = basketItems.Sum(bi => bi.Count)
+                discountAmount,
+                oldAmount,
+                basketCount,
+                oldPrice,
+                newItemPrice,
+                discountPrice,
+                newItemDiscountPrice
             });
         }
 
@@ -125,6 +162,12 @@ namespace Food_Delivery_MVC.Controllers
 
             List<BasketVM> basketItems;
 
+            decimal? discountAmount;
+            decimal? oldAmount;
+            decimal? discountPrice;
+            decimal? oldPrice;
+            int basketCount;
+
             if (User.Identity.IsAuthenticated)
             {
                 string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
@@ -133,6 +176,12 @@ namespace Food_Delivery_MVC.Controllers
                 responseMessage.EnsureSuccessStatusCode();
 
                 basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+
+                discountAmount = basketItems.Sum(bi => bi.DiscountPrice);
+                oldAmount = basketItems.Sum(bi => bi.Price);
+                discountPrice = discountAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                oldPrice = oldAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                basketCount = basketItems.Sum(bi => bi.Count);
 
             }
             else
@@ -157,9 +206,15 @@ namespace Food_Delivery_MVC.Controllers
                 {
                     Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItems));
                 }
+
+                discountAmount = basketItems.Sum(bi => bi.DiscountPrice);
+                oldAmount = basketItems.Sum(bi => bi.Price);
+                discountPrice = discountAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                oldPrice = oldAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+                basketCount = basketItems.Sum(bi => bi.Count);
             }
 
-            return Ok(new { TotalPrice = basketItems.Sum(bi => bi.Price), BasketCount = basketItems.Sum(bi => bi.Count) });
+            return Ok(new { discountAmount, discountPrice, oldAmount, oldPrice, basketCount });
         }
 
         [HttpPost]
@@ -208,6 +263,49 @@ namespace Food_Delivery_MVC.Controllers
             }
 
             return Ok(new { basketCount = basketItems.Sum(bi => bi.Count) });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ApplyPromoCode([FromQuery] string code)
+        {
+            if (code == null) return BadRequest();
+
+            string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+            string data = JsonConvert.SerializeObject(new { userId, code });
+            StringContent content = new(data, Encoding.UTF8, "application/json");
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
+
+            var responseMessage = await HttpClient.PostAsync("promoCode/applyToBasket", content);
+            responseMessage.EnsureSuccessStatusCode();
+
+            string responseData = await responseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<PromoCodeResponse>(responseData);
+
+            if (!response.Success) return BadRequest(response);
+
+            List<BasketVM> basketItems = (List<BasketVM>)await HttpClient.GetFromJsonAsync<IEnumerable<BasketVM>>($"basketItem/getAllByUserId?userId={userId}");
+
+            var discountAmount = basketItems.Sum(bi => bi.DiscountPrice);
+            var oldAmount = basketItems.Sum(bi => bi.Price);
+            var discountPrice = discountAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+            var oldPrice = oldAmount + basketItems.FirstOrDefault()?.DeliveryFee;
+
+            return Ok(new { discountAmount, discountPrice, oldAmount, oldPrice, response.Discount });
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteUserPromoCode()
+        {
+            string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
+
+            var responseMessage = await HttpClient.DeleteAsync($"promoCode/deleteUserPromoCode?userId={userId}");
+            responseMessage.EnsureSuccessStatusCode();
+
+            return Ok();
         }
     }
 }

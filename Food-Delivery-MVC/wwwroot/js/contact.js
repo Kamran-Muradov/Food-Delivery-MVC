@@ -1,7 +1,7 @@
 ﻿$(function () {
 
     $("#contact-create").validate({
-        errorClass: "my-error-class",
+        errorClass: "invalid-feedback",
 
         rules: {
             ignore: [],

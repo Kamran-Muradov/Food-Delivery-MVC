@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PromoCodeVMVC>
+
+
+<section id="coupon-area" class=" mb-5 position-relative">
+    <div class="container position-relative">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="pt-4 pt-sm-3 mb-5 d-inline-block">Special offers</h2>
+        </div>
+    </div>
+
+    <div class="position-relative">
+        <div class="container">
+            <div class="owl-carousel owl-theme owl-loaded">
+               @foreach (var promoCode in Model)
+               {
+                   <div class="item">
+                       <div class="data-layout-selected u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+                           <div class="u-layout">
+                               <div class="u-layout-row">
+                                   <div style="background-image:url('https://res.cloudinary.com/duta72kmn/image/upload/v1723212711/dng1fgiwhgvbeuyezku9.jpg')" class="u-container-style u-image u-layout-cell u-right-cell u-shape-rectangle u-size-35-lg u-size-35-xl u-size-60-md u-size-60-sm u-size-60-xs u-image-1" data-image-width="1355" data-image-height="1080">
+                                       <div class="u-container-layout u-valign-middle u-container-layout-1"></div>
+                                   </div>
+                                   <div class="u-align-left u-container-align-center u-container-align-left u-container-style u-layout-cell u-left-cell u-palette-2-base u-size-25-lg u-size-25-xl u-size-60-md u-size-60-sm u-size-60-xs u-layout-cell-2">
+                                       <div class="u-container-layout u-container-layout-2">
+                                           <h6 class="u-align-center u-custom-font u-font-montserrat u-text u-text-body-alt-color u-text-1">limited time offer</h6>
+                                           <h2 class="u-align-center u-custom-font u-font-montserrat u-text u-text-palette-3-base u-text-2">@promoCode.Discount% off</h2>
+                                           <div class="u-container-align-center u-container-style u-group u-image u-image-default u-shape-round u-image-2" data-image-width="1507" data-image-height="245">
+                                               <div class="u-container-layout u-valign-middle-xl u-valign-middle-xs u-container-layout-3">
+                                                   <p class="u-align-center u-custom-font u-font-oswald u-text u-text-3">
+                                                       <span style="font-weight: 700;">Use Code:</span> @promoCode.Code
+                                                   </p>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               }
+            </div>
+        </div>
+
+    </div>
+</section>
+
+

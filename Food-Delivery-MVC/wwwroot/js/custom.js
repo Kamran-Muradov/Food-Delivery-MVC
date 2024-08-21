@@ -50,19 +50,35 @@
         autoplayTimeout: 5000,
         margin: 30,
         stageContainer: true,
-        nav: false,
+        nav: false,  // Enable navigation
         responsive: {
             0: {
-                items: 1
+                items: 5
             },
             600: {
-                items: 6
+                items: 5
             },
             1000: {
                 items: 5
             }
         }
     })
+
+    $('#coupon-area .owl-carousel').owlCarousel({
+        center: true,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        margin: 30,
+        mouseDrag: false,
+        stageContainer: true,
+        nav: false,  // Enable navigation
+        navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"],
+        items: 2
+    })
+
+
+
     $(document).on('input', '#input-search', function (e) {
         let searchText = $(this).val().trim()
         let html = "";

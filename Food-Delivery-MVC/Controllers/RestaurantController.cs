@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using Food_Delivery_MVC.ViewModels.UI.Menus;
 
 namespace Food_Delivery_MVC.Controllers
 {
@@ -117,9 +118,9 @@ namespace Food_Delivery_MVC.Controllers
         public async Task<IActionResult> AddMenuToBasket([FromBody] BasketCreateVM request)
         {
             if (request == null) return BadRequest();
-            HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{request.MenuId}");
+            var menu = await HttpClient.GetFromJsonAsync<MenuDetailVM>($"menu/getById/{request.MenuId}");
 
-            if (responseMessage.StatusCode == HttpStatusCode.NoContent)
+            if (menu is null)
             {
                 return NotFound();
             }
@@ -135,7 +136,7 @@ namespace Food_Delivery_MVC.Controllers
 
                 StringContent content = new(data, Encoding.UTF8, "application/json");
 
-                responseMessage = await HttpClient.PostAsync("basketItem/create", content);
+                HttpResponseMessage responseMessage = await HttpClient.PostAsync("basketItem/create", content);
 
                 if (responseMessage.StatusCode == HttpStatusCode.Conflict)
                 {
@@ -168,6 +169,7 @@ namespace Food_Delivery_MVC.Controllers
                     MenuId = request.MenuId,
                     RestaurantId = request.RestaurantId,
                     Price = request.Price,
+                    DeliveryFee = menu.DeliveryFee,
                     BasketVariants = request.BasketVariants
                 });
             }
@@ -179,8 +181,8 @@ namespace Food_Delivery_MVC.Controllers
                     MenuId = request.MenuId,
                     RestaurantId = request.RestaurantId,
                     Price = request.Price,
+                    DeliveryFee = menu.DeliveryFee,
                     BasketVariants = request.BasketVariants
-
                 });
             }
 
