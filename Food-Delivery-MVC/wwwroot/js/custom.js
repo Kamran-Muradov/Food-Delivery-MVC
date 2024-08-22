@@ -26,7 +26,7 @@
 
     $('#slider-area .owl-carousel').owlCarousel({
         loop: true,
-        autoplay: true,
+        autoplay: false,
         autoplayTimeout: 5000,
         margin: 0,
         nav: false,
@@ -81,22 +81,28 @@
 
     $(document).on('input', '#input-search', function (e) {
         let searchText = $(this).val().trim()
-        let html = "";
-        $("#results-menu").nextAll().remove()
+        let html = ` 
+           <div id="results-menu" class="d-flex justify-content-between">
+                        <h4>Restaurants</h4>
+                        <a href="#" onclick="$(this).closest('form').submit()">See all</a>
+                    </div> `;
+        //$("#results-menu").nextAll().remove()
 
         if (searchText.length <= 0) {
-            $("#results-menu").addClass("d-none")
+            $("#search-area").html("")
+            $('#search-area').css('height', '')
         }
 
 
         if (searchText.length > 0) {
+            $('#search-area').css('height', '321px')
             axios.get(`https://localhost:7247/api/restaurant/search?searchText=${searchText}`)
                 .then(function (response) {
                     if (response.data.length > 0) {
-                        $("#results-menu").removeClass("d-none")
+                        //$("#results-menu").removeClass("d-none")
 
                         $.each(response.data.slice(0, 4), function (index, item) {
-                            let tagNames = item.tags.map(obj => obj.name).join(", ")
+                            let tagNames = item.tags.slice(0, 3).map(obj => obj.name).join(", ")
 
                             let mainImage = item.restaurantImages.filter(obj => obj.isMain == true)[0]
 
@@ -104,18 +110,22 @@
                             html += `<div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter">
                              <a href="/restaurant/detail/${item.id}">
                                 <div class="card product-card border pb-2"><img class="card-img-top" style="height:112px" src="${mainImage.url}" alt="Pizza">
-                                    <div class="card-body pt-1 pb-2">
+                                    <div class="card-body pt-1 pb-2 px-2">
                                         <h3 class="product-title fs-md">${item.name}</h3>
-                                        <p class="fs-ms text-muted">${tagNames}</p>
+                                        <p style="font-size:12px !important" class="text-muted">${tagNames}</p>
                                     </div>
                                 </div>
                                  </a>
                             </div> `;
                         })
-                        $("#results-menu").after(html)
+                        $("#search-area").html(html)
                         html = "";
                     } else {
-                        $("#results-menu").addClass("d-none")
+                        //$("#results-menu").addClass("d-none")
+                        //$('#search-area').css('height', '')
+                        $("#search-area").html(` <div class="d-flex justify-content-center align-items-center">
+                        <h1>No results found</h1>
+                    </div>`)
                     }
                 })
                 .catch(function (error) {

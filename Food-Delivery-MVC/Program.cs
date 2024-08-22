@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using Food_Delivery_MVC.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,10 +78,11 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Error/500"); // Default to 500 error page for unhandled exceptions
     app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 
 app.UseHttpsRedirection();

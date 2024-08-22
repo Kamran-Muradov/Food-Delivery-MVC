@@ -161,7 +161,7 @@ namespace Food_Delivery_MVC.Controllers
             {
                 var url = Url.Action(nameof(ResetPassword), "Account", new { userId = response.UserId, token = response.PasswordResetToken }, Request.Scheme, Request.Host.ToString());
 
-                string path = _env.GenerateFilePath("templates", "new-email.html");
+                string path = _env.GenerateFilePath("templates", "reset-password.html");
 
                 string htmlTemplate = await path.ReadFromFileAsync();
 

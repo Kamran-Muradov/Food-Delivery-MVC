@@ -2,6 +2,10 @@
     ViewData["Title"] = "Index";
 }
 
+@section css{
+    <link rel="stylesheet" media="screen" href="~/css/promoCode.css" />
+}
+
 <!-- Hero section-->
 @await Component.InvokeAsync("Slider")
 @await Component.InvokeAsync("PromoCode")

@@ -223,7 +223,7 @@ namespace Food_Delivery_MVC.Controllers
             if (request == null) return BadRequest();
             HttpResponseMessage responseMessage = await HttpClient.GetAsync($"menu/getById/{request.MenuId}");
 
-            if (responseMessage.StatusCode == HttpStatusCode.NoContent)
+            if (responseMessage.StatusCode == HttpStatusCode.NotFound)
             {
                 return NotFound();
             }

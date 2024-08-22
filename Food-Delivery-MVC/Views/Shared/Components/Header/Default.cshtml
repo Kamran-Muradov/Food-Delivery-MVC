@@ -94,14 +94,11 @@
     <!-- Search collapse-->
     <div class="search-box collapse" id="searchBox">
         <div class="container py-2">
-            <form method="get" asp-controller="Restaurant" asp-action="Search">
-                <i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3" style="left: 155px !important;top: 118px !important;"></i>
+            <form method="get" asp-controller="Restaurant" asp-action="Search" class="position-relative">
+                <i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3" style="top: 22px !important;"></i>
                 <input autocomplete="off" id="input-search" class="form-control rounded-start d-block px-5" type="text" name="searchText" placeholder="What do you need?">
-                <div id="test" class="row pt-3 w-75 m-auto">
-                    <div id="results-menu" class="d-flex justify-content-between d-none">
-                        <h4>Restaurants</h4>
-                        <a href="#" onclick="$(this).closest('form').submit()">See all</a>
-                    </div>
+                <div id="search-area" class="row pt-3 w-75 m-auto">
+                   
                 </div>
             </form>
         </div>

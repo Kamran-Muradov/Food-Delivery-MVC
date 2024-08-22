@@ -96,6 +96,11 @@ namespace Food_Delivery_MVC.Controllers
 
             HttpResponseMessage responseMessage = await HttpClient.GetAsync($"restaurant/getById/{id}");
 
+            if (responseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
             responseMessage.EnsureSuccessStatusCode();
 
             string data = await responseMessage.Content.ReadAsStringAsync();
