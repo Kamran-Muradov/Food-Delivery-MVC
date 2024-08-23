@@ -399,7 +399,7 @@
         }
     });
 
-     $(document).on('click', '#table-area .detail', function (e) {
+    $(document).on('click', '#table-area .detail', function (e) {
         e.preventDefault()
         let id = $(this).attr('data-id')
 
@@ -521,30 +521,32 @@
     function updatePagination(response) {
         pagination.empty()
 
-        let paginationHtml = `<li class="page-item disabled prev">
+        if (response.totalPage > 1) {
+            let paginationHtml = `<li class="page-item disabled prev">
                         <a class="page-link" href="#" tabindex="-1">Previous</a>
                     </li>`
 
 
-        for (let i = 1; i <= response.totalPage; i++) {
-            if (i == 1) {
-                paginationHtml += ` <li class="page-item active"><a class="page-link page-num" href="#">${i}</a></li>`
-            } else {
-                paginationHtml += ` <li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`
+            for (let i = 1; i <= response.totalPage; i++) {
+                if (i == 1) {
+                    paginationHtml += ` <li class="page-item active"><a class="page-link page-num" href="#">${i}</a></li>`
+                } else {
+                    paginationHtml += ` <li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`
+                }
             }
-        }
 
-        if (response.totalPage == 1) {
-            paginationHtml += `<li class="page-item disabled">
+            if (response.totalPage == 1) {
+                paginationHtml += `<li class="page-item disabled">
                         <a class="page-link" href="#">Next</a>
                     </li>`
-        } else {
-            paginationHtml += `<li class="page-item">
+            } else {
+                paginationHtml += `<li class="page-item">
                         <a class="page-link" href="#">Next</a>
                     </li>`
-        }
+            }
 
-        pagination.html(paginationHtml)
+            pagination.html(paginationHtml)
+        }
     }
 
     function updateTable(response) {

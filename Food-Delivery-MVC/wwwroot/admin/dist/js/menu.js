@@ -149,6 +149,7 @@
                     $("#form-create #create-btn").removeClass("d-none")
                     $("#form-create #loading-create-btn").addClass("d-none")
                     $("#form-create")[0].reset()
+                    $('#search').val('')
 
                     Swal.fire({
                         position: "top-end",
@@ -198,8 +199,9 @@
         e.preventDefault()
         let currentPage = $(this).html()
         let pageItem = $(this).closest(".page-item")
+        const searchText = $('#search').val()
 
-        getPaginatedDatas(currentPage)
+        getPaginatedDatas(currentPage, searchText)
             .then(function (datas) {
 
                 $("#table-area .active").removeClass("active")
@@ -226,11 +228,10 @@
 
         let activePageItem = $('#table-area .active')
         let previousPageItem = activePageItem.prev()
-
-
         let previousPage = (parseInt($('#table-area .active .page-link').html())) - 1
+        const searchText = $('#search').val()
 
-        getPaginatedDatas(previousPage)
+        getPaginatedDatas(previousPage, searchText)
             .then(function (datas) {
                 activePageItem.removeClass("active")
                 previousPageItem.addClass("active")
@@ -251,13 +252,12 @@
         e.preventDefault()
 
         let activePageItem = $('#table-area .active')
-
         let nextPageItem = activePageItem.next()
-
         let nextPage = (parseInt($('#table-area .active .page-link').html())) + 1
+        const searchText = $('#search').val()
 
 
-        getPaginatedDatas(nextPage)
+        getPaginatedDatas(nextPage, searchText)
             .then(function (datas) {
                 activePageItem.removeClass("active")
                 nextPageItem.addClass("active")
@@ -551,6 +551,7 @@
                 $('#modal-small').modal('hide');
                 $("#table-area .yes-btn").removeClass("d-none")
                 $("#table-area #loading-delete-btn").addClass("d-none")
+                $('#search').val('')
 
                 Swal.fire({
                     position: "top-end",
@@ -607,6 +608,7 @@
                              style="width:228px;height:163px;" />
                     </div>`
                 $('#table-area #modal-detail .images-area').append(html);
+
                 html = "";
 
                 html += `  <div class="mb-0 mt-3 flex-grow d-flex">
@@ -621,6 +623,9 @@
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Category: </strong>${response.category}</p>
                 </div>
+                  <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Ingredients: </strong>${response.ingredients.join(', ')}</p>
+                </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Create date: </strong>${response.createdDate}</p>
                 </div>
@@ -629,33 +634,35 @@
                 </div>`
 
                 $('#table-area #modal-detail .data-area').append(html);
-
-                html = "";
-
-                $.each(response.categories, function (index, item) {
-
-                    html += `<li class="list-group-item">${item}</li>`
-                })
-                $('#table-area #modal-detail #categories').append(html);
-                html = "";
-
-                $.each(response.ingredients, function (index, item) {
-
-                    html += `<li class="list-group-item">${item}</li>`
-                })
-                $('#table-area #modal-detail #ingredients').append(html);
-                html = "";
             }
         });
     })
 
-    function getPaginatedDatas(page) {
+    $(document).on('input', '#search', function (e) {
+        const searchText = $(this).val()
+
+        if (searchText.length > 0) {
+            getPaginatedDatas(1, searchText)
+                .then(function (datas) {
+                    updateTable(datas)
+                    updatePagination(datas)
+                })
+        } else {
+            getPaginatedDatas(1)
+                .then(function (datas) {
+                    updateTable(datas)
+                    updatePagination(datas)
+                })
+        }
+    })
+
+    function getPaginatedDatas(page, searchText = null) {
         return Promise.resolve($.ajax({
             type: "GET",
             headers: {
                 'Authorization': header
             },
-            url: `https://localhost:7247/api/admin/menu/GetPaginateDatas?page=${page}&take=5`,
+            url: `https://localhost:7247/api/admin/menu/GetPaginateDatas?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
@@ -730,30 +737,32 @@
     function updatePagination(response) {
         pagination.empty()
 
-        let paginationHtml = `<li class="page-item disabled prev">
+        if (response.totalPage > 1) {
+            let paginationHtml = `<li class="page-item disabled prev">
                         <a class="page-link" href="#" tabindex="-1">Previous</a>
                     </li>`
 
 
-        for (let i = 1; i <= response.totalPage; i++) {
-            if (i == 1) {
-                paginationHtml += ` <li class="page-item active"><a class="page-link page-num" href="#">${i}</a></li>`
-            } else {
-                paginationHtml += ` <li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`
+            for (let i = 1; i <= response.totalPage; i++) {
+                if (i == 1) {
+                    paginationHtml += ` <li class="page-item active"><a class="page-link page-num" href="#">${i}</a></li>`
+                } else {
+                    paginationHtml += ` <li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`
+                }
             }
-        }
 
-        if (response.totalPage == 1) {
-            paginationHtml += `<li class="page-item disabled">
+            if (response.totalPage <= 1) {
+                paginationHtml += `<li class="page-item disabled">
                         <a class="page-link" href="#">Next</a>
                     </li>`
-        } else {
-            paginationHtml += `<li class="page-item">
+            } else {
+                paginationHtml += `<li class="page-item">
                         <a class="page-link" href="#">Next</a>
                     </li>`
+            }
+            pagination.html(paginationHtml)
         }
 
-        pagination.html(paginationHtml)
     }
 
     function updateTable(response) {

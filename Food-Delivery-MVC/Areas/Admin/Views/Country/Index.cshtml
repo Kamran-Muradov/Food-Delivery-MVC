@@ -147,22 +147,25 @@
         </div>
     </div>
 
-    <div class="pagination-area d-flex justify-content-center mt-3">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item disabled prev">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                @for (int i = 1; i <= Model.TotalPage; i++)
-                {
-                    <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
-                }
-                <li class="page-item">
-                    <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    @if (Model.TotalPage > 1)
+    {
+        <div class="pagination-area d-flex justify-content-center mt-3">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item disabled prev">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    @for (int i = 1; i <= Model.TotalPage; i++)
+                    {
+                        <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
 </section>
 
 

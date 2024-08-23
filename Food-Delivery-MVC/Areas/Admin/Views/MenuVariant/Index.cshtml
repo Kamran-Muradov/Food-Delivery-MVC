@@ -33,24 +33,6 @@
 <section id="table-area">
     <div class="card">
         <div class="card-body">
-            <div class="card-body border-bottom py-3">
-                <div class="d-flex">
-                    <div class="col-2">
-                        <div class="form-label">Sort by</div>
-                        <select class="form-select">
-                            <option value="Create date">Create date</option>
-                            <option value="Name">Name</option>
-                            <option value="Update date">Update date</option>
-                        </select>
-                    </div>
-                    <div class="ms-auto text-muted">
-                        Search:
-                        <div class="ms-2 d-inline-block">
-                            <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="table-default" class="table-responsive">
                 <table class="table">
                     <thead>
@@ -246,23 +228,26 @@
             </div>
         </div>
     </div>
+    @if (Model.TotalPage > 1)
+    {
+        <div class="pagination-area d-flex justify-content-center mt-3">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item disabled prev">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    @for (int i = 1; i <= Model.TotalPage; i++)
+                    {
+                        <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
 
-    <div class="pagination-area d-flex justify-content-center mt-3">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item disabled prev">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                @for (int i = 1; i <= Model.TotalPage; i++)
-                {
-                    <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
-                }
-                <li class="page-item">
-                    <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </section>
 
 

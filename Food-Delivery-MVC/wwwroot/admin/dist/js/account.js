@@ -12,8 +12,9 @@
         e.preventDefault()
         let currentPage = $(this).html()
         let pageItem = $(this).closest(".page-item")
+        const searchText = $('#search').val()
 
-        getPaginatedDatas(currentPage)
+        getPaginatedDatas(currentPage, searchText)
             .then(function (datas) {
 
                 $("#table-area .active").removeClass("active")
@@ -40,11 +41,10 @@
 
         let activePageItem = $('#table-area .active')
         let previousPageItem = activePageItem.prev()
-
-
         let previousPage = (parseInt($('#table-area .active .page-link').html())) - 1
+        const searchText = $('#search').val()
 
-        getPaginatedDatas(previousPage)
+        getPaginatedDatas(previousPage, searchText)
             .then(function (datas) {
                 activePageItem.removeClass("active")
                 previousPageItem.addClass("active")
@@ -65,13 +65,12 @@
         e.preventDefault()
 
         let activePageItem = $('#table-area .active')
-
         let nextPageItem = activePageItem.next()
-
         let nextPage = (parseInt($('#table-area .active .page-link').html())) + 1
+        const searchText = $('#search').val()
 
 
-        getPaginatedDatas(nextPage)
+        getPaginatedDatas(nextPage, searchText)
             .then(function (datas) {
                 activePageItem.removeClass("active")
                 nextPageItem.addClass("active")
@@ -259,13 +258,31 @@
         });
     })
 
-    function getPaginatedDatas(page) {
+    $(document).on('input', '#search', function (e) {
+        const searchText = $(this).val()
+
+        if (searchText.length > 0) {
+            getPaginatedDatas(1, searchText)
+                .then(function (datas) {
+                    updateTable(datas)
+                    updatePagination(datas)
+                })
+        } else {
+            getPaginatedDatas(1)
+                .then(function (datas) {
+                    updateTable(datas)
+                    updatePagination(datas)
+                })
+        }
+    })
+
+    function getPaginatedDatas(page, searchText = null) {
         return Promise.resolve($.ajax({
             type: "GET",
             headers: {
                 'Authorization': header
             },
-            url: `https://localhost:7247/api/admin/account/GetUsersPaginate?page=${page}&take=5`,
+            url: `https://localhost:7247/api/admin/account/GetUsersPaginate?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -277,9 +294,39 @@
         }));
     }
 
+    function updatePagination(response) {
+        pagination.empty()
+
+        if (response.totalPage > 1) {
+            let paginationHtml = `<li class="page-item disabled prev">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>`
+
+
+            for (let i = 1; i <= response.totalPage; i++) {
+                if (i == 1) {
+                    paginationHtml += ` <li class="page-item active"><a class="page-link page-num" href="#">${i}</a></li>`
+                } else {
+                    paginationHtml += ` <li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`
+                }
+            }
+
+            if (response.totalPage <= 1) {
+                paginationHtml += `<li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>`
+            } else {
+                paginationHtml += `<li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>`
+            }
+            pagination.html(paginationHtml)
+        }
+
+    }
+
     function updateTable(response) {
 
-        tableBody.empty()
         let html = "";
         $.each(response.datas, function (index, item) {
 
@@ -300,6 +347,6 @@
                                     </td>
                                 </tr>`;
         })
-        tableBody.append(html)
+        tableBody.html(html)
     }
 })

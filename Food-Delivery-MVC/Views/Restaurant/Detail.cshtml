@@ -137,26 +137,24 @@
         </div>
     </div>
 </section>
-@if (Model.Reviews.Any())
-{
     <section id="review-area" class="py-5">
         <div class="container">
             <div class="row">
                 <!-- customer reviews -->
                 <!-- customer reviews list -->
                 <div class="col-lg-8 col-md-7 col-12">
-                    <h4 class="mb-5" style="font-weight:bold">Ratings &amp; Reviews</h4>
+                    <h4 class="mb-5" style="font-weight:bold">Ratings &amp; Reviews(@Model.Reviews.Count())</h4>
                     @foreach (var review in Model.Reviews)
                     {
                         <!-- reviews -->
                         <div class="mb-4 pb-4 border-bottom">
                             <div class="d-flex mb-3 align-items-center">
                                 <img src="@review.UserImage" alt="" style="width: 3.125rem;height: 3.125rem;font-size: 1.04167rem;border-radius: 50% !important;">
-                                <div class="ml-2">
-                                    <h5 class="mb-1">
+                                <div class="ml-2 mx-2">
+                                    <h5 class="mb-1" style="font-size:17px">
                                         @review.UserName
                                     </h5>
-                                    <p class="font-12 mb-0">
+                                    <p class="font-12 mb-0" style="font-size:13px">
                                         <span>@review.CreatedDate</span>
                                     </p>
                                 </div>
@@ -176,7 +174,6 @@
             </div>
         </div>
     </section>
-}
 
 @section js {
     <script src="~/js/restaurant.js"></script>
