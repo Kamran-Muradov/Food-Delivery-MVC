@@ -1,0 +1,30 @@
+﻿@model IEnumerable<RestaurantVM>
+
+@if (Model.Any())
+{
+    <div id="results-menu" class="d-flex justify-content-between">
+        <h4>Restaurants</h4>
+        <a href="#" onclick="$(this).closest('form').submit()">See all</a>
+    </div>
+
+    @foreach (var restaurant in Model.Take(4))
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter">
+            <a asp-controller="Restaurant" asp-action="Detail" asp-route-id="@restaurant.Id">
+                <div class="card product-card border pb-2">
+                    <img class="card-img-top" style="height:112px" src="@restaurant.RestaurantImages.FirstOrDefault(ri => ri.IsMain)?.Url" alt="Pizza">
+                    <div class="card-body pt-1 pb-2 px-2">
+                        <h3 class="product-title fs-md">@restaurant.Name</h3>
+                        <p style="font-size:12px !important" class="text-muted">@string.Join(", ", restaurant.Tags.Take(3).Select(t => t.Name))</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+}
+else
+{
+    <div class="d-flex justify-content-center align-items-center">
+        <h1>No results found</h1>
+    </div>
+}

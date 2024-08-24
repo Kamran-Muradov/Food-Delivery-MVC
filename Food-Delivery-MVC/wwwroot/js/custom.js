@@ -1,4 +1,5 @@
 ﻿$(function () {
+
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("https://localhost:7247/checkoutHub", {
             transport: signalR.HttpTransportType.WebSockets,
@@ -77,66 +78,40 @@
         items: 2
     })
 
+    function debounce(func, delay) {
+        let debounceTimer;
+        return function () {
+            const context = this;
+            const args = arguments;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => func.apply(context, args), delay);
+        };
+    }
 
-
-    $(document).on('input', '#input-search', function (e) {
-        let searchText = $(this).val().trim()
-        let html = ` 
-           <div id="results-menu" class="d-flex justify-content-between">
-                        <h4>Restaurants</h4>
-                        <a href="#" onclick="$(this).closest('form').submit()">See all</a>
-                    </div> `;
-        //$("#results-menu").nextAll().remove()
-
-        if (searchText.length <= 0) {
-            $("#search-area").html("")
-            $('#search-area').css('height', '')
-        }
-
-
-        if (searchText.length > 0) {
-            $('#search-area').css('height', '321px')
-            axios.get(`https://localhost:7247/api/restaurant/search?searchText=${searchText}`)
-                .then(function (response) {
-                    if (response.data.length > 0) {
-                        //$("#results-menu").removeClass("d-none")
-
-                        $.each(response.data.slice(0, 4), function (index, item) {
-                            let tagNames = item.tags.slice(0, 3).map(obj => obj.name).join(", ")
-
-                            let mainImage = item.restaurantImages.filter(obj => obj.isMain == true)[0]
-
-
-                            html += `<div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter">
-                             <a href="/restaurant/detail/${item.id}">
-                                <div class="card product-card border pb-2"><img class="card-img-top" style="height:112px" src="${mainImage.url}" alt="Pizza">
-                                    <div class="card-body pt-1 pb-2 px-2">
-                                        <h3 class="product-title fs-md">${item.name}</h3>
-                                        <p style="font-size:12px !important" class="text-muted">${tagNames}</p>
-                                    </div>
-                                </div>
-                                 </a>
-                            </div> `;
-                        })
-                        $("#search-area").html(html)
-                        html = "";
-                    } else {
-                        //$("#results-menu").addClass("d-none")
-                        //$('#search-area').css('height', '')
-                        $("#search-area").html(` <div class="d-flex justify-content-center align-items-center">
-                        <h1>No results found</h1>
-                    </div>`)
-                    }
+    $('#input-search').on('input', debounce(function () {
+        const searchText = $(this).val().trim();
+        if (searchText) {
+            $('#search-area').css('min-height', '321px')
+            axios.get(`/home/searchRestaurants`, {
+                params: { searchText }
+            })
+                .then(async function (response) {
+                    $('#search-area').html(response.data)
                 })
                 .catch(function (error) {
+                    $("#search-area").html("")
+                    $('#search-area').css('min-height', '')
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
                         text: "Something went wrong!",
                     });
                 })
+        } else {
+            $("#search-area").html("")
+            $('#search-area').css('min-height', '')
         }
-    })
+    }, 100));
 
     $(document).on('click', '#see-all', function (e) {
         let searchText = $("#input-search").val()
@@ -164,21 +139,6 @@
         //    }
         //}));
 
-
     }
 
-    function searchRestaurants(searchText) {
-        return Promise.resolve($.ajax({
-            type: "GET",
-            url: `https://localhost:7247/api/restaurant/search?searchText=${searchText}`,
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                });
-            }
-        }));
-    }
 })

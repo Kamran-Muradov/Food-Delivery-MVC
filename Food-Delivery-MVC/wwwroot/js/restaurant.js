@@ -163,6 +163,7 @@ $(function () {
         axios.get(`/menu/detail/${id}`)
             .then(function (response) {
                 $('#menu-detail').append(response.data);
+                $('#quick-view').modal('show')
                 basePrice = parseFloat($('#menu-detail input[type="hidden"]').val());
                 totalPrice = basePrice;
                 totalPriceChange = totalPrice;

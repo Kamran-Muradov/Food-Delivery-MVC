@@ -2,7 +2,6 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-edit').modal({
         backdrop: true,
@@ -109,9 +108,8 @@
 
         const data = JSON.stringify({ status })
 
-        axios.put(`https://localhost:7247/api/admin/checkout/edit/${id}`, data, {
+        axios.put(`/admin/checkout/edit/${id}`, data, {
             headers: {
-                'Authorization': header,
                 'Content-Type': 'application/json'
             }
         })
@@ -148,10 +146,7 @@
     function getPaginatedDatas(page) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/checkout/GetPaginateDatas?page=${page}&take=5`,
+            url: `/admin/checkout/GetPaginatedData?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');

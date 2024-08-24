@@ -1,10 +1,9 @@
-﻿using System.Text;
-using Food_Delivery_MVC.Helpers;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.UI.Contacts;
 using Food_Delivery_MVC.ViewModels.UI.SocialMedias;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR.Protocol;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Food_Delivery_MVC.Controllers
 {

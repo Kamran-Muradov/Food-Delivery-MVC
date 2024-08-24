@@ -99,8 +99,8 @@ namespace Food_Delivery_MVC.Controllers
                 {
                     Expires = DateTime.UtcNow.AddDays(30),
                     IsEssential = true,
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.Strict
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Lax
                 });
 
                 Response.Cookies.Append("ProfilePic", response.ProfilePicture, new CookieOptions

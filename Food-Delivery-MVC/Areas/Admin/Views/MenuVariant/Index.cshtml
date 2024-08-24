@@ -1,7 +1,7 @@
 ﻿@model PaginationResponse<MenuVariantVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Menu variants";
 }
 
 <div class="page-header d-print-none mb-5">
@@ -19,7 +19,7 @@
                 {
                     <div class="">
                         <div class="btn-list">
-                            <a id="toggle-create" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                            <a id="toggle-create" class="btn btn-primary d-none d-sm-inline-block">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                 Create
                             </a>
@@ -51,7 +51,10 @@
                                 <td class="sort-name create-date">@item.CreatedDate</td>
                                 <td class="sort-name">@item.UpdatedDate</td>
                                 <td>
-                                    <a class="btn btn-warning btn-icon" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                    <a class="btn btn-info btn-icon detail" data-id="@item.Id">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
+                                    </a>
+                                    <a class="btn btn-warning btn-icon" data-id="@item.Id">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
                                     </a>
                                     <a class="btn btn-danger btn-icon delete-btn" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-small">
@@ -101,7 +104,7 @@
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label class="form-label required">Option</label>
-                                        <input autocomplete="off" id="option" type="text" class="form-control" name="option" placeholder="Option..."/>
+                                        <input autocomplete="off" id="option" type="text" class="form-control" name="option" placeholder="Option..." />
                                     </div>
                                 </div>
                             </div>
@@ -159,6 +162,25 @@
         </div>
     }
 
+    @* Modal-Detail *@
+    <div class="modal modal-blur fade" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content container">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">Detailed View</h5>
+                </div>
+                <div class="data-area">
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @* Modal-Edit *@
     <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -172,7 +194,7 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label class="form-label required">Option</label>
-                                    <input autocomplete="off" id="option" type="text" class="form-control" name="option" placeholder="Option..."/>
+                                    <input autocomplete="off" id="option" type="text" class="form-control" name="option" placeholder="Option..." />
                                 </div>
                             </div>
                         </div>
@@ -228,11 +250,12 @@
             </div>
         </div>
     </div>
-    @if (Model.TotalPage > 1)
-    {
-        <div class="pagination-area d-flex justify-content-center mt-3">
-            <nav aria-label="...">
-                <ul class="pagination">
+    <div class="pagination-area d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                @if (Model.TotalPage > 1)
+                {
+
                     <li class="page-item disabled prev">
                         <a class="page-link" href="#" tabindex="-1">Previous</a>
                     </li>
@@ -240,13 +263,13 @@
                     {
                         <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                     }
-                    <li class="page-item">
-                        <a class="page-link @(Model.TotalPage == 1? "disabled" : "")" href="#">Next</a>
+                    <li class="page-item @(Model.TotalPage <= 1 ? "disabled" : "")">
+                        <a class="page-link" href="#">Next</a>
                     </li>
-                </ul>
-            </nav>
-        </div>
-    }
+                }
+            </ul>
+        </nav>
+    </div>
 
 </section>
 

@@ -5,7 +5,6 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-report').modal({
         backdrop: true,
@@ -56,6 +55,8 @@
                 })
                 $("#form-create #cities").html(html)
             })
+
+        $('#modal-report').modal('show')
     })
 
     $("#form-create").validate({
@@ -85,10 +86,6 @@
                 required: true,
                 min: 1,
                 max: 55
-            },
-            minorder: {
-                required: true,
-                min: 1
             },
             website: {
                 url: true
@@ -125,10 +122,6 @@
                 required: "Delivery fee is required",
                 min: "Delivery fee must be minimum 1"
             },
-            minorder: {
-                required: "Minimum order is required",
-                min: "Delivery fee must be minimum 1"
-            },
             mintime: {
                 required: "Minimum delivery time is required",
                 min: "Minimum delivery time must be minimum 1",
@@ -154,10 +147,8 @@
             formData.append('phone', $('#table-area #phone').val());
             formData.append('address', $('#table-area #address').val());
             formData.append('deliveryFee', $('#table-area #delfee').val());
-            formData.append('minimumOrder', $('#table-area #minorder').val());
             formData.append('minDeliveryTime', $('#table-area #mintime').val());
             formData.append('website', $('#table-area #website').val());
-            formData.append('isActive', $('#table-area #active').val());
             formData.append('email', $('#table-area #email').val());
             formData.append('brandId', $('#table-area #brands').val());
             formData.append('cityId', $('#table-area #cities').val());
@@ -175,10 +166,7 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/restaurant/create',
-                headers: {
-                    'Authorization': header
-                },
+                url: '/admin/restaurant/create',
                 method: 'POST',
                 processData: false,
                 contentType: false,
@@ -315,10 +303,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/restaurant/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/restaurant/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #name').val(response.name)
@@ -327,11 +312,10 @@
                 $('#table-area #modal-edit #email').val(response.email)
                 $('#table-area #modal-edit #address').val(response.address)
                 $('#table-area #modal-edit #delfee').val(response.deliveryFee)
-                $('#table-area #modal-edit #minorder').val(response.minimumOrder)
                 $('#table-area #modal-edit #mintime').val(response.minDeliveryTime)
                 $('#table-area #modal-edit #maxtime').val(response.maxDeliveryTime)
-                $('#table-area #modal-edit #website').val(response.website)
-                $(`#table-area #modal-edit #active option[value="${response.isActive}"]`).attr("selected", "selected")
+                if (response.website != "N/A") $('#table-area #modal-edit #website').val(response.website)
+
                 let html = ""
 
                 getTagsSelected()
@@ -373,6 +357,15 @@
                         $("#form-edit #cities").html(html)
                         html = "";
                     })
+
+                $('#modal-edit').modal('show')
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
             }
         });
     })
@@ -404,10 +397,6 @@
                 required: true,
                 min: 1,
                 max: 55
-            },
-            minorder: {
-                required: true,
-                min: 1
             },
             website: {
                 url: true
@@ -443,10 +432,6 @@
                 required: "Delivery fee is required",
                 min: "Delivery fee must be minimum 1"
             },
-            minorder: {
-                required: "Minimum order is required",
-                min: "Delivery fee must be minimum 1"
-            },
             mintime: {
                 required: "Minimum delivery time is required",
                 min: "Minimum delivery time must be minimum 1",
@@ -472,10 +457,8 @@
             formData.append('phone', $('#table-area #modal-edit #phone').val());
             formData.append('address', $('#table-area #modal-edit #address').val());
             formData.append('deliveryFee', $('#table-area #modal-edit #delfee').val());
-            formData.append('minimumOrder', $('#table-area #modal-edit #minorder').val());
             formData.append('minDeliveryTime', $('#table-area #modal-edit #mintime').val());
             formData.append('website', $('#table-area #modal-edit #website').val());
-            formData.append('isActive', $('#table-area #modal-edit #active').val());
             formData.append('email', $('#table-area #modal-edit #email').val());
             formData.append('brandId', $('#table-area #modal-edit #brands').val());
             formData.append('cityId', $('#table-area #modal-edit #cities').val());
@@ -493,10 +476,7 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/restaurant/edit/${id}`,
-                headers: {
-                    'Authorization': header
-                },
+                url: `/admin/restaurant/edit/${id}`,
                 method: 'PUT',
                 processData: false,
                 contentType: false,
@@ -575,10 +555,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/restaurantimage/getallbyrestaurantid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/restaurant/getallimages/${id}`,
             dataType: 'json',
             success: function (response) {
                 let html = "";
@@ -634,6 +611,7 @@
                 })
 
                 $('#table-area #modal-images .images-area').append(html);
+                $('#modal-images').modal('show')
             }
         });
     })
@@ -648,10 +626,7 @@
 
         $.ajax({
             type: "POST",
-            url: `https://localhost:7247/api/admin/restaurant/SetMainImage`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/restaurant/SetMainImage`,
             data: data,
             contentType: 'application/json',
             success: function () {
@@ -689,10 +664,7 @@
 
         $.ajax({
             type: "POST",
-            url: `https://localhost:7247/api/admin/restaurant/DeleteImage`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/restaurant/DeleteImage`,
             data: data,
             contentType: 'application/json',
             success: function () {
@@ -717,10 +689,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/Restaurant/Delete?id=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/Restaurant/Delete?id=${id}`,
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
@@ -768,10 +737,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/restaurant/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/restaurant/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 let imgHtml = "";
@@ -793,6 +759,8 @@
                     </div>`
                     }
                 })
+
+                const website = response.website != "N/A" ? `<a href=${response.website}>${response.website}</a>` : response.website
 
                 $('#table-area #modal-detail .images-area').append(imgHtml);
 
@@ -818,10 +786,10 @@
                     <p class="mb-0 font-weight-light"><strong>Email: </strong>${response.email}</p>
                 </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Delivery fee: </strong>${response.deliveryFee}</p>
+                    <p class="mb-0 font-weight-light"><strong>Delivery fee: </strong>$${response.deliveryFee.toFixed(2)}</p>
                 </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Minimum order: </strong>${response.minimumOrder}</p>
+                    <p class="mb-0 font-weight-light"><strong>Website: </strong>${website}</p>
                 </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Minimum delivery time: </strong>${response.minDeliveryTime}</p>
@@ -846,6 +814,8 @@
                 </div>`
 
                 $('#table-area #modal-detail .data-area').append(dataHtml);
+
+                $('#modal-detail').modal('show')
             }
         });
     })
@@ -871,10 +841,7 @@
     function getPaginatedDatas(page, searchText = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/restaurant/GetPaginateDatas?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/restaurant/GetPaginatedData?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
@@ -891,10 +858,7 @@
     function getTagsSelected(exludeid = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/tag/getallforselect?exludeId=${exludeid}`,
+            url: `/admin/tag/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -909,10 +873,7 @@
     function getBrandsSelected(exludeid = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/brand/getallforselect?exludeId=${exludeid}`,
+            url: `/admin/brand/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -927,10 +888,7 @@
     function getCitiesSelected(exludeid = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/city/getallforselect?exludeId=${exludeid}`,
+            url: `/admin/city/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

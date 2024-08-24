@@ -1,7 +1,7 @@
 ﻿@model RestaurantDetailVM
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = Model.Name;
 }
 
 <section class="bg-darker bg-size-cover bg-position-center py-5" style=" background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('@Model.RestaurantImages.FirstOrDefault(m => !m.IsMain)?.Url') no-repeat center center;">
@@ -65,12 +65,12 @@
         @foreach (var menu in Model.Menus)
         {
             <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter content" data-id="@menu.Category.Id">
-                <a data-id="@menu.Id" href="#quick-view" class="d-block menu-detail" data-bs-toggle="modal">
-                    <img class="card-img-top" style="height:203px" src="@menu.Image" alt="Pizza">
+                <a data-id="@menu.Id" href="" class="d-block menu-detail">
+                    <img class="card-img-top" style="height:150px" src="@menu.Image" alt="Pizza">
                     <div class="card product-card border pb-2">
 
                         <div class="card-body pt-1 pb-2">
-                            <h3 class="product-title fs-md"><a href="#quick-view" data-bs-toggle="modal">@menu.Name</a></h3>
+                            <h3 class="product-title fs-md">@menu.Name</h3>
                             <p class="fs-ms text-muted">@string.Join(", ", menu.Ingredients.Take(4))</p>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="product-price"><span class="text-accent">$@menu.Price</span></div>
@@ -80,6 +80,7 @@
                     </div>
                 </a>
             </div>
+
         }
         <!-- Item-->
     </div>
@@ -137,43 +138,43 @@
         </div>
     </div>
 </section>
-    <section id="review-area" class="py-5">
-        <div class="container">
-            <div class="row">
-                <!-- customer reviews -->
-                <!-- customer reviews list -->
-                <div class="col-lg-8 col-md-7 col-12">
-                    <h4 class="mb-5" style="font-weight:bold">Ratings &amp; Reviews(@Model.Reviews.Count())</h4>
-                    @foreach (var review in Model.Reviews)
-                    {
-                        <!-- reviews -->
-                        <div class="mb-4 pb-4 border-bottom">
-                            <div class="d-flex mb-3 align-items-center">
-                                <img src="@review.UserImage" alt="" style="width: 3.125rem;height: 3.125rem;font-size: 1.04167rem;border-radius: 50% !important;">
-                                <div class="ml-2 mx-2">
-                                    <h5 class="mb-1" style="font-size:17px">
-                                        @review.UserName
-                                    </h5>
-                                    <p class="font-12 mb-0" style="font-size:13px">
-                                        <span>@review.CreatedDate</span>
-                                    </p>
-                                </div>
+<section id="review-area" class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- customer reviews -->
+            <!-- customer reviews list -->
+            <div class="col-lg-8 col-md-7 col-12">
+                <h4 class="mb-5" style="font-weight:bold">Ratings &amp; Reviews(@Model.Reviews.Count())</h4>
+                @foreach (var review in Model.Reviews)
+                {
+                    <!-- reviews -->
+                    <div class="mb-4 pb-4 border-bottom">
+                        <div class="d-flex mb-3 align-items-center">
+                            <img src="@review.UserImage" alt="" style="width: 3.125rem;height: 3.125rem;font-size: 1.04167rem;border-radius: 50% !important;">
+                            <div class="ml-2 mx-2">
+                                <h5 class="mb-1" style="font-size:17px">
+                                    @review.UserName
+                                </h5>
+                                <p class="font-12 mb-0" style="font-size:13px">
+                                    <span>@review.CreatedDate</span>
+                                </p>
                             </div>
-                            <div class="mb-2">
-                                <span class="font-14 mr-2">
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        <i class="@(i <= review.Rating ? "fas" : "far") fa-star text-warning"></i>
-                                    }
-                                </span>
-                            </div>
-                            <p>@review.Comment</p>
                         </div>
-                    }
-                </div>
+                        <div class="mb-2">
+                            <span class="font-14 mr-2">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="@(i <= review.Rating ? "fas" : "far") fa-star text-warning"></i>
+                                }
+                            </span>
+                        </div>
+                        <p>@review.Comment</p>
+                    </div>
+                }
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 @section js {
     <script src="~/js/restaurant.js"></script>

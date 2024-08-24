@@ -1,6 +1,5 @@
 ﻿$(function () {
     let tableBody = $("#table-area .table-tbody")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-report').modal({
         backdrop: true,
@@ -52,16 +51,12 @@
                     platform: $('#table-area #form-create #platform').val(),
                     url: $('#table-area #form-create #url').val()
                 })
-                console.log(data)
             $("#form-create #create-btn").addClass("d-none")
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/socialMedia/create',
+                url: '/admin/socialMedia/create',
                 method: 'POST',
-                headers: {
-                    'Authorization': header
-                },
                 contentType: 'application/json',
                 data: data,
                 success: function (response) {
@@ -115,14 +110,12 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/socialMedia/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/socialMedia/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #platform').val(response.platform)
                 $('#table-area #modal-edit #url').val(response.url)
+                $('#modal-edit').modal('show')
             },
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -175,11 +168,8 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/socialMedia/edit/${id}`,
+                url: `/admin/socialMedia/edit/${id}`,
                 method: 'PUT',
-                headers: {
-                    'Authorization': header
-                },
                 data: data,
                 contentType: 'application/json',
                 error: function (xhr, status, error) {
@@ -262,10 +252,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/socialMedia/Delete?id=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/socialMedia/Delete?id=${id}`,
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
@@ -306,10 +293,7 @@
     function getAllDatas() {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/socialMedia/getAll`,
+            url: `/admin/socialMedia/getAll`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

@@ -1,6 +1,6 @@
 ﻿@model RestaurantResponse
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Restaurants";
 }
 <div class="bg-accent pt-4 pb-5">
     <div class="container pt-2 pb-3 pt-lg-3 pb-lg-4">
@@ -56,7 +56,7 @@
 <div class="container mt-5">
     <div class="row gy-3 gx-4 justify-content-end">
         <div class="col-lg-2 col-md-3 col-sm-5 col-12 order-md-1 order-sm-2 order-3">
-            <div><a class="btn btn-outline-secondary w-100 collapsed" href="#filter-modal" data-bs-toggle="modal"><i class="ci-filter me-2"></i>Filters</a></div>
+            <div><a class="btn btn-outline-secondary w-100 collapsed" href="#filter-modal" data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-alt"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 8h4v4h-4z" /><path d="M6 4l0 4" /><path d="M6 12l0 8" /><path d="M10 14h4v4h-4z" /><path d="M12 4l0 10" /><path d="M12 18l0 2" /><path d="M16 5h4v4h-4z" /><path d="M18 4l0 1" /><path d="M18 9l0 11" /></svg><span class="mx-2">Filters</span></a></div>
         </div>
     </div>
 </div>
@@ -66,10 +66,11 @@
         {
             <div class="col-md-4 col-sm-6 mb-grid-gutter">
                 <a class="card product-card h-100 border-0 shadow pb-2" asp-action="Detail" asp-route-id="@item.Id">
-                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span><img class="card-img-top" style="height:280px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
+                    <span class="badge badge-end badge-shadow bg-success fs-md fw-medium">@(item.MinDeliveryTime)-@(item.MinDeliveryTime + 10) min</span>
+                    <img class="card-img-top" style="height:200px" src="@item.RestaurantImages.FirstOrDefault(m => m.IsMain)?.Url" alt="McDonald's">
                     <div class="card-body text-center pt-3 pb-4">
                         <h3 class="h5 mb-2">@item.Name</h3>
-                        <div class="fs-ms text-muted">@string.Join(", ", item.Tags.Take(3).Select(m => m.Name))</div>
+                        <div class="fs-ms text-muted">@string.Join(", ", item.Tags.Take(5).Select(m => m.Name))</div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div class="product-price"><span class="text-accent">$@item.DeliveryFee</span></div>
                             <div>

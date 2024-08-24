@@ -48,6 +48,6 @@ namespace Food_Delivery_MVC.ViewComponents
     {
         public int BasketCount { get; set; }
         public string UserId { get; set; }
-        public Dictionary<string,string> Settings { get; set; }
+        public Dictionary<string, string> Settings { get; set; }
     }
 }

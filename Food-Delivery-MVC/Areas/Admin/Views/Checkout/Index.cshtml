@@ -1,7 +1,7 @@
 ﻿@model PaginationResponse<CheckoutVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Checkouts";
 }
 
 <div class="page-header d-print-none mb-5">
@@ -86,11 +86,12 @@
         </div>
     </div>
 
-    @if (Model.TotalPage > 1)
-    {
-        <div class="pagination-area d-flex justify-content-center mt-3">
-            <nav aria-label="...">
-                <ul class="pagination">
+    <div class="pagination-area d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                @if (Model.TotalPage > 1)
+                {
+
                     <li class="page-item disabled prev">
                         <a class="page-link" href="#" tabindex="-1">Previous</a>
                     </li>
@@ -98,13 +99,13 @@
                     {
                         <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                     }
-                    <li class="page-item @(Model.TotalPage == 1 ? "disabled" : "")">
+                    <li class="page-item @(Model.TotalPage <= 1 ? "disabled" : "")">
                         <a class="page-link" href="#">Next</a>
                     </li>
-                </ul>
-            </nav>
-        </div>
-    }
+                }
+            </ul>
+        </nav>
+    </div>
 </section>
 
 

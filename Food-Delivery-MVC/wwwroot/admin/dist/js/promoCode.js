@@ -8,7 +8,6 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-report').modal({
         backdrop: true,
@@ -65,11 +64,8 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/promoCode/create',
+                url: '/admin/promoCode/create',
                 method: 'POST',
-                headers: {
-                    'Authorization': header
-                },
                 contentType: 'application/json',
                 data: data,
                 success: function (response) {
@@ -216,10 +212,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/promoCode/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/promoCode/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
 
@@ -233,6 +226,7 @@
                 var formattedDate = yyyy + '-' + mm + '-' + dd;
 
                 $('#table-area #modal-edit #expiryDate').val(formattedDate)
+                $('#modal-edit').modal('show')
             },
             error: function (xhr, status, error) {
                 $('#modal-edit').modal('hide');
@@ -283,17 +277,12 @@
                     isActive: $('#table-area #modal-edit #status').val() === 'true'
                 })
 
-            console.log(data)
-
             $("#form-edit #edit-btn").addClass("d-none")
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/promoCode/edit/${id}`,
+                url: `/admin/promoCode/edit/${id}`,
                 method: 'PUT',
-                headers: {
-                    'Authorization': header
-                },
                 data: data,
                 contentType: 'application/json',
                 error: function (xhr, status, error) {
@@ -374,10 +363,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/promoCode/Delete?id=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/promoCode/Delete?id=${id}`,
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
@@ -419,10 +405,7 @@
     function getPaginatedDatas(page) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/promoCode/GetPaginateDatas?page=${page}&take=5`,
+            url: `/admin/promoCode/GetPaginatedData?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

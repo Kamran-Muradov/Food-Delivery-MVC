@@ -8,7 +8,7 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8">
-    <title>Food Delivery Service</title>
+    <title>@ViewData["Title"]</title>
     <!-- SEO Meta Tags-->
     <meta name="description" content="EasyShop- Bootstrap E-commerce Template">
     <meta name="keywords" content="bootstrap, shop, e-commerce, market, modern, responsive,  business, mobile, bootstrap, html5, css3, js, gallery, slider, touch, creative, clean">
@@ -17,8 +17,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon and Touch Icons-->
     <link rel="apple-touch-icon" sizes="180x180" href="~/img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="~/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="~/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/img/logo-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
     <link rel="manifest" href="~/site.webmanifest">
     <link rel="mask-icon" color="#fe6a6a" href="~/img/safari-pinned-tab.svg">
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -37,10 +37,7 @@
 </head>
 <!-- Body-->
 <body class="handheld-toolbar-enabled">
-    <!-- Google Tag Manager (noscript)-->
-    <noscript>
-        https://nigammishra.github.io/nigam-portfolio/
-    </noscript>
+
     <!-- Sign in / sign up modal-->
     @if (User.Identity != null && !User.Identity.IsAuthenticated)
     {

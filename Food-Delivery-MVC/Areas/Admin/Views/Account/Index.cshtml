@@ -1,7 +1,7 @@
 ﻿@model PaginationResponse<UserVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
 
 <div class="page-header d-print-none mb-5">
@@ -50,10 +50,10 @@
                                 <td class="sort-name">@item.UserName</td>
                                 <td class="sort-name">@item.Email</td>
                                 <td>
-                                    <a class="btn btn-info btn-icon detail" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-detail">
+                                    <a class="btn btn-info btn-icon detail" data-id="@item.Id">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
                                     </a>
-                                    <a class="btn btn-warning" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                    <a class="btn btn-warning" data-id="@item.Id">
                                         Edit roles
                                     </a>
 
@@ -114,11 +114,12 @@
         </div>
     </div>
 
-    @if (Model.TotalPage > 1)
-    {
-        <div class="pagination-area d-flex justify-content-center mt-3">
-            <nav aria-label="...">
-                <ul class="pagination">
+    <div class="pagination-area d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                @if (Model.TotalPage > 1)
+                {
+
                     <li class="page-item disabled prev">
                         <a class="page-link" href="#" tabindex="-1">Previous</a>
                     </li>
@@ -126,13 +127,13 @@
                     {
                         <li class="page-item @(i == 1 ? "active" : "")"><a class="page-link page-num" href="#">@i</a></li>
                     }
-                    <li class="page-item">
-                        <a class="page-link @(Model.TotalPage == 1 ? "disabled" : "")" href="#">Next</a>
+                    <li class="page-item @(Model.TotalPage <= 1 ? "disabled" : "")">
+                        <a class="page-link" href="#">Next</a>
                     </li>
-                </ul>
-            </nav>
-        </div>
-    }
+                }
+            </ul>
+        </nav>
+    </div>
 </section>
 
 

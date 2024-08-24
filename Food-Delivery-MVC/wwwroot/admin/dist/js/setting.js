@@ -1,6 +1,4 @@
 ﻿$(function () {
-    const header = "Bearer " + $.cookie("JWTToken");
-
 
     $('#modal-edit').modal({
         backdrop: true,
@@ -15,13 +13,11 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/setting/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/setting/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #value').val(response.value)
+                $('#modal-edit').modal('show')
             },
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -65,11 +61,8 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/setting/edit/${id}`,
+                url: `/admin/setting/edit/${id}`,
                 method: 'PUT',
-                headers: {
-                    'Authorization': header
-                },
                 data: data,
                 contentType: 'application/json',
                 error: function (xhr, status, error) {

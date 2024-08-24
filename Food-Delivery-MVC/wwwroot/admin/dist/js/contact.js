@@ -2,7 +2,6 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-small').modal({
         backdrop: true,
@@ -106,10 +105,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/contact/Delete?id=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/contact/Delete?id=${id}`,
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
@@ -159,10 +155,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/contact/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/contact/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 let html = "";
@@ -186,6 +179,7 @@
                 $('#table-area #modal-detail .data-area').append(html);
 
                 html = "";
+                $('#modal-detail').modal('show')
             }
         });
     })
@@ -193,10 +187,7 @@
     function getPaginatedDatas(page) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/contact/GetPaginateDatas?page=${page}&take=5`,
+            url: `/admin/contact/GetPaginatedData?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');

@@ -1,7 +1,6 @@
 ﻿$(function () {
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-edit').modal({
         backdrop: true,
@@ -96,10 +95,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/account/getroles?userId=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/account/getroles?userId=${id}`,
             dataType: 'json',
             success: function (response) {
                 let html = ""
@@ -125,6 +121,7 @@
                 })
 
                 $("#form-edit .roles").html(html)
+                $('#modal-edit').modal('show')
             },
             error: function (xhr, status, error) {
                 $('#modal-edit').modal('hide');
@@ -154,11 +151,8 @@
             let id = $('#table-area #form-edit').attr('data-id')
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/account/AddRoleToUser?userId=${id}`,
+                url: `/admin/account/AddRoleToUser?userId=${id}`,
                 method: 'POST',
-                headers: {
-                    'Authorization': header
-                },
                 contentType: 'application/json',
                 data: JSON.stringify({ roles: roles }),
                 error: function (xhr, status, error) {
@@ -208,10 +202,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/account/getUserDetail?userId=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/account/getUserDetail?userId=${id}`,
             dataType: 'json',
             success: function (response) {
                 let html = "";
@@ -254,6 +245,7 @@
                 })
                 $('#table-area #modal-detail #ingredients').append(html);
                 html = "";
+                $('#modal-detail').modal('show')
             }
         });
     })
@@ -279,10 +271,7 @@
     function getPaginatedDatas(page, searchText = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/account/GetUsersPaginate?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
+            url: `/admin/account/GetUsersPaginate?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

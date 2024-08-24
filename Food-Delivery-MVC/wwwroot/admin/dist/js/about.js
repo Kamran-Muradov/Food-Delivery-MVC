@@ -5,7 +5,6 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-report').modal({
         backdrop: true,
@@ -67,11 +66,8 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/about/create',
+                url: '/admin/about/create',
                 method: 'POST',
-                headers: {
-                    'Authorization': header
-                },
                 processData: false,
                 contentType: false,
                 data: formData,
@@ -219,14 +215,12 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/about/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/about/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #title').val(response.title)
                 $('#table-area #modal-edit #desc').val(response.description)
+                $('#modal-edit').modal('show')
             },
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -282,11 +276,8 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/about/edit/${id}`,
+                url: `/admin/about/edit/${id}`,
                 method: 'PUT',
-                headers: {
-                    'Authorization': header
-                },
                 processData: false,
                 contentType: false,
                 data: formData,
@@ -322,10 +313,7 @@
                     $('#modal-edit .modal-header .btn-close').prop('disabled', false);
 
                     $.ajax({
-                        url: `https://localhost:7247/api/admin/aboutimage/getbyaboutid/${id}`,
-                        headers: {
-                            'Authorization': header
-                        },
+                        url: `/admin/about/getimage/${id}`,
                         method: 'GET',
                         dataType: 'json',
                         success: function (response) {
@@ -393,10 +381,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/about/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/about/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 let html = "";
@@ -423,6 +408,7 @@
                 $('#table-area #modal-detail .data-area').append(html);
 
                 html = "";
+                $('#modal-detail').modal('show')
             }
         });
     })
@@ -443,10 +429,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/about/Delete?id=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/about/Delete?id=${id}`,
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
@@ -487,10 +470,7 @@
     function getPaginatedDatas(page) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/about/GetPaginateDatas?page=${page}&take=5`,
+            url: `/admin/about/GetPaginatedData?page=${page}&take=5`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({

@@ -5,7 +5,6 @@
 
     let tableBody = $("#table-area .table-tbody")
     let pagination = $("#table-area .pagination-area .pagination")
-    const header = "Bearer " + $.cookie("JWTToken");
 
     $('#modal-report').modal({
         backdrop: true,
@@ -57,6 +56,8 @@
                 })
                 $("#form-create #ingredients").append(html)
             })
+
+        $('#modal-report').modal('show')
     })
 
     $("#form-create").validate({
@@ -131,11 +132,8 @@
             $("#form-create #loading-create-btn").removeClass("d-none")
 
             $.ajax({
-                url: 'https://localhost:7247/api/admin/menu/create',
+                url: '/admin/menu/create',
                 method: 'POST',
-                headers: {
-                    'Authorization': header
-                },
                 processData: false,
                 contentType: false,
                 data: formData,
@@ -283,10 +281,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/menu/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/menu/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 $('#table-area #modal-edit #name').val(response.name)
@@ -335,6 +330,7 @@
                         $("#form-edit #ingredients").append(html)
                         html = "";
                     })
+                $('#modal-edit').modal('show')
             },
             error: function (xhr, status, error) {
                 $('#modal-edit').modal('hide');
@@ -421,11 +417,8 @@
             $("#form-edit #loading-edit-btn").removeClass("d-none")
 
             $.ajax({
-                url: `https://localhost:7247/api/admin/menu/edit/${id}`,
+                url: `/admin/menu/edit/${id}`,
                 method: 'PUT',
-                headers: {
-                    'Authorization': header
-                },
                 processData: false,
                 contentType: false,
                 data: formData,
@@ -461,10 +454,7 @@
                     $('#modal-edit .modal-header .btn-close').prop('disabled', false);
 
                     $.ajax({
-                        url: `https://localhost:7247/api/admin/menuimage/getbymenuid/${id}`,
-                        headers: {
-                            'Authorization': header
-                        },
+                        url: `/admin/menu/getImage/${id}`,
                         method: 'GET',
                         dataType: 'json',
                         success: function (response) {
@@ -540,10 +530,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: `https://localhost:7247/api/admin/menu/Delete?id=${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/menu/Delete?id=${id}`,
             success: function (response) {
                 modal._config.backdrop = true;
                 modal._config.keyboard = true;
@@ -594,10 +581,7 @@
 
         $.ajax({
             type: "GET",
-            url: `https://localhost:7247/api/admin/menu/getbyid/${id}`,
-            headers: {
-                'Authorization': header
-            },
+            url: `/admin/menu/getbyid/${id}`,
             dataType: 'json',
             success: function (response) {
                 let html = "";
@@ -615,7 +599,7 @@
                     <p class="mb-0 font-weight-light"><strong>Name: </strong>${response.name}</p>
                 </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Price: </strong>${response.price}</p>
+                    <p class="mb-0 font-weight-light"><strong>Price: </strong>$${response.price.toFixed(2)}</p>
                 </div>
                  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Restaurant: </strong>${response.restaurant}</p>
@@ -629,11 +613,18 @@
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Create date: </strong>${response.createdDate}</p>
                 </div>
+                  <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Create by: </strong>${response.createdBy}</p>
+                </div>
                 <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Update date: </strong>${response.updatedDate}</p>
+                </div>
+                  <div class="mb-0 mt-3 flex-grow d-flex">
+                    <p class="mb-0 font-weight-light"><strong>Update by: </strong>${response.updatedBy}</p>
                 </div>`
 
                 $('#table-area #modal-detail .data-area').append(html);
+                $('#modal-detail').modal('show')
             }
         });
     })
@@ -659,10 +650,7 @@
     function getPaginatedDatas(page, searchText = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/menu/GetPaginateDatas?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
+            url: `/admin/menu/GetPaginatedData?page=${page}&take=5&searchText=${searchText != null ? searchText : ""}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
@@ -679,10 +667,7 @@
     function getRestaurantsSelected(exludeid = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/restaurant/getallforselect?exludeId=${exludeid}`,
+            url: `/admin/restaurant/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
@@ -699,10 +684,7 @@
     function getCategoriesSelected(exludeid = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/category/getallforselect?exludeId=${exludeid}`,
+            url: `/admin/category/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 $('#modal-small').modal('hide');
@@ -719,10 +701,7 @@
     function getIngredientsSelected(exludeid = null) {
         return Promise.resolve($.ajax({
             type: "GET",
-            headers: {
-                'Authorization': header
-            },
-            url: `https://localhost:7247/api/admin/ingredient/getallforselect?exludeId=${exludeid}`,
+            url: `/admin/ingredient/getallforselect?exludeId=${exludeid}`,
             dataType: 'json',
             error: function (xhr, status, error) {
                 Swal.fire({
