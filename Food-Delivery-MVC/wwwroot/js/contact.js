@@ -64,13 +64,17 @@
                     $("#contact-create #loading-btn").addClass("d-none")
 
                     Swal.fire({
-                        title: "Your contact is submitted successfully",
+                        title: "Your message is submitted successfully",
                         text: "We will get back to you very soon!",
                         icon: "success",
                         showCancelButton: true,
                         cancelButtonColor: "#d33",
-                        confirmButtonText: '<a href="/home/index" class="text-white">Go to home page</a>'
-                    })
+                        confirmButtonText: 'Go to home page',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/';
+                        }
+                    });
                 })
                 .catch(function (error) {
                     $("#contact-create #submit-btn").removeClass("d-none")

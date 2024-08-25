@@ -1,0 +1,48 @@
+﻿@model CheckoutDetailVM
+
+<div class="modal-header">
+    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="container mt-2">
+    <h3 style="font-weight:bold">Detailed view</h3>
+    <p><strong>Items:</strong> @string.Join(", ", Model.Items)</p>
+    <div class="d-flex justify-content-between">
+        <p class="my-0">Total price</p>
+        <span class="fs-sm">$@Model.TotalPrice.ToString("F")</span>
+    </div>
+    <div class="d-flex justify-content-between">
+        <p class="my-0">Purchase date</p>
+        <span class="fs-sm">@Model.CreatedDate</span>
+    </div>
+    <div class="d-flex justify-content-between">
+        <p class="my-0">Restaurant</p>
+        <span class="fs-sm">@Model.Restaurant</span>
+    </div>
+    <div class="d-flex justify-content-between">
+        <p class="my-0">Status</p>
+        <span class="fs-sm">@Model.Status</span>
+    </div>
+    <div class="my-4">
+        <h3>Rating and review</h3>
+        <div class="d-flex justify-content-between">
+            <p class="my-0">Your rating</p>
+            <div class="star-rating d-inline-block">
+                @if (Model.Review is not null)
+                {
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <i class="star-rating-icon @(i <= Model.Review.Rating ? "ci-star-filled active" : "ci-star")"></i>
+                    }
+                }
+                else
+                {
+                    <span>N/A</span>
+                }
+            </div>
+        </div>
+        <div class="my-3">
+            <p class="my-0"><strong>Your review:</strong> </p>
+            <span class="fs-sm">@(Model.Review != null && Model.Review.Comment != null ? Model.Review.Comment : "N/A")</span>
+        </div>
+    </div>
+</div>

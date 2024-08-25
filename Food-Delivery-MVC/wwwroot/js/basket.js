@@ -22,7 +22,6 @@
             params: { menuId, count: currentCount }
         })
             .then(function (response) {
-                console.log(response.data)
                 if (response.data.discountAmount == null || response.data.discountAmount == 0) {
                     $('#total-price span').html(`${response.data.oldPrice.toFixed(2)}`);
                     $('#total-amount span').html(`${response.data.oldAmount.toFixed(2)}`);
@@ -39,7 +38,6 @@
                 $('#menu-count').html(response.data.basketCount)
             })
             .catch(function (error) {
-                console.log(error)
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -51,12 +49,14 @@
     $(document).on('click', '.basket-delete', function () {
         let menuId = $(this).attr('data-menuId')
         let $basketItem = $(this).closest('.basket-item')
+        $('#basket-area button').prop('disabled', true)
 
         axios.post(`/cart/deletemenufrombasket`, null, {
             params: { menuId }
         })
             .then(function (response) {
                 $basketItem.remove()
+                $('#basket-area button').prop('disabled', false)
                 if (response.data.basketCount == 0) {
                     $('#menu-count').addClass('d-none')
                     $('#basket-area').html(` <div id="empty-basket" class="container py-5 mb-lg-3">
@@ -99,6 +99,7 @@
 
             })
             .catch(function (error) {
+                $('#basket-area button').prop('disabled', false)
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -126,6 +127,7 @@
 
         submitHandler: function (form) {
             const code = $('#promoCode').val()
+            $('#basket-area button').prop('disabled', true)
 
             axios.post(`/cart/applyPromoCode`, null, {
                 params: { code }
@@ -153,15 +155,16 @@
 
                         $('#promoCode').prop('disabled', true)
                         $('#btn-area').html(`<button id="remove-code-btn" class="btn btn-outline-warning d-block w-100" type="button">Remove promo code</button>`)
+                        $('#basket-area button').prop('disabled', false)
                     });
                 })
                 .catch(function (error) {
                     if (error.response.status == 400) {
                         $('#validate-code').addClass('d-block')
                         $('#validate-code').html(error.response.data.error)
-
-
+                        $('#basket-area button').prop('disabled', false)
                     } else {
+                        $('#basket-area button').prop('disabled', false)
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
@@ -174,8 +177,20 @@
         }
     });
 
+    $("#checkout-form").validate({
+        ignore: [],
+
+        errorClass: "invalid-feedback",
+        rules: {
+            address: {
+                required: true,
+            },
+        }
+    });
+
     $(document).on('click', '#remove-code-btn', function (e) {
         e.preventDefault()
+        $('#basket-area button').prop('disabled', true)
 
         axios.delete(`/cart/DeleteUserPromoCode`, null, {
         })
@@ -203,9 +218,11 @@
                     $('#promoCode').prop('disabled', false)
                     $('#promoCode').val('')
                     $('#btn-area').html(`<button id="promo-code-btn" class="btn btn-outline-primary d-block w-100" type="submit">Apply promo code</button>`)
+                    $('#basket-area button').prop('disabled', false)
                 });
             })
             .catch(function (error) {
+                $('#basket-area button').prop('disabled', false)
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MenuVM>
+
+@if (Model.Any())
+{
+    @foreach (var menu in Model)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter content" data-id="@menu.Category.Id">
+            <a data-id="@menu.Id" href="" class="d-block menu-detail">
+                <img class="card-img-top" style="height:150px" src="@menu.Image" alt="Pizza">
+                <div class="card product-card border pb-2">
+
+                    <div class="card-body pt-1 pb-2">
+                        <h3 class="product-title fs-md">@menu.Name</h3>
+                        <p class="fs-ms text-muted">@string.Join(", ", menu.Ingredients.Take(4))</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="product-price"><span class="text-accent">$@menu.Price</span></div>
+                            <button class="btn btn-primary btn-sm" type="button">+<i class="ci-cart fs-base ms-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+}
+else
+{
+    <div class="d-flex justify-content-center align-items-center">
+        <h1>No results found</h1>
+    </div>
+}

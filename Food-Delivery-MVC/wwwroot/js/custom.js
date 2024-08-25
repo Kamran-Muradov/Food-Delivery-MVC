@@ -113,6 +113,28 @@
         }
     }, 100));
 
+    $('#menu-search').on('input', debounce(function () {
+        const searchText = $(this).val().trim();
+        const restaurantId = $(this).attr('data-restaurantId')
+        axios.get(`/menu/search`, {
+            params: { searchText, restaurantId }
+        })
+            .then(async function (response) {
+                $('#menu-area').html(response.data)
+                $('#tab-header .active').removeClass('active')
+                $('#tab-header .nav-link').first().addClass('active')
+            })
+            .catch(function (error) {
+                $("#menu-area").html("")
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            })
+
+    }, 100));
+
     $(document).on('click', '#see-all', function (e) {
         let searchText = $("#input-search").val()
 

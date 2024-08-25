@@ -762,7 +762,7 @@
 
                 const website = response.website != "N/A" ? `<a href=${response.website}>${response.website}</a>` : response.website
 
-                $('#table-area #modal-detail .images-area').append(imgHtml);
+                $('#table-area #modal-detail .images-area').html(imgHtml);
 
                 let dataHtml = `  <div class="mb-0 mt-3 flex-grow d-flex">
                     <p class="mb-0 font-weight-light"><strong>Name: </strong>${response.name}</p>
@@ -813,7 +813,7 @@
                     <p class="mb-0 font-weight-light"><strong>Updated by: </strong>${response.updatedBy}</p>
                 </div>`
 
-                $('#table-area #modal-detail .data-area').append(dataHtml);
+                $('#table-area #modal-detail .data-area').html(dataHtml);
 
                 $('#modal-detail').modal('show')
             }

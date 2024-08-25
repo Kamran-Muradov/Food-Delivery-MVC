@@ -82,7 +82,7 @@
                                 </div>
 
                                 <h3 class="h6 mb-4">Apply promo code</h3>
-                                <form autocomplete="off" id="form-code" method="post" novalidate="">
+                                <form autocomplete="off" id="form-code" class="mb-3" method="post" novalidate="">
                                     @if (User.Identity.IsAuthenticated)
                                     {
                                         @if (Model.FirstOrDefault()?.AppliedPromoCode != null)
@@ -117,7 +117,11 @@
                                 </form>
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <form class="mt-3" method="post" asp-controller="Payment" asp-action="CreateCheckoutSession">
+                                    <form id="checkout-form" autocomplete="off" method="post" asp-controller="Payment" asp-action="CreateCheckoutSession">
+                                        <div class="mb-4">
+                                            <label class="form-label mb-3 required" for="address">Enter address</label>
+                                            <input autocomplete="off" id="address" name="address" class="form-control" type="text" required="" />
+                                        </div>
                                         <div class="mb-4">
                                             <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
                                             <textarea class="form-control" rows="4" id="order-comments" name="checkoutComments"></textarea>
@@ -129,6 +133,10 @@
                                 }
                                 else
                                 {
+                                    <div class="mb-4">
+                                        <label class="form-label mb-3 required" for="address">Enter address</label>
+                                        <input autocomplete="off" id="address" class="form-control" type="text" required="" />
+                                    </div>
                                     <div class="mb-4">
                                         <label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
                                         <textarea class="form-control" rows="4" id="order-comments"></textarea>

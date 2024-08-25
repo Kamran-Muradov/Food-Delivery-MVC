@@ -10,7 +10,7 @@
                     <th>Status</th>
                     <th>Total</th>
                     <th>Restaurant</th>
-                    <th>Review Operations</th>
+                    <th>Operations</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,32 +18,51 @@
                 {
                     <tr>
                         <td class="py-3">@checkout.CreatedDate</td>
-                        <td class="py-3"><span class="badge bg-info m-0">@checkout.Status</span></td>
+                        @switch (checkout.Status)
+                        {
+                            case "Delivered":
+                                <td class="py-3"><span class="badge bg-success m-0">@checkout.Status</span></td>
+                                break;
+                            case "Canceled":
+                                <td class="py-3"><span class="badge bg-danger m-0">@checkout.Status</span></td>
+                                break;
+                            default:
+                                <td class="py-3"><span class="badge bg-info m-0">@checkout.Status</span></td>
+                                break;
+                        }
                         <td class="py-3">$@checkout.TotalPrice</td>
                         <td class="py-3">@checkout.Restaurant</td>
                         <td>
                             @if (checkout.Status == "Delivered" && checkout.Review == null)
                             {
-                                <a data-checkoutId="@checkout.Id"
-                                   class="btn btn-outline-primary toggle-create"
-                                   href="#review-create-modal"
-                                   data-bs-toggle="modal">
+                                <button data-checkoutId="@checkout.Id"
+                                        class="btn btn-outline-primary btn-sm toggle-create"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#review-create-modal">
                                     Add review
-                                </a>
-                            }
-                            else if (checkout.Review != null)
-                            {
-                                <button 
-                                   class="btn btn-outline-primary" disabled="">
-                                    Your review was submitted
                                 </button>
                             }
-
+                            else
+                            {
+                                <button class="btn btn-outline-primary btn-sm" disabled="">
+                                    Add review
+                                </button>
+                            }
+                            <a class="btn btn-info btn-sm checkout-detail" data-id="@checkout.Id">
+                                View details
+                            </a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+    </div>
+
+    <div class="modal fade" id="modal-checkout-detail" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div id="checkout-info" class="modal-content">
+            </div>
+        </div>
     </div>
 }
 else

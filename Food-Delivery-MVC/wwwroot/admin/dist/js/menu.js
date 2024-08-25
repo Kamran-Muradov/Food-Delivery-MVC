@@ -591,7 +591,7 @@
                              alt="image"
                              style="width:228px;height:163px;" />
                     </div>`
-                $('#table-area #modal-detail .images-area').append(html);
+                $('#table-area #modal-detail .images-area').html(html);
 
                 html = "";
 
@@ -623,7 +623,7 @@
                     <p class="mb-0 font-weight-light"><strong>Update by: </strong>${response.updatedBy}</p>
                 </div>`
 
-                $('#table-area #modal-detail .data-area').append(html);
+                $('#table-area #modal-detail .data-area').html(html);
                 $('#modal-detail').modal('show')
             }
         });

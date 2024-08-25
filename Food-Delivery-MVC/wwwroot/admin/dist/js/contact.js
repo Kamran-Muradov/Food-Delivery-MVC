@@ -176,7 +176,7 @@
                     <p class="mb-0 font-weight-light"><strong>Create date: </strong>${response.createdDate}</p>
                 </div>`
 
-                $('#table-area #modal-detail .data-area').append(html);
+                $('#table-area #modal-detail .data-area').html(html);
 
                 html = "";
                 $('#modal-detail').modal('show')

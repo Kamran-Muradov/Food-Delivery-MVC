@@ -212,7 +212,7 @@
                              alt="image"
                              style="width:228px;height:163px;" />
                     </div>`
-                $('#table-area #modal-detail .images-area').append(html);
+                $('#table-area #modal-detail .images-area').html(html);
                 html = "";
 
                 html += `<div class="mb-0 mt-3 flex-grow d-flex">
@@ -228,7 +228,7 @@
                     <p class="mb-0 font-weight-light"><strong>Roles: </strong>${response.roles.join(", ")}</p>
                 </div>`
 
-                $('#table-area #modal-detail .data-area').append(html);
+                $('#table-area #modal-detail .data-area').html(html);
 
                 html = "";
 

@@ -312,6 +312,23 @@
             });
     })
 
+    $(document).on('click', '.checkout-detail', function (e) {
+        e.preventDefault()
+        const id = $(this).attr('data-id')
+        axios.get(`/checkout/detail/${id}`)
+            .then(function (response) {
+                $('#checkout-info').html(response.data)
+                $('#modal-checkout-detail').modal('show')
+            })
+            .catch(function (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            });
+    })
+
     $("#form-update").validate({
         errorClass: "invalid-feedback",
         rules: {
@@ -454,7 +471,7 @@
         if (typeof rating === 'undefined') {
             rating = 0;
         }
-        const comment = $('#comment').val()
+        const comment = $('#comment').val().trim()
 
         const data = JSON.stringify({
             rating,
@@ -476,7 +493,7 @@
 
                 $("#review-create #create-btn").removeClass("d-none")
                 $("#review-create #loading-btn").addClass("d-none")
-                $(`.toggle-create[data-checkoutId=${checkoutId}]`).addClass('d-none')
+                $(`.toggle-create[data-checkoutId=${checkoutId}]`).prop('disabled', true)
                 $('#review-create')[0].reset();
 
                 Swal.fire({
@@ -624,6 +641,7 @@
     $(document).on('click', '#delete-picture', function (e) {
         e.preventDefault()
         const userId = $(this).attr('data-id')
+        $('#delete-picture').prop('disabled', true)
 
         axios.delete(`/UserProfile/DeleteProfilePicture`, {
             params: {
@@ -636,6 +654,7 @@
                 $('#delete-picture').prop('disabled', true)
             })
             .catch(function (error) {
+                $('#delete-picture').prop('disabled', false)
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

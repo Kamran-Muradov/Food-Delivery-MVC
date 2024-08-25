@@ -23,5 +23,21 @@ namespace Food_Delivery_MVC.Controllers
 
             return PartialView("_Detail", JsonConvert.DeserializeObject<MenuDetailVM>(data));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Search([FromQuery] int? restaurantId, [FromQuery] string? searchText)
+        {
+            if (restaurantId is null) return BadRequest();
+
+            HttpResponseMessage response = await HttpClient.GetAsync($"menu/search?restaurantId={restaurantId}&searchText={searchText}");
+
+            response.EnsureSuccessStatusCode();
+
+            string data = await response.Content.ReadAsStringAsync();
+
+            IEnumerable<MenuVM> model = JsonConvert.DeserializeObject<IEnumerable<MenuVM>>(data);
+
+            return PartialView("_SearchResult", model);
+        }
     }
 }

@@ -28,13 +28,13 @@ namespace Food_Delivery_MVC.Controllers
             });
 
             var comments = Request.Form["checkoutComments"];
+            var address = Request.Form["address"];
             HttpContext.Session.SetString("checkoutComments", comments);
+            HttpContext.Session.SetString("address", address);
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            string authToken = Request.Cookies["JWTToken"];
-
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
 
             HttpResponseMessage responseMessage = await HttpClient.PostAsync("payment/createCheckoutSession", content);
 
@@ -50,9 +50,7 @@ namespace Food_Delivery_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> PaymentSuccess([FromQuery] string sessionId)
         {
-            string authToken = Request.Cookies["JWTToken"];
-
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
 
             HttpResponseMessage responseMessage = await HttpClient.GetAsync($"payment/checkPaymentStatus?sessionId={sessionId}");
             if (responseMessage.StatusCode != HttpStatusCode.OK)
@@ -61,21 +59,20 @@ namespace Food_Delivery_MVC.Controllers
             }
 
             string userId = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
-            var comments = HttpContext.Session.GetString("checkoutComments");
+            var comments = HttpContext.Session.GetString("checkoutComments")?.Trim();
+            var address = HttpContext.Session.GetString("address")?.Trim();
 
-            string data = JsonConvert.SerializeObject(new { userId, comments });
+            string data = JsonConvert.SerializeObject(new { userId, comments, address });
 
             StringContent content = new(data, Encoding.UTF8, "application/json");
 
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Request.Cookies["JWTToken"]);
 
             responseMessage = await HttpClient.PostAsync("checkout/create", content);
-            if (responseMessage.StatusCode != HttpStatusCode.OK)
-            {
-                return RedirectToAction(nameof(PaymentCancel));
-            }
+            responseMessage.EnsureSuccessStatusCode();
 
             HttpContext.Session.Remove("checkoutComments");
+            HttpContext.Session.Remove("address");
 
             return View();
         }

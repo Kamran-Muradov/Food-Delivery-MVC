@@ -158,6 +158,21 @@ h2,
 /*cursor: pointer;
 }*/
 
+.swal-button-as-link {
+    background-color: #3085d6; /* Same color as the default confirm button */
+    border: none;
+}
+
+    .swal-button-as-link a {
+        display: block;
+        color: white;
+        text-decoration: none;
+    }
+
+        .swal-button-as-link a:hover {
+            text-decoration: none;
+        }
+
 .owl-prev, .owl-next {
     width: 40px; /* Adjust width */
     height: 40px; /* Adjust height */
@@ -193,7 +208,7 @@ h2,
 
 
 .custom-prev, .custom-next {
-  display:none;
+    display: none;
 }
 
 .custom-prev {
