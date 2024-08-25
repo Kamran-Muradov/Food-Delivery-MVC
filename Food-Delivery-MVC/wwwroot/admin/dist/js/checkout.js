@@ -203,7 +203,7 @@
                                     <td class="sort-name">${item.status}</td>
                                     <td class="sort-name">${parseFloat(item.totalPrice).toFixed(2)}</td>
                                     <td>
-                                        <a class="btn btn-outline-warning" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                        <a class="btn btn-outline-warning" data-id="${item.id}">
                                         Change status
                                         </a>
                                     </td>

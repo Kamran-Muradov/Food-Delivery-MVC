@@ -5,8 +5,8 @@
             transport: signalR.HttpTransportType.WebSockets,
             withCredentials: true
         })
+        .configureLogging(signalR.LogLevel.Information)
         .build();
-
     connection.on("ReceiveOrderStatusUpdate", function (checkoutId, status) {
         if (status === "Delivered") {
             showReviewForm(checkoutId);
@@ -147,20 +147,4 @@
             }
         });
     })
-    function searchMenus(searchText) {
-        //return Promise.resolve($.ajax({
-        //    type: "GET",
-        //    url: `https://localhost:7247/api/menu/search?searchText=${searchText}`,
-        //    dataType: 'json',
-        //    error: function (xhr, status, error) {
-        //        Swal.fire({
-        //            icon: "error",
-        //            title: "Oops...",
-        //            text: "Something went wrong!",
-        //        });
-        //    }
-        //}));
-
-    }
-
 })
