@@ -11,7 +11,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
     [Authorize(Policy = "RequireSuperAdminRole")]
     public class AccountController : BaseController
     {
-        public AccountController(HttpClient httpClient) : base(httpClient)
+        public AccountController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

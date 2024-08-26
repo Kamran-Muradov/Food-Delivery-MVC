@@ -8,7 +8,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class SettingController : BaseController
     {
-        public SettingController(HttpClient httpClient) : base(httpClient)
+        public SettingController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

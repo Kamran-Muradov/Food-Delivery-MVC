@@ -6,10 +6,9 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class AboutController : BaseController
     {
-        public AboutController(HttpClient httpClient) : base(httpClient)
+        public AboutController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
-
         public async Task<IActionResult> Index()
         {
             HttpResponseMessage response = await HttpClient.GetAsync("about/getAll");
@@ -22,5 +21,7 @@ namespace Food_Delivery_MVC.Controllers
 
             return View(model.ToList());
         }
+
+      
     }
 }

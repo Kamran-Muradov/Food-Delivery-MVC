@@ -1,18 +1,16 @@
-﻿using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
-using Food_Delivery_MVC.ViewModels.UI.Reviews;
+﻿using Food_Delivery_MVC.ViewModels.UI.Reviews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Ocsp;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace Food_Delivery_MVC.Controllers
 {
     [Authorize]
     public class ReviewController : BaseController
     {
-        public ReviewController(HttpClient httpClient) : base(httpClient)
+        public ReviewController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

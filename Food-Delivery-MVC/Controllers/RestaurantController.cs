@@ -14,7 +14,7 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class RestaurantController : BaseController
     {
-        public RestaurantController(HttpClient httpClient) : base(httpClient)
+        public RestaurantController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

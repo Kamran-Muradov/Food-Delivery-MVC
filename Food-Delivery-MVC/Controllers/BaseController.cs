@@ -4,13 +4,11 @@ namespace Food_Delivery_MVC.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected readonly Uri BaseUri = new("https://localhost:7247/api/");
         protected readonly HttpClient HttpClient;
 
-        protected BaseController(HttpClient httpClient)
+        protected BaseController(IHttpClientFactory httpClientFactory)
         {
-            HttpClient = httpClient;
-            HttpClient.BaseAddress = BaseUri;
+            HttpClient = httpClientFactory.CreateClient("MyApiClient");
         }
     }
 }

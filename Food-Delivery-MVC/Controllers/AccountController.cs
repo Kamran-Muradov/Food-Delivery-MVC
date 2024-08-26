@@ -17,9 +17,9 @@ namespace Food_Delivery_MVC.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly IEmailService _emailService;
 
-        public AccountController(HttpClient httpClient,
+        public AccountController(IHttpClientFactory httpClientFactory,
                                  IWebHostEnvironment env,
-                                 IEmailService emailService) : base(httpClient)
+                                 IEmailService emailService) : base(httpClientFactory)
         {
             _env = env;
             _emailService = emailService;

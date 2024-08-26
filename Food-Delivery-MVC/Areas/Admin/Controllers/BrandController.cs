@@ -1,6 +1,5 @@
 ﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.Admin.Brands;
-using Food_Delivery_MVC.ViewModels.Admin.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -11,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class BrandController : BaseController
     {
-        public BrandController(HttpClient httpClient) : base(httpClient)
+        public BrandController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

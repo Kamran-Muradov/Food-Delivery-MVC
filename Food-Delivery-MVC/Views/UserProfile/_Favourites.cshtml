@@ -16,7 +16,7 @@
                             <p class="text-dark mt-2 mb-2">@favourite.Restaurant.Name</p>
                             <div>
                                 <i class="fa-solid fa-star" style="color: #fe9f41;" aria-hidden="true"></i>
-                                <span class="text-dark">@favourite.Restaurant.AverageRating</span>
+                                <span class="text-dark">@favourite.Restaurant.AverageRating.ToString("F1")</span>
                             </div>
                         </div>
                         <span style="color: darkgray; font-size: 12px;">@(favourite.Restaurant.Description.Length > 35 ? $"{favourite.Restaurant.Description.Substring(0, 35)}..." : favourite.Restaurant.Description)</span>

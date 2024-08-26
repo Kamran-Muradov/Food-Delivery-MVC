@@ -11,7 +11,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class MenuController : BaseController
     {
-        public MenuController(HttpClient httpClient) : base(httpClient) { }
+        public MenuController(IHttpClientFactory httpClientFactory) : base(httpClientFactory) { }
 
         [HttpGet]
         public async Task<IActionResult> Index()

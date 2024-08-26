@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class AboutController : BaseController
     {
-        public AboutController(HttpClient httpClient) : base(httpClient)
+        public AboutController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

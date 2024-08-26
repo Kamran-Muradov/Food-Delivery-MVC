@@ -2,7 +2,9 @@
 
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("https://localhost:7247/checkoutHub", {
-            transport: signalR.HttpTransportType.WebSockets,
+            transport: signalR.HttpTransportType.WebSockets |
+                signalR.HttpTransportType.ServerSentEvents |
+                signalR.HttpTransportType.LongPolling,
             withCredentials: true
         })
         .configureLogging(signalR.LogLevel.Information)

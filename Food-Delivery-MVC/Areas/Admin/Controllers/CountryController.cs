@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class CountryController : BaseController
     {
-        public CountryController(HttpClient httpClient) : base(httpClient)
+        public CountryController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

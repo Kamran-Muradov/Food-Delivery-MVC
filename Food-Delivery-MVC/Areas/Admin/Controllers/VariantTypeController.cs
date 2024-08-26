@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class VariantTypeController : BaseController
     {
-        public VariantTypeController(HttpClient httpClient) : base(httpClient)
+        public VariantTypeController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

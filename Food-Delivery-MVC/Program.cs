@@ -9,6 +9,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient("MyApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7247/api/");
+});
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -67,7 +71,7 @@ builder.Services.AddAuthorization(o =>
     o.AddPolicy("RequireSuperAdminRole", p => p.RequireRole("SuperAdmin"));
 });
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient();
+
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));

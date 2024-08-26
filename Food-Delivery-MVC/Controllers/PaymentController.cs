@@ -12,7 +12,7 @@ namespace Food_Delivery_MVC.Controllers
     [Authorize]
     public class PaymentController : BaseController
     {
-        public PaymentController(HttpClient httpClient) : base(httpClient)
+        public PaymentController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

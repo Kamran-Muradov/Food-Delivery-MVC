@@ -7,13 +7,11 @@ namespace Food_Delivery_MVC.ViewComponents
 {
     public class HeaderViewComponent : ViewComponent
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
         private readonly HttpClient _httpClient;
 
-        public HeaderViewComponent(HttpClient httpClient)
+        public HeaderViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
         public async Task<IViewComponentResult> InvokeAsync()

@@ -1,10 +1,9 @@
-﻿using System.Globalization;
-using Food_Delivery_MVC.Helpers;
-using Food_Delivery_MVC.ViewModels.Admin.Categories;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.Admin.Restaurants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,7 +12,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class RestaurantController : BaseController
     {
-        public RestaurantController(HttpClient httpClient) : base(httpClient) { }
+        public RestaurantController(IHttpClientFactory httpClientFactory) : base(httpClientFactory) { }
         public async Task<IActionResult> Index()
         {
             HttpResponseMessage response = await HttpClient.GetAsync("admin/Restaurant/GetPaginateDatas?page=1&take=5");

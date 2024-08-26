@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class CategoryController : BaseController
     {
-        public CategoryController(HttpClient httpClient) : base(httpClient) { }
+        public CategoryController(IHttpClientFactory httpClientFactory) : base(httpClientFactory) { }
 
         [HttpGet]
         public async Task<IActionResult> Index()

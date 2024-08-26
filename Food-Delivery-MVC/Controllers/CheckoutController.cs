@@ -8,7 +8,7 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class CheckoutController : BaseController
     {
-        public CheckoutController(HttpClient httpClient) : base(httpClient)
+        public CheckoutController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

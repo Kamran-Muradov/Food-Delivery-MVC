@@ -15,7 +15,7 @@ namespace Food_Delivery_MVC.Controllers
     [Authorize]
     public class UserProfileController : BaseController
     {
-        public UserProfileController(HttpClient httpClient) : base(httpClient)
+        public UserProfileController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

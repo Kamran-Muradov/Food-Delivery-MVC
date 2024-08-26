@@ -6,13 +6,11 @@ namespace Food_Delivery_MVC.ViewComponents
 {
     public class BrandViewComponent : ViewComponent
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
         private readonly HttpClient _httpClient;
 
-        public BrandViewComponent(HttpClient httpClient)
+        public BrandViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
         public async Task<IViewComponentResult> InvokeAsync()

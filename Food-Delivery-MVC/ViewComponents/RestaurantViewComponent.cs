@@ -1,20 +1,18 @@
-﻿using System.Text;
-using Food_Delivery_MVC.Helpers;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.UI.Restaurants;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Food_Delivery_MVC.ViewComponents
 {
     public class RestaurantViewComponent : ViewComponent
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
         private readonly HttpClient _httpClient;
 
-        public RestaurantViewComponent(HttpClient httpClient)
+        public RestaurantViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
         public async Task<IViewComponentResult> InvokeAsync()

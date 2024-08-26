@@ -1,16 +1,15 @@
-﻿using System.Net;
-using System.Text;
-using Food_Delivery_MVC.Helpers;
+﻿using Food_Delivery_MVC.Helpers;
 using Food_Delivery_MVC.ViewModels.Admin.Checkouts;
-using Food_Delivery_MVC.ViewModels.Admin.Ingredients;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
+using System.Text;
 
 namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class CheckoutController : BaseController
     {
-        public CheckoutController(HttpClient httpClient) : base(httpClient)
+        public CheckoutController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

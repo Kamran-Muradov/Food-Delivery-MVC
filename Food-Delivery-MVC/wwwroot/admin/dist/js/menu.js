@@ -620,7 +620,7 @@
                     <p class="mb-0 font-weight-light"><strong>Update date: </strong>${response.updatedDate}</p>
                 </div>
                   <div class="mb-0 mt-3 flex-grow d-flex">
-                    <p class="mb-0 font-weight-light"><strong>Update by: </strong>${response.updatedBy}</p>
+                    <p class="mb-0 font-weight-light"><strong>Update by: </strong>${response.updatedBy != null ? response.updatedBy : "N/A"}</p>
                 </div>`
 
                 $('#table-area #modal-detail .data-area').html(html);

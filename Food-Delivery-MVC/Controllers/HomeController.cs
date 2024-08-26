@@ -1,6 +1,4 @@
-﻿using Food_Delivery_MVC.Helpers;
-using Food_Delivery_MVC.ViewModels.Admin.Ingredients;
-using Food_Delivery_MVC.ViewModels.UI.Restaurants;
+﻿using Food_Delivery_MVC.ViewModels.UI.Restaurants;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,7 +6,7 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController(HttpClient httpClient) : base(httpClient)
+        public HomeController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

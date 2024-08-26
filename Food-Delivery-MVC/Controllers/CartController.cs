@@ -13,7 +13,7 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class CartController : BaseController
     {
-        public CartController(HttpClient httpClient) : base(httpClient)
+        public CartController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

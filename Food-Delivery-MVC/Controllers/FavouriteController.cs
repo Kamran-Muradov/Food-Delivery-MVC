@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Controllers
     [Authorize]
     public class FavouriteController : BaseController
     {
-        public FavouriteController(HttpClient httpClient) : base(httpClient)
+        public FavouriteController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

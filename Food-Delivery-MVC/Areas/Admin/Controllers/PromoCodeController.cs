@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class PromoCodeController : BaseController
     {
-        public PromoCodeController(HttpClient httpClient) : base(httpClient)
+        public PromoCodeController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

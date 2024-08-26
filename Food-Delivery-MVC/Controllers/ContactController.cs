@@ -9,7 +9,7 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class ContactController : BaseController
     {
-        public ContactController(HttpClient httpClient) : base(httpClient)
+        public ContactController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

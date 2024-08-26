@@ -9,7 +9,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class SocialMediaController : BaseController
     {
-        public SocialMediaController(HttpClient httpClient) : base(httpClient)
+        public SocialMediaController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

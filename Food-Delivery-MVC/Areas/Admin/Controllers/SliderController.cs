@@ -10,7 +10,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class SliderController : BaseController
     {
-        public SliderController(HttpClient httpClient) : base(httpClient)
+        public SliderController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

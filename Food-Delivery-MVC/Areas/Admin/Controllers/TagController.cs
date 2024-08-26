@@ -11,7 +11,7 @@ namespace Food_Delivery_MVC.Areas.Admin.Controllers
 {
     public class TagController : BaseController
     {
-        public TagController(HttpClient httpClient) : base(httpClient)
+        public TagController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 

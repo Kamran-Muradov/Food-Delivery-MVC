@@ -6,7 +6,7 @@ namespace Food_Delivery_MVC.Controllers
 {
     public class BrandController : BaseController
     {
-        public BrandController(HttpClient httpClient) : base(httpClient)
+        public BrandController(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
         {
         }
 
@@ -20,5 +20,7 @@ namespace Food_Delivery_MVC.Controllers
 
             return View(JsonConvert.DeserializeObject<IEnumerable<RestaurantVM>>(data));
         }
+
+      
     }
 }

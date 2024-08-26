@@ -6,12 +6,10 @@ namespace Food_Delivery_MVC.ViewComponents
 {
     public class ReviewViewComponent : ViewComponent
     {
-        private readonly Uri _baseUri = new("https://localhost:7247/api/");
         private readonly HttpClient _httpClient;
-        public ReviewViewComponent(HttpClient httpClient)
+        public ReviewViewComponent(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = _baseUri;
+            _httpClient = httpClientFactory.CreateClient("MyApiClient");
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
